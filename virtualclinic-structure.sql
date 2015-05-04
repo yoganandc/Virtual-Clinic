@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 04, 2015 at 04:42 AM
+-- Generation Time: May 04, 2015 at 11:58 AM
 -- Server version: 5.6.22-log
 -- PHP Version: 5.6.7
 
@@ -61,6 +61,18 @@ CREATE TABLE IF NOT EXISTS `vc_admin` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `vc_complaint`
+--
+
+CREATE TABLE IF NOT EXISTS `vc_complaint` (
+  `complaint_id` int(11) NOT NULL,
+  `complaint` varchar(40) NOT NULL,
+  `chronic_only` bit(1) NOT NULL DEFAULT b'0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `vc_messages`
 --
 
@@ -89,6 +101,30 @@ CREATE TABLE IF NOT EXISTS `vc_patient` (
   `email` varchar(40) DEFAULT NULL,
   `phone` varchar(15) DEFAULT NULL,
   `picture` varchar(20) NOT NULL DEFAULT 'default.png'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `vc_treatment_name`
+--
+
+CREATE TABLE IF NOT EXISTS `vc_treatment_name` (
+  `treatment_name_id` int(11) NOT NULL,
+  `treatment_type_id` int(11) NOT NULL,
+  `name` varchar(40) NOT NULL,
+  `dosage` decimal(6,3) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `vc_treatment_type`
+--
+
+CREATE TABLE IF NOT EXISTS `vc_treatment_type` (
+  `treatment_type_id` int(11) NOT NULL,
+  `name` varchar(40) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -143,6 +179,12 @@ ALTER TABLE `vc_address_state`
   ADD PRIMARY KEY (`state_id`);
 
 --
+-- Indexes for table `vc_complaint`
+--
+ALTER TABLE `vc_complaint`
+  ADD PRIMARY KEY (`complaint_id`);
+
+--
 -- Indexes for table `vc_messages`
 --
 ALTER TABLE `vc_messages`
@@ -155,6 +197,19 @@ ALTER TABLE `vc_messages`
 ALTER TABLE `vc_patient`
   ADD PRIMARY KEY (`patient_id`),
   ADD KEY `address_id` (`address_id`);
+
+--
+-- Indexes for table `vc_treatment_name`
+--
+ALTER TABLE `vc_treatment_name`
+  ADD PRIMARY KEY (`treatment_name_id`),
+  ADD KEY `treatment_type_id` (`treatment_type_id`);
+
+--
+-- Indexes for table `vc_treatment_type`
+--
+ALTER TABLE `vc_treatment_type`
+  ADD PRIMARY KEY (`treatment_type_id`);
 
 --
 -- Indexes for table `vc_user`
@@ -184,6 +239,11 @@ ALTER TABLE `vc_address`
 ALTER TABLE `vc_address_state`
   MODIFY `state_id` int(11) NOT NULL AUTO_INCREMENT;
 --
+-- AUTO_INCREMENT for table `vc_complaint`
+--
+ALTER TABLE `vc_complaint`
+  MODIFY `complaint_id` int(11) NOT NULL AUTO_INCREMENT;
+--
 -- AUTO_INCREMENT for table `vc_messages`
 --
 ALTER TABLE `vc_messages`
@@ -193,6 +253,16 @@ ALTER TABLE `vc_messages`
 --
 ALTER TABLE `vc_patient`
   MODIFY `patient_id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `vc_treatment_name`
+--
+ALTER TABLE `vc_treatment_name`
+  MODIFY `treatment_name_id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `vc_treatment_type`
+--
+ALTER TABLE `vc_treatment_type`
+  MODIFY `treatment_type_id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `vc_user`
 --
@@ -224,6 +294,12 @@ ALTER TABLE `vc_messages`
 --
 ALTER TABLE `vc_patient`
   ADD CONSTRAINT `vc_patient_ibfk_1` FOREIGN KEY (`address_id`) REFERENCES `vc_address` (`address_id`);
+
+--
+-- Constraints for table `vc_treatment_name`
+--
+ALTER TABLE `vc_treatment_name`
+  ADD CONSTRAINT `vc_treatment_name_ibfk_1` FOREIGN KEY (`treatment_type_id`) REFERENCES `vc_treatment_type` (`treatment_type_id`);
 
 --
 -- Constraints for table `vc_user`

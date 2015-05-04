@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 04, 2015 at 04:49 AM
+-- Generation Time: May 04, 2015 at 11:59 AM
 -- Server version: 5.6.22-log
 -- PHP Version: 5.6.7
 
@@ -61,6 +61,65 @@ INSERT INTO `vc_address_state` (`state_id`, `code`, `name`) VALUES
 (34, 'DL', 'Delhi'),
 (35, 'LD', 'Lakshadweep'),
 (36, 'PY', 'Puducherry');
+
+--
+-- Dumping data for table `vc_admin`
+--
+
+INSERT INTO `vc_admin` (`password`) VALUES
+('d033e22ae348aeb5660fc2140aec35850c4da997');
+
+--
+-- Dumping data for table `vc_treatment_name`
+--
+
+INSERT INTO `vc_treatment_name` (`treatment_name_id`, `treatment_type_id`, `name`, `dosage`) VALUES
+(1, 1, 'Crocin', '500.000'),
+(2, 2, 'Crocin DS', '240.000'),
+(3, 1, 'Calpol', '500.000'),
+(4, 2, 'Calpol', '120.000'),
+(5, 1, 'Dolo', '500.000'),
+(6, 2, 'Dolo', '125.000'),
+(7, 1, 'Dolo 650', '650.000'),
+(8, 1, 'Storvas', '5.000'),
+(9, 1, 'Storvas', '10.000'),
+(10, 1, 'Storvas', '20.000'),
+(11, 1, 'Storvas', '40.000'),
+(12, 1, 'Storvas', '80.000'),
+(13, 1, 'Lipvas', '10.000'),
+(14, 1, 'Lipvas', '20.000'),
+(15, 1, 'Lipvas', '40.000'),
+(16, 1, 'Lilo', '10.000'),
+(17, 1, 'Acebitor', '5.000'),
+(18, 1, 'Cipril', '5.000'),
+(19, 1, 'Cipril', '12.500'),
+(20, 1, 'Eltroxin', '0.100'),
+(21, 1, 'Eltroxin', '0.050'),
+(22, 1, 'Thyrowin', '0.025'),
+(23, 1, 'Omez', '40.000'),
+(24, 3, 'Omez', '40.000'),
+(25, 1, 'Lomac', '10.000'),
+(26, 1, 'Zithromax', '250.000'),
+(27, 1, 'Zithromax', '500.000'),
+(28, 1, 'Glycomet', '250.000'),
+(29, 1, 'Glycomet', '500.000'),
+(30, 1, 'Glycomet', '850.000'),
+(31, 1, 'Tranax', '0.500'),
+(32, 1, 'Tranax', '1.000'),
+(33, 1, 'Tranax', '0.250'),
+(34, 1, 'Stilnoct-CR', '12.500'),
+(35, 1, 'Stilnoct-CR', '6.250'),
+(36, 1, 'Sertil', '50.000'),
+(37, 1, 'Sertil', '100.000');
+
+--
+-- Dumping data for table `vc_treatment_type`
+--
+
+INSERT INTO `vc_treatment_type` (`treatment_type_id`, `name`) VALUES
+(1, 'Tablet'),
+(2, 'Suspension'),
+(3, 'Injection');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
