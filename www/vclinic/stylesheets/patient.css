@@ -1,0 +1,37 @@
+th {
+	padding-left: 0px;
+}
+#main-content {
+	border: none;
+}
+#content {
+	min-height: 600px;
+	margin-left: 235px;
+	border: 1px solid;
+}
+#sidebar {
+	border: 1px solid;
+}
+#details {
+	padding-top: 20px;
+	padding-left: 5px;
+}
+#details-inner-1 {
+	overflow-x: auto;
+	overflow-y: hidden;
+	margin-right: 5px;
+}
+#details-inner-2 {
+	text-align: center;
+	padding-top: 5px;
+	padding-bottom: 10px;
+}
+.heading {
+	font-weight: bold;
+	padding-top: 5px;
+	display: block;
+}
+.lastline {
+	padding-bottom: 5px;
+	display: inline-block;
+}

@@ -1,0 +1,11 @@
+#sidebar {
+	width: 225px;
+	float: left;
+}
+#content {
+	margin-left: 225px;
+	min-height: 185px;
+	padding: 20px;
+	padding-left: 40px;
+	border-left: 1px solid;
+}

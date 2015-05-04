@@ -1,0 +1,44 @@
+th {
+	padding-left: 0px;
+}
+h3 {
+	margin-top: 0px;
+	margin-bottom: 14px;
+}
+#main-content {
+	border: none;
+}
+#showerror {
+	text-align: center;
+	border: 1px solid;
+	padding: 20px;
+}
+#showerror p {
+	display: inline-block;
+}
+.result {
+	border: 1px solid;
+	margin-bottom: 10px;
+}
+.result-picture {
+	width: 150px;
+	float: left;
+}
+.result-details {
+	margin-left: 150px;
+	margin-right: 367px;
+	min-height: 110px;
+	padding: 20px 40px;
+	border-left: 1px solid;
+}
+.result-details-right {
+	float: right;
+	width: 327px;
+	margin-top: 52px;
+	margin-right: 40px;
+	overflow-x: auto;
+	overflow-y: hidden;
+}
+.nowrap {
+	white-space: nowrap;
+}
