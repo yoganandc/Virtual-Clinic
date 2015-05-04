@@ -6,7 +6,7 @@ This application aims to provide two main functions:
 
 ### How to set it up:
 1. set the variables in /include/vclinic/appvars.php to your MySQL database credentials.
-2. execute virtualclinic.sql & states.sql on your MySQL database.
+2. execute *virtualclinic-structure.sql* and *virtualclinic-data.sql* (in that order) on your MySQL database.
 3. copy all the files to the *htdocs* folder of your Apache server. (document root is assumed to be */htdocs/www* here.)
 4. */inlude/vclinic/cron.php* must be scheduled to run every 20 seconds.
 5. install and start *signalmaster* by running `npm install` and then `node server.js`.
