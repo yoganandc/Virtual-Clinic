@@ -12,12 +12,13 @@
 
 <?php require_once('../'.VC_INCLUDE.'header.php'); ?>
 
+<?php require_once('../'.VC_INCLUDE.'chat.php'); ?>
+
 <div id="banner">
 	<h2><?php echo $pagetitle; ?></h2>
 	<p><a title="Add New Patient" href="addpatient.php">Add New Patient</a></p>
 </div>
 
-<?php require_once('../'.VC_INCLUDE.'chat.php'); ?>
 <div id="main-content">
 	
 </div>

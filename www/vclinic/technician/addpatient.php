@@ -260,10 +260,12 @@
 
 <?php require_once('../'.VC_INCLUDE.'header.php'); ?>
 
+<?php require_once('../'.VC_INCLUDE.'chat.php'); ?>
+
 <div id="banner">
 	<h2><?php echo $pagetitle; ?></h2>
 </div>
-<?php require_once('../'.VC_INCLUDE.'chat.php'); ?>
+
 <div id="main-content">
 	<?php if($showerror) echo '<p class="error">'.$error.'</p>'."\n"; ?>
 	<div id="content">
@@ -349,7 +351,7 @@
 				</tr>
 				<tr>
 					<th></th>
-					<td><input type="submit" id="submit" name="submit"></td>
+					<td><input type="submit" id="submit" name="submit"><a href="<?php echo VC_LOCATION; ?>" class="back-link" title="Cancel">Cancel</a></td>
 				</tr>
 			</table>
 		</form>

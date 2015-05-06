@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 04, 2015 at 11:59 AM
+-- Generation Time: May 06, 2015 at 08:46 AM
 -- Server version: 5.6.22-log
 -- PHP Version: 5.6.7
 
@@ -70,10 +70,38 @@ INSERT INTO `vc_admin` (`password`) VALUES
 ('d033e22ae348aeb5660fc2140aec35850c4da997');
 
 --
+-- Dumping data for table `vc_complaint`
+--
+
+INSERT INTO `vc_complaint` (`complaint_id`, `complaint`, `chronic_only`) VALUES
+(1, 'Back Problem', b'0'),
+(2, 'Joint Disorder', b'0'),
+(3, 'Skin Disorder', b'0'),
+(4, 'Upper Respiratory Condition', b'0'),
+(5, 'Stomach Problem', b'0'),
+(6, 'Anxiety/Depression', b'0'),
+(7, 'Headache', b'0'),
+(8, 'Not Listed', b'0'),
+(9, 'Cholesterol Problem', b'1'),
+(10, 'Diabetes', b'1'),
+(11, 'High Blood Pressure', b'1'),
+(12, 'Neurological Disorder', b'1');
+
+--
+-- Dumping data for table `vc_test_name`
+--
+
+INSERT INTO `vc_test_name` (`test_name_id`, `name`) VALUES
+(1, 'Blood Test'),
+(2, 'Urine Test'),
+(3, 'Ultrasound'),
+(4, 'Not Listed');
+
+--
 -- Dumping data for table `vc_treatment_name`
 --
 
-INSERT INTO `vc_treatment_name` (`treatment_name_id`, `treatment_type_id`, `name`, `dosage`) VALUES
+INSERT INTO `vc_treatment_name` (`treatment_name_id`, `treatment_type_id`, `name`, `strength`) VALUES
 (1, 1, 'Crocin', '500.000'),
 (2, 2, 'Crocin DS', '240.000'),
 (3, 1, 'Calpol', '500.000'),
@@ -110,7 +138,8 @@ INSERT INTO `vc_treatment_name` (`treatment_name_id`, `treatment_type_id`, `name
 (34, 1, 'Stilnoct-CR', '12.500'),
 (35, 1, 'Stilnoct-CR', '6.250'),
 (36, 1, 'Sertil', '50.000'),
-(37, 1, 'Sertil', '100.000');
+(37, 1, 'Sertil', '100.000'),
+(38, 4, 'Not Listed', '0.000');
 
 --
 -- Dumping data for table `vc_treatment_type`
@@ -119,7 +148,8 @@ INSERT INTO `vc_treatment_name` (`treatment_name_id`, `treatment_type_id`, `name
 INSERT INTO `vc_treatment_type` (`treatment_type_id`, `name`) VALUES
 (1, 'Tablet'),
 (2, 'Suspension'),
-(3, 'Injection');
+(3, 'Injection'),
+(4, 'Not Listed');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

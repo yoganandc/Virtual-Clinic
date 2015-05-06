@@ -23,7 +23,9 @@ var runWebRTC = null;
 var isChatOpen = false;
 var assignedStatus = ASSIGNED_STATUS_NULL;
 
-window.onload = function() {
+window.addEventListener("load", readyChat);
+
+function readyChat() {
 	var pageopen = getCookie(COOKIE_PAGEOPEN);
 	if(pageopen) {
 		if(pageopen == CHAT_CLOSE) {
@@ -65,6 +67,7 @@ window.onload = function() {
 	requestPreviousMessages.send(null);
 
 	requestUpdater = createXMLHttpRequest();
+	requestMessenger = createXMLHttpRequest();
 
 	if(assignedStatus == ASSIGNED_STATUS_OFFLINE) {
 		pollInterval = POLL_INTERVAL_UPDATE;
@@ -72,7 +75,6 @@ window.onload = function() {
 
 	if(assignedStatus == ASSIGNED_STATUS_ONLINE) {
 		pollInterval = POLL_INTERVAL_CHAT;
-		requestMessenger = createXMLHttpRequest();
 		setupWebRTC();
 	}
 
@@ -230,9 +232,6 @@ function sendMessage(message) {
 }
 
 function sendHandler() {
-	if(assignedStatus != ASSIGNED_STATUS_ONLINE)
-		return;
-
 	var message = document.getElementById("send-text").value;
 
 	if(!message) 
@@ -275,7 +274,7 @@ function sendTextHandler(evt) {
 }
 
 function setupMessages(jsonData) {
-	if(!jsonData.success)
+	if(jsonData.success == "0")
 		return;
 	else {
 		for(var i=0;i<jsonData.messages.length;i++) {

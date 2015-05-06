@@ -64,10 +64,12 @@
 
 <?php require_once(VC_INCLUDE.'header.php'); ?>
 
+<?php require_once(VC_INCLUDE.'chat.php'); ?>
+
 <div id="banner">
 	<h2><?php echo $pagetitle; ?></h2>
 </div>
-<?php require_once(VC_INCLUDE.'chat.php'); ?>
+
 <div id="main-content">
 	<?php
 		if($showerror) 

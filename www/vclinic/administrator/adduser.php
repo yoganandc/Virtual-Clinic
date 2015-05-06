@@ -115,7 +115,7 @@
 				</tr>
 				<tr>
 					<th></th>
-					<td><input type="submit" id="submit" name="submit"></td>
+					<td><input type="submit" id="submit" name="submit"><a href="index.php" class="back-link" title="Cancel">Cancel</a></td>
 				</tr>
 			</table>
 		</form>

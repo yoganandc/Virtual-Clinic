@@ -44,6 +44,9 @@
 
 <link rel="stylesheet" href="stylesheets/user.css">
 <link rel="stylesheet" href="stylesheets/profile.css">
+<link href="stylesheets/lightbox.css" rel="stylesheet" />
+<script src="scripts/jquery-1.11.0.min.js"></script>
+<script src="scripts/lightbox.min.js"></script>
 
 <?php require_once(VC_INCLUDE.'header.php'); ?>
 
@@ -56,7 +59,7 @@
 
 <div id="main-content">
 	<div id="sidebar">
-		<?php echo '<img src="'.VC_UPLOADPATH.$row['picture'].'" alt="Profile Picture">'."\n"; ?>
+		<?php echo '<a href="'.VC_UPLOADPATH.$row['picture'].'" data-lightbox="profile-image" data-title="'.$name.'"><img src="'.VC_UPLOADPATH.$row['picture'].'" alt="Profile Picture"></a>'."\n"; ?>
 	</div>
 	<div id="content">
 		<table>

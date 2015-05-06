@@ -170,12 +170,13 @@
 
 <?php require_once(VC_INCLUDE.'header.php'); ?>
 
+<?php require_once(VC_INCLUDE.'chat.php'); ?>
 
 <div id="banner">
 	<h2><?php echo $display_fname.' '.$display_lname; ?></h2>
 	<p><a title="Change Password" href="#">Change Password</a></p>
 </div>
-<?php require_once(VC_INCLUDE.'chat.php'); ?>
+
 <div id="main-content">
 	<div id="sidebar">
 		<?php echo '<img src="'.VC_UPLOADPATH.$display_picture.'" alt="Profile Picture">'."\n"; ?>
@@ -220,7 +221,7 @@
 				</tr>
 				<tr>
 					<th></th>
-					<td><input type="submit" id="submit" name="submit"></td>
+					<td><input type="submit" id="submit" name="submit"><a href="profile.php" class="back-link" title="Cancel">Cancel</a></td>
 				</tr>
 			</table>
 		</form>

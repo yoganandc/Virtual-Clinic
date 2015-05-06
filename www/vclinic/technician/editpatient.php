@@ -19,6 +19,7 @@
 	array_push($states, $result);
 
 	if(isset($_GET['patient_id'])) {
+		$patient_id = $_GET['patient_id'];
 		$query = "SELECT vp.fname, vp.lname, vp.gender, vp.birthdate, vp.occupation, va.line1, va.line2, va.city, va.district, va.state_id, va.pincode, vp.email, vp.phone, vp.picture FROM vc_patient AS vp LEFT JOIN vc_address AS va USING (address_id) WHERE vp.patient_id=".$_GET['patient_id'];
 		$data = mysqli_query($dbc, $query);
 
@@ -49,6 +50,7 @@
 		$display_picture = $row['picture'];		
 	}
 	else if(isset($_POST['submit'])) {
+		$patient_id = $_POST['patient_id'];
 		$query = "SELECT fname, lname, picture FROM vc_patient WHERE patient_id=".$_POST['patient_id'];
 		$data = mysqli_query($dbc, $query);
 		if(mysqli_num_rows($data) != 1) {
@@ -341,11 +343,11 @@
 
 <?php require_once('../'.VC_INCLUDE.'header.php'); ?>
 
+<?php require_once('../'.VC_INCLUDE.'chat.php'); ?>
 
 <div id="banner">
 	<h2><?php echo $display_fname.' '.$display_lname; ?></h2>
 </div>
-<?php require_once('../'.VC_INCLUDE.'chat.php'); ?>
 <div id="main-content">
 	<div id="sidebar">
 		<?php echo '<img src="'.VC_LOCATION.VC_UPLOADPATH.$display_picture.'" alt="Profile Picture">'."\n"; ?>
@@ -435,7 +437,7 @@
 				</tr>
 				<tr>
 					<th></th>
-					<td><input type="submit" id="submit" name="submit"></td>
+					<td><input type="submit" id="submit" name="submit"><a href="<?php echo VC_LOCATION.'patient.php?patient_id='.$patient_id; ?>" class="back-link" title="Cancel">Cancel</a></td>
 				</tr>
 			</table>
 		</form>
