@@ -11,14 +11,17 @@
 		exit();
 	}
 
-	if(empty($_GET['query'])) {
+	$dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME) or die('Error connecting to database.');
+	$search_query = mysqli_real_escape_string($dbc, trim($_GET['query']));
+
+	if(empty($search_query)) {
 		$showerror = true;
 		$error = 'Search query cannot be blank.';
 	}
 	else {
 		$query = "SELECT patient_id AS id, NULL AS type, fname, lname, gender, birthdate, occupation, email, phone, picture FROM vc_patient WHERE ";
 
-		$original_search_query = $_GET['query'];
+		$original_search_query = $search_query;
 
 		$processed_search_query = preg_replace(VC_PATTERN_SEARCH, ' ', $original_search_query);
 		$search_words = explode(' ', $processed_search_query);
@@ -37,8 +40,6 @@
 
   			$where_clause = implode(' OR ', $where_list);
   			$query .= $where_clause." UNION ALL SELECT user_id AS id, type, fname, lname, gender, birthdate, NULL AS occupation, email, phone, picture FROM vc_user WHERE ".$where_clause." ORDER BY lname, fname";
-
-  			$dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME) or die('Error connecting to database.');
 
   			$data = mysqli_query($dbc, $query);
 

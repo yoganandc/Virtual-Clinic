@@ -6,10 +6,9 @@
 		exit();
 	}
 
-	$patient_id = $_GET['patient_id'];
-
 	$dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME) or die('Error connecting to database.');
-	$query = "SELECT vp.fname, vp.lname FROM vc_patient AS vp LEFT JOIN vc_address AS va USING (address_id) LEFT JOIN vc_address_state AS vas USING (state_id) WHERE vp.patient_id=".$_GET['patient_id'];
+	$patient_id = mysqli_real_escape_string($dbc, trim($_GET['patient_id']));
+	$query = "SELECT vp.fname, vp.lname FROM vc_patient AS vp WHERE vp.patient_id=".$_GET['patient_id'];
 	$data = mysqli_query($dbc, $query);
 
 	if(mysqli_num_rows($data) != 1) {
@@ -40,6 +39,7 @@
 <div id="main-content">
 	<?php require_once(VC_INCLUDE.'patient-sidebar.php'); ?>
 	<div id="content">
+
 	</div>
 </div>
 

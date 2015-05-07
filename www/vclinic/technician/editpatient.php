@@ -19,7 +19,7 @@
 	array_push($states, $result);
 
 	if(isset($_GET['patient_id'])) {
-		$patient_id = $_GET['patient_id'];
+		$patient_id = mysqli_real_escape_string($dbc, trim($_GET['patient_id']));
 		$query = "SELECT vp.fname, vp.lname, vp.gender, vp.birthdate, vp.occupation, va.line1, va.line2, va.city, va.district, va.state_id, va.pincode, vp.email, vp.phone, vp.picture FROM vc_patient AS vp LEFT JOIN vc_address AS va USING (address_id) WHERE vp.patient_id=".$_GET['patient_id'];
 		$data = mysqli_query($dbc, $query);
 

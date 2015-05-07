@@ -14,7 +14,7 @@
 			<?php if($_SESSION['type'] != VC_ADMINISTRATOR) { ?>
 			<form action="<?php echo VC_LOCATION.'search.php'; ?>" method="GET">
 				<input type="text" id="query" name="query" value="<?php if(isset($_GET['query'])) echo $_GET['query']; ?>">
-				<input type="submit" id="search">
+				<input type="submit" id="search" value="Search">
 			</form>
 			<?php } ?>
 		</div>

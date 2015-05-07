@@ -1,0 +1,37 @@
+.case {
+	border: 1px solid;
+}
+.case-heading {
+	padding-left: 20px;
+}
+.case-edit {
+	float: right;
+	padding-right: 20px;
+	margin-top: 18px;
+}
+.case-content {
+	border-top: 1px solid;
+	padding: 20px 20px 10px 20px;
+}
+.case-content table {
+	table-layout: fixed;
+	width: 500px;
+}
+.case-content th {
+	text-align: right;
+	vertical-align: top;
+	width: 125px;
+}
+.case-content td {
+	width: 375px;
+	word-wrap: break-word;
+}
+.lowerborder {
+	border-bottom: 1px solid gray;
+}
+.test-heading {
+	padding-top: 18px;
+}
+.upperborder {
+	border-top: 1px solid gray;
+}

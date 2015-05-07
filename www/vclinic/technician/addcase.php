@@ -4,14 +4,10 @@
 	$showerror = false;
 	$error = "";
 
-	define('VC_COMPLAINT_UNLISTED', '8');
-	define('VC_CHRONIC', '1');
-	define('VC_ACUTE', '0');
-
 	if(isset($_GET['patient_id'])) {
-		$patient_id = $_GET['patient_id'];
 		$dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME) or die('Error connecting to database.');
-		$query = "SELECT vp.fname, vp.lname FROM vc_patient AS vp LEFT JOIN vc_address AS va USING (address_id) LEFT JOIN vc_address_state AS vas USING (state_id) WHERE vp.patient_id=".$patient_id;
+		$patient_id = mysqli_real_escape_string($dbc, trim($_GET['patient_id']));
+		$query = "SELECT vp.fname, vp.lname FROM vc_patient AS vp WHERE vp.patient_id=".$patient_id;
 		$data = mysqli_query($dbc, $query);
 
 		if(mysqli_num_rows($data) != 1) {
@@ -93,8 +89,8 @@
 							exit();
 						}
 						else {
-							echo '<p class="error">Some error occured.</p>';
-							exit();
+							$showerror = true;
+							$error = "Please check that patient, past, personal, family histories, and examination do not exceed 400 characters each.";
 						}
 					}
 					else {

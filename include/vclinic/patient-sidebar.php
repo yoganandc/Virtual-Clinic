@@ -1,5 +1,5 @@
 <?php 
-	$query = "SELECT vp.fname, vp.lname, vp.gender, vp.birthdate, vp.occupation, va.line1, va.line2, va.city, va.district, vas.code, va.pincode, vp.email, vp.phone, vp.picture FROM vc_patient AS vp LEFT JOIN vc_address AS va USING (address_id) LEFT JOIN vc_address_state AS vas USING (state_id) WHERE vp.patient_id=".$patient_id;
+	$query = "SELECT vp.gender, vp.birthdate, vp.occupation, va.line1, va.line2, va.city, va.district, vas.code, va.pincode, vp.email, vp.phone, vp.picture FROM vc_patient AS vp LEFT JOIN vc_address AS va USING (address_id) LEFT JOIN vc_address_state AS vas USING (state_id) WHERE vp.patient_id=".$patient_id;
 	$data_sidebar = mysqli_query($dbc, $query);
 
 	if(mysqli_num_rows($data_sidebar) != 1) {
