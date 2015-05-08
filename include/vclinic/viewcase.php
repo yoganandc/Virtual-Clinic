@@ -51,7 +51,7 @@
 	$row_temp = mysqli_fetch_array($data_case);
 	$row_case['count_treatment'] = $row_temp['count_treatment'];
 ?>
-<div class="case">
+<div class="case" data-case_id="<?php echo $case_id; ?>">
 	<a class="case-edit" title="Edit Case" href="#">Edit Case</a>
 	<h3 class="case-heading"><?php if(isset($case_no)) echo '#'.$case_no.' '; echo $title; ?></h3>
 	<div class="case-content">

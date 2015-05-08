@@ -106,16 +106,19 @@
 								$picture = "";
 							}
 							else {
+								unlink($picture_src_location);
 								$showerror = true;
 								$error = "An error related to the uploaded picture occured";
 							}
 						}
 						else {
+							unlink($picture_src_location);
 							$showerror = true;
 							$error = "Picture size cannot exceed ".(VC_MAXFILESIZE/(1024*1024))."MB.";
 						}
 					}
 					else {
+						unlink($picture_src_location);
 						$showerror = true;
 						$error = "Picture format can only be JPG or PNG.";
 					} 
