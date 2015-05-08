@@ -23,6 +23,7 @@
 <body>
 	<div id="wrapper">
 		<div id="header">
+			<p><a id="add-link" title="Add another test" href="#">Add&nbsp;Row</a></p>
 			<h2>Add Test</h2>
 		</div>
 		<div id="wrapper-form">
@@ -31,13 +32,13 @@
 				<table>
 					<tr>
 						<th><label for="test">Test</label></th>
-						<th class="hidden-col"><label for="altname">Name</label></th>
+						<th data-hidden="1" class="hidden-col"><label for="altname">Name</label></th>
 						<th><label for="result">Result</label></th>
 						<th><label for="file">File</label></th>
 					</tr>
 					<tr>
 						<td>
-							<select id="test-1" name="test-1">
+							<select id="test-1" class="test" name="test-1">
 								<?php 
 									while($row_test = mysqli_fetch_array($data_tests)) {
 										if(isset($test) && $test == $row_test['test_name_id'])
@@ -51,7 +52,7 @@
 						<td class="hidden-col"><input type="text" id="altname-1" name="altname-1" disabled="disabled" value="<?php if(isset($altname)) echo $altname; ?>"></td>
 						<td><input type="text" id="result-1" name="result-1" value="<?php if(isset($result)) echo $result; ?>"></td>
 						<td><input type="file" id="file-1" class="file" name="file-1"></td>
-						<td><a id="add-link" title="Add another test" href="#">Add</a></td>
+						<td><a id="remove-link-1" class="remove-link" title="Remove this test" href="#">Remove</a></td>
 					</tr>
 					<tr>
 						<td id="submit-cell"><input type="submit" id="submit" name="submit"></td>
