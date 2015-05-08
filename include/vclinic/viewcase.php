@@ -22,12 +22,10 @@
 	else 
 		$title = $row_case['complaint'];
 
-	if($row_case['chronic_only'] == "0") {
-		if($row_case['chronic'] == "0")
-			$title .= " (Acute)";
-		else 
-			$title .= " (Chronic)";
-	}
+	if($row_case['chronic'] == '0')
+		$type = "Acute";
+	else
+		$type = "Chronic";
 
 	$row_case['patient_history'] = preg_replace("/\r\n/", "<br>", $row_case['patient_history']);
 	$row_case['past_history'] = preg_replace("/\r\n/", "<br>", $row_case['past_history']);
@@ -55,8 +53,15 @@
 ?>
 <div class="case">
 	<a class="case-edit" title="Edit Case" href="#">Edit Case</a>
-	<h3 class="case-heading"><?php echo $title; ?></h3>
+	<h3 class="case-heading"><?php if(isset($case_no)) echo '#'.$case_no.' '; echo $title; ?></h3>
 	<div class="case-content">
+		<table>
+			<tr>
+				<th>Type: </th>
+				<td><?php echo $type; ?></td>
+			</tr>
+		</table>
+		<hr>
 		<table>
 			<tr>
 				<th>Patient History: </th>
@@ -99,7 +104,7 @@
 
 							}
 						?>
-						<?php if($_SESSION['type'] == VC_TECHNICIAN) echo '<li><a title="Add Test" href="#">Add Test</a></li>'; ?>
+						<?php if($_SESSION['type'] == VC_TECHNICIAN) echo '<li><a id="add-test" title="Add Test" href="#">Add Test</a></li>'; ?>
 					</ul>
 				</td>
 			</tr>
@@ -115,7 +120,7 @@
 								
 							}
 						?>
-						<?php echo '<li><a title="Add Prescription" href="#">Add Prescription</a></li>'; ?>
+						<?php echo '<li><a id="add-treatment" title="Add Prescription" href="#">Add Prescription</a></li>'; ?>
 					</ul>
 				</td>
 			</tr>

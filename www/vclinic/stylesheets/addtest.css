@@ -1,0 +1,25 @@
+body {
+	text-align: center;
+}
+#wrapper {
+	display: inline-block;
+	text-align: left;
+}
+#wrapper-form {
+	margin: 0px;
+	padding: 20px;
+	border: 1px solid;
+}
+.hidden-col {
+	//display: none;
+}
+.file {
+	width: 175px;
+}
+#submit-cell {
+	text-align: right;
+}
+#add-link {
+	display: inline-block;
+	width: 54px;
+}

@@ -8,16 +8,33 @@
 
 	$dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME) or die('Error connecting to database.');
 	$patient_id = mysqli_real_escape_string($dbc, trim($_GET['patient_id']));
-	$query = "SELECT vp.fname, vp.lname FROM vc_patient AS vp WHERE vp.patient_id=".$_GET['patient_id'];
+	$query = "SELECT vp.fname, vp.lname FROM vc_patient AS vp WHERE vp.patient_id=".$patient_id;
 	$data = mysqli_query($dbc, $query);
-
 	if(mysqli_num_rows($data) != 1) {
-		header('Location: '.VC_LOCATION);
+		echo '<p class="error">Some error occured.</p>';
 		exit();
 	}
-
 	$row = mysqli_fetch_array($data);
 	$name = $row['fname'].' '.$row['lname'];
+
+	$query = "SELECT case_id FROM vc_case WHERE patient_id=".$patient_id." ORDER BY case_id DESC LIMIT 1";
+	$data = mysqli_query($dbc, $query);
+	if(mysqli_num_rows($data) != 1) {
+		echo '<p class="error">Some error occured.</p>';
+		exit();
+	}
+	$row = mysqli_fetch_array($data);
+	$case_id = $row['case_id'];
+
+	$query = "SELECT COUNT(*) AS count FROM vc_case WHERE patient_id=".$patient_id;
+	$data = mysqli_query($dbc, $query);
+	if(mysqli_num_rows($data) != 1) {
+		echo '<p class="error">Some error occured.</p>';
+		exit();
+	}
+	$row = mysqli_fetch_array($data);
+	$case_no = $row['count'];
+
 	$pagetitle = 'Patient Profile';
 ?>
 
@@ -25,7 +42,9 @@
 
 <link rel="stylesheet" href="stylesheets/user.css">
 <link rel="stylesheet" href="stylesheets/patient-sidebar.css">
+<link rel="stylesheet" href="stylesheets/viewcase.css">
 <link rel="stylesheet" href="stylesheets/patient.css">
+<script src="scripts/viewcase.js"></script>
 
 <?php require_once(VC_INCLUDE.'header.php'); ?>
 
@@ -39,7 +58,7 @@
 <div id="main-content">
 	<?php require_once(VC_INCLUDE.'patient-sidebar.php'); ?>
 	<div id="content">
-
+		<?php require_once(VC_INCLUDE.'viewcase.php'); ?>
 	</div>
 </div>
 

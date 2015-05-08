@@ -47,6 +47,7 @@
 <link rel="stylesheet" href="stylesheets/patient-sidebar.css">
 <link rel="stylesheet" href="stylesheets/viewcase.css">
 <link rel="stylesheet" href="stylesheets/case.css">
+<script src="scripts/viewcase.js"></script>
 
 <?php require_once(VC_INCLUDE.'header.php'); ?>
 
