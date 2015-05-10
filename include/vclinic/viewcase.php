@@ -1,4 +1,13 @@
 <?php
+	function is_filetype_image($file) {
+		$filetypes = array("image/jpeg", "image/pjpeg", "image/png", "image/bmp", "image/gif");
+		foreach($filetypes as $filetype) {
+			if($filetype == $file)
+				return true;
+		}
+		return false;
+	}
+
 	$query_case = "SELECT complaint_id, altname, chronic, patient_history, past_history, personal_history, family_history, examination FROM vc_case WHERE case_id=".$case_id;
 	$data_case = mysqli_query($dbc, $query_case);
 	if(mysqli_num_rows($data_case) != 1) {
@@ -42,6 +51,19 @@
 	$row_temp = mysqli_fetch_array($data_case);
 	$row_case['count_test'] = $row_temp['count_test'];
 
+	if($row_case['count_test'] > 0) {
+		$query_case = "SELECT * FROM vc_test WHERE case_id=".$case_id;
+		$data_case = mysqli_query($dbc, $query_case);
+		if(mysqli_num_rows($data_case) < 1) {
+			echo '<p class="error">Some error occured.</p>';
+			exit();
+		}
+		$data_case_tests = array();
+		while($row_temp = mysqli_fetch_array($data_case)) {
+			array_push($data_case_tests, $row_temp);
+		}
+	}
+
 	$query_case = "SELECT COUNT(*) AS count_treatment FROM vc_treatment WHERE case_id=".$case_id;
 	$data_case = mysqli_query($dbc, $query_case);
 	if(mysqli_num_rows($data_case) != 1) {
@@ -50,6 +72,19 @@
 	}
 	$row_temp = mysqli_fetch_array($data_case);
 	$row_case['count_treatment'] = $row_temp['count_treatment'];
+
+	$query_case = "SELECT * FROM vc_test_name";
+	$data_case = mysqli_query($dbc, $query_case);
+	if(mysqli_num_rows($data_case) < 1) {
+		echo '<p class="error">Some error occured.</p>';
+		exit();
+	}
+	$data_test_names = array();
+	$i = 1;
+	while($row_temp = mysqli_fetch_array($data_case)) {
+		$data_test_names[$i] = $row_temp['name'];
+		$i++;
+	}
 ?>
 <div class="case" data-case_id="<?php echo $case_id; ?>">
 	<a class="case-edit" title="Edit Case" href="#">Edit Case</a>
@@ -91,37 +126,39 @@
 		</table>
 		<br>
 		<hr>
+		<br>
+		<?php
+			if(($row_case['count_test'] == "0") && ($_SESSION['type'] == VC_DOCTOR)) {
+				echo '<ul><li><span class="nulldata">No tests conducted.</span></li></ul>';
+			}
+			else { 	
+		?>
 		<table>
 			<tr>
-				<th class="test-heading">Tests: </th>
-				<td>
-					<ul>
-						<?php
-							if(($row_case['count_test'] == "0") && ($_SESSION['type'] == VC_DOCTOR)) {
-								echo '<li><span class="nulldata">No tests conducted.</span></li>';
-							}
-							else {
-
-							}
-						?>
-						<?php if($_SESSION['type'] == VC_TECHNICIAN) echo '<li><a id="add-test" title="Add Test" href="#">Add Test</a></li>'; ?>
-					</ul>
-				</td>
+				<th>Name</th>
+				<th>Result</th>
+				<th>File</th>
 			</tr>
+			<?php foreach($data_case_tests as $data_case_test) { ?>
+			<tr>
+				<td><?php $x = $data_case_test['test_name_id']; echo $data_test_names[$x]; ?></td>
+				<td><?php echo $data_case_test['result']; ?></td>
+				<td></td>
+			</tr>
+			<?php } ?>
 		</table>
+		<?php } if($_SESSION['type'] == VC_TECHNICIAN) echo '<ul><li><a id="add-test" title="Add Test" href="#">Add Test</a></li></ul>'; ?>
 		<hr>
 		<table>	
 			<tr>
 				<th class="test-heading">Treatment: </th>
 				<td>
-					<ul>
-						<?php
-							if($row_case['count_treatment'] != "0") {
-								
-							}
-						?>
-						<?php echo '<li><a id="add-treatment" title="Add Prescription" href="#">Add Prescription</a></li>'; ?>
-					</ul>
+					<?php
+						if($row_case['count_treatment'] != "0") {
+							
+						}
+					?>
+					<?php echo '<ul><li><a id="add-treatment" title="Add Prescription" href="#">Add Prescription</a></li></ul>'; ?>
 				</td>
 			</tr>
 		</table>

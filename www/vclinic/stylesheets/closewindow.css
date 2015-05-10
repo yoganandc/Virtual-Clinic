@@ -1,0 +1,13 @@
+body {
+	text-align: center;
+}
+#wrapper {
+	margin-top: 100px;
+	display: inline-block;
+	text-align: left;
+}
+#wrapper-form {
+	margin: 0px;
+	padding: 20px;
+	border: 1px solid;
+}

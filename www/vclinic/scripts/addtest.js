@@ -24,7 +24,7 @@ window.addEventListener("load", function() {
 	var offsetX = window.outerWidth - window.innerWidth;
 	var offsetY = window.outerHeight - window.innerHeight;
 	windowWidth = 790 + offsetX;
-	windowHeight = 199 + (parseInt(rows, 10)*31) + offsetY;
+	windowHeight = 231 + (parseInt(rows, 10) * 31) + offsetY;
 	window.resizeTo(windowWidth, windowHeight);
 	
 	document.getElementById("cancel-test").addEventListener("click", function(evt) { window.close(); evt.preventDefault(); });

@@ -8,7 +8,7 @@ window.addEventListener("load", function() {
 
 function testHandler() {
 	if(testWindow == null || testWindow.closed)
-		testWindow = window.open("technician/addtest.php?case_id="+case_id, "test-window", "left=50, top=50, width=790, height=230");
+		testWindow = window.open("technician/addtest.php?case_id="+case_id, "test-window", "left=50, top=50, width=790, height=262");
 	else
 		testWindow.focus();
 }
