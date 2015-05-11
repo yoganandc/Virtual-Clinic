@@ -1,7 +1,6 @@
 <?php 
 	require_once('../../../include/vclinic/techniciansession.php');
 
-	define('VC_TEST_UNLISTED', '4');
 	define('VC_RESULT_LENGTH', '40');
 
 	function is_valid_filetype($file) {
@@ -96,6 +95,7 @@
 					}
 				}
 				else {
+					echo $test['file_type'];
 					unlink_all_files($tests);
 					$showerror = true;
 					$error = "You can only upload files of the following types: .odt, .ods, .doc/.docx, .xls/.xlsx, .pdf, .jpg, .png, .bmp, & .gif";
@@ -154,8 +154,7 @@
 							if(move_uploaded_file($test['file_src_location'], $file_dest_location)) {
 								$query = "UPDATE vc_test SET filename='$filename' WHERE test_id=".$row['test_id'];
 								if(mysqli_query($dbc, $query)) {
-									header('Location: '.VC_LOCATION.'technician/closewindow.php');
-									exit();
+									continue;
 								}
 								else {
 									unlink_all_files($tests);
@@ -177,8 +176,7 @@
 						}
 					}
 					else {
-						header('Location: '.VC_LOCATION.'technician/closewindow.php');
-						exit();
+						continue;
 					}
 				}
 				else {
@@ -187,6 +185,8 @@
 					exit();
 				}
 			}
+			header('Location: '.VC_LOCATION.'/technician/closewindow.php');
+			exit();
 		}
 
 		$query = "SELECT * FROM vc_test_name";

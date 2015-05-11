@@ -19,6 +19,8 @@
 	define('VC_PATTERN_PINCODE', '/^\d{6}$/');
 
 	define('VC_COMPLAINT_UNLISTED', '8');
+	define('VC_TEST_UNLISTED', '4');
+	define('VC_TREATMENT_UNLISTED', '38');
 	define('VC_CHRONIC', '1');
 	define('VC_ACUTE', '0');
 ?>

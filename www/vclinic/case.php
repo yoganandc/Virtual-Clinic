@@ -48,6 +48,9 @@
 <link rel="stylesheet" href="stylesheets/viewcase.css">
 <link rel="stylesheet" href="stylesheets/case.css">
 <script src="scripts/viewcase.js"></script>
+<link href="stylesheets/lightbox.css" rel="stylesheet">
+<script src="scripts/jquery-1.11.0.min.js"></script>
+<script src="scripts/lightbox.min.js"></script>
 
 <?php require_once(VC_INCLUDE.'header.php'); ?>
 

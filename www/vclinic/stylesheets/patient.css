@@ -1,1 +1,6 @@
-
+#nocase {
+	text-align: center;
+	padding: 20px;
+	border: 1px solid;
+	min-height: 600px;
+}

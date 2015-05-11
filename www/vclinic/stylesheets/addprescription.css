@@ -14,12 +14,3 @@ body {
 	padding: 20px;
 	border: 1px solid;
 }
-.hidden-col {
-	display: none;
-}
-.file {
-	width: 175px;
-}
-#submit-cell {
-	text-align: right;
-}

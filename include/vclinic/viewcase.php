@@ -8,6 +8,15 @@
 		return false;
 	}
 
+	function is_filetype_pdf($file) {
+		$filetypes = array("image/jpeg", "image/pjpeg", "image/png", "image/bmp", "image/gif");
+		foreach($filetypes as $filetype) {
+			if($filetype == $file)
+				return true;
+		}
+		return false;
+	}
+
 	$query_case = "SELECT complaint_id, altname, chronic, patient_history, past_history, personal_history, family_history, examination FROM vc_case WHERE case_id=".$case_id;
 	$data_case = mysqli_query($dbc, $query_case);
 	if(mysqli_num_rows($data_case) != 1) {
@@ -86,10 +95,10 @@
 		$i++;
 	}
 ?>
-<div class="case" data-case_id="<?php echo $case_id; ?>">
-	<a class="case-edit" title="Edit Case" href="#">Edit Case</a>
-	<h3 class="case-heading"><?php if(isset($case_no)) echo '#'.$case_no.' '; echo $title; ?></h3>
-	<div class="case-content">
+<div id="case" data-case_id="<?php echo $case_id; ?>">
+	<a id="case-edit" title="Edit Case" href="#">Edit Case</a>
+	<h3 id="case-heading"><?php if(isset($case_no)) echo '#'.$case_no.' '; echo $title; ?></h3>
+	<div id="case-content">
 		<table>
 			<tr>
 				<th>Type: </th>
@@ -127,38 +136,67 @@
 		<br>
 		<hr>
 		<br>
-		<?php
-			if(($row_case['count_test'] == "0") && ($_SESSION['type'] == VC_DOCTOR)) {
-				echo '<ul><li><span class="nulldata">No tests conducted.</span></li></ul>';
-			}
-			else { 	
-		?>
 		<table>
 			<tr>
-				<th>Name</th>
-				<th>Result</th>
-				<th>File</th>
+				<th>Tests:</th>
+				<td>
+					<?php
+						if($_SESSION['type'] == VC_TECHNICIAN) echo '<a class="add" id="add-test" title="Add Test" href="#">Add Test</a>';
+						if(($row_case['count_test'] == "0") && ($_SESSION['type'] == VC_DOCTOR)) {
+							echo '<span class="add nulldata">No tests conducted.</span>';
+						}
+						else { 	
+					?>
+					<br><br>
+					<table id="results">
+						<tr id="heading">
+							<th id="width-1">Name</th>
+							<th id="width-2">Result</th>
+							<th id="width-3">File</th>
+						</tr>
+						<?php $color = false; ?>
+						<?php foreach($data_case_tests as $data_case_test) { ?>
+						<tr<?php if($color) echo ' class="color-row"'; ?>>
+							<?php $color = !$color; ?>
+							<td><?php if($data_case_test['test_name_id'] == VC_TEST_UNLISTED) echo $data_case_test['altname']; else echo $data_test_names[intval($data_case_test['test_name_id'])]; ?></td>
+							<td><?php echo $data_case_test['result']; ?></td>
+							<td>
+								<?php
+									if(!empty($data_case_test['filename'])) {
+										$filename = $_SERVER['DOCUMENT_ROOT'].'/vclinic/cases/case-'.$case_id.'/'.$data_case_test['filename'];
+										$finfo = finfo_open(FILEINFO_MIME_TYPE);
+										$filetype = finfo_file($finfo, $filename);
+										finfo_close($finfo);
+										$href = VC_LOCATION.'cases/case-'.$case_id.'/'.$data_case_test['filename'];
+										if(is_filetype_image($filetype)) {
+											echo '<a href="'.$href.'" data-lightbox="case-'.$case_id.'">View</a>';
+										}
+										else {
+											echo '<a href="'.$href.'" target="_blank">Open</a>';
+										}
+									}
+								?>
+							</td>
+						</tr>
+						<?php } ?>
+					</table>
+					<?php } ?>
+				</td>
 			</tr>
-			<?php foreach($data_case_tests as $data_case_test) { ?>
-			<tr>
-				<td><?php $x = $data_case_test['test_name_id']; echo $data_test_names[$x]; ?></td>
-				<td><?php echo $data_case_test['result']; ?></td>
-				<td></td>
-			</tr>
-			<?php } ?>
 		</table>
-		<?php } if($_SESSION['type'] == VC_TECHNICIAN) echo '<ul><li><a id="add-test" title="Add Test" href="#">Add Test</a></li></ul>'; ?>
+		<br>
 		<hr>
+		<br>
 		<table>	
 			<tr>
-				<th class="test-heading">Treatment: </th>
+				<th>Treatment: </th>
 				<td>
+					<?php echo '<a class="add" id="add-treatment" title="Add Prescription" href="#">Add Prescription</a>'; ?>
 					<?php
 						if($row_case['count_treatment'] != "0") {
 							
 						}
 					?>
-					<?php echo '<ul><li><a id="add-treatment" title="Add Prescription" href="#">Add Prescription</a></li></ul>'; ?>
 				</td>
 			</tr>
 		</table>

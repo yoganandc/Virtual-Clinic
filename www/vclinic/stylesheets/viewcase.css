@@ -1,37 +1,55 @@
-.case {
+#case {
 	border: 1px solid;
 }
-.case-heading {
+#case-heading {
 	padding-left: 20px;
 }
-.case-edit {
+#case-edit {
 	float: right;
 	padding-right: 20px;
 	margin-top: 18px;
 }
-.case-content {
+#case-content {
 	border-top: 1px solid;
 	padding: 20px 20px 10px 20px;
 }
-.case-content table {
+#case-content table {
 	table-layout: fixed;
 	width: 500px;
 }
-.case-content th {
+#case-content th {
 	text-align: right;
 	vertical-align: top;
 	width: 125px;
 }
-.case-content td {
+#case-content td {
 	width: 375px;
 	word-wrap: break-word;
 }
-.lowerborder {
+#case-content table table {
+	table-layout: fixed;
+	width: 370px;
+	border: 1px solid gray;
+}
+#case-content table table th {
+	text-align: left;
 	border-bottom: 1px solid gray;
 }
-.test-heading {
-	padding-top: 18px;
+#case-content th#width-1 {
+	width: 25%;
 }
-.upperborder {
-	border-top: 1px solid gray;
+#case-content th#width-2 {
+	width: 60%;
+}
+#case-content th#width-3 {
+	width: 15%;
+}
+#heading {
+	background-color: #40A2D0;
+}
+.color-row {
+	background-color: #DDDDDD;
+}
+.add {
+	padding-left: 5px;
 }
