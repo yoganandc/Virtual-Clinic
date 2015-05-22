@@ -9,11 +9,9 @@
 	}
 
 	function is_filetype_pdf($file) {
-		$filetypes = array("image/jpeg", "image/pjpeg", "image/png", "image/bmp", "image/gif");
-		foreach($filetypes as $filetype) {
-			if($filetype == $file)
-				return true;
-		}
+		$filetype = "application/pdf";
+		if($filetype == $file)
+			return true;
 		return false;
 	}
 
@@ -82,6 +80,21 @@
 	$row_temp = mysqli_fetch_array($data_case);
 	$row_case['count_treatment'] = $row_temp['count_treatment'];
 
+	if($row_case['count_treatment'] > 0) {
+		$query_case = "SELECT * FROM vc_treatment WHERE case_id=".$case_id;
+		$data_case = mysqli_query($dbc, $query_case);
+		if(mysqli_num_rows($data_case) < 1) {
+			echo '<p class="error">Some error occured.</p>';
+			exit();
+		}
+		$data_case_treatments = array();
+		while($row_temp = mysqli_fetch_array($data_case)) {
+			$temp_dosage = str_split($row_temp['dosage']);
+			$row_temp['dosage'] = implode('-', $temp_dosage);
+			array_push($data_case_treatments, $row_temp);
+		}
+	}
+
 	$query_case = "SELECT * FROM vc_test_name";
 	$data_case = mysqli_query($dbc, $query_case);
 	if(mysqli_num_rows($data_case) < 1) {
@@ -92,6 +105,32 @@
 	$i = 1;
 	while($row_temp = mysqli_fetch_array($data_case)) {
 		$data_test_names[$i] = $row_temp['name'];
+		$i++;
+	}
+
+	$query_case = "SELECT initial, unit FROM vc_treatment_type";
+	$data_case = mysqli_query($dbc, $query_case);
+	if(mysqli_num_rows($data_case) < 1) {
+		echo '<p class="error">Some error occured.</p>';
+		exit();
+	}
+	$data_treatment_types = array();
+	$i = 1;
+	while($row_temp = mysqli_fetch_array($data_case)) {
+		$data_treatment_types[$i] = $row_temp;
+		$i++;
+	}
+
+	$query_case = "SELECT * FROM vc_treatment_name";
+	$data_case = mysqli_query($dbc, $query_case);
+	if(mysqli_num_rows($data_case) < 1) {
+		echo '<p class="error">Some error occured.</p>';
+		exit();
+	}
+	$data_treatment_names = array();
+	$i = 1;
+	while($row_temp = mysqli_fetch_array($data_case)) {
+		$data_treatment_names[$i] = $data_treatment_types[$row_temp['treatment_type_id']]['initial'].'. '.$row_temp['name'].' '.substr($row_temp['strength'], 0, 5).$data_treatment_types[$row_temp['treatment_type_id']]['unit'];
 		$i++;
 	}
 ?>
@@ -141,15 +180,16 @@
 				<th>Tests:</th>
 				<td>
 					<?php
-						if($_SESSION['type'] == VC_TECHNICIAN) echo '<a class="add" id="add-test" title="Add Test" href="#">Add Test</a>';
-						if(($row_case['count_test'] == "0") && ($_SESSION['type'] == VC_DOCTOR)) {
-							echo '<span class="add nulldata">No tests conducted.</span>';
+						if($_SESSION['type'] == VC_TECHNICIAN) echo '<a class="add" id="add-test" title="Add Test" href="#">Add Test</a><br>';
+						if(($row_case['count_test'] == "0")) {
+							if(($_SESSION['type'] == VC_DOCTOR))
+								echo '<span class="add nulldata">No tests conducted.</span><br>';
 						}
 						else { 	
 					?>
-					<br><br>
+					<br>
 					<table id="results">
-						<tr id="heading">
+						<tr id="heading-results">
 							<th id="width-1">Name</th>
 							<th id="width-2">Result</th>
 							<th id="width-3">File</th>
@@ -171,8 +211,11 @@
 										if(is_filetype_image($filetype)) {
 											echo '<a href="'.$href.'" data-lightbox="case-'.$case_id.'">View</a>';
 										}
-										else {
+										else if(is_filetype_pdf($filetype)) {
 											echo '<a href="'.$href.'" target="_blank">Open</a>';
+										}
+										else {
+											echo '<a href="'.$href.'" target="_blank">Download</a>';
 										}
 									}
 								?>
@@ -191,14 +234,32 @@
 			<tr>
 				<th>Treatment: </th>
 				<td>
-					<?php echo '<a class="add" id="add-treatment" title="Add Prescription" href="#">Add Prescription</a>'; ?>
-					<?php
+					<?php 
+						echo '<a class="add" id="add-treatment" title="Add Prescription" href="#">Add Prescription</a><br><br>';
 						if($row_case['count_treatment'] != "0") {
-							
-						}
 					?>
+					<table id="treatments">
+						<tr id="heading-treatments">
+							<th id="width-4">Medicine</th>
+							<th id="width-5">Dosage</th>
+							<th id="width-6">Intake</th>
+							<th id="width-7">Length</th>
+						</tr>
+						<?php $color = false; ?>
+						<?php foreach($data_case_treatments as $data_case_treatment) { ?>
+						<tr<?php if($color) echo ' class="color-row"'; ?>>
+							<?php $color = !$color; ?>
+							<td><?php if($data_case_treatment['treatment_name_id'] == VC_TREATMENT_UNLISTED) echo $data_case_treatment['altname']; else echo $data_treatment_names[intval($data_case_treatment['treatment_name_id'])]; ?></td>
+							<td><?php echo $data_case_treatment['dosage']; ?></td>
+							<td><?php if($data_case_treatment['before_food'] == "0") echo 'A/F'; else echo 'B/F'; ?></td>
+							<td><?php echo $data_case_treatment['duration']; ?></td>
+						</tr>
+						<?php } ?>
+					</table>
+					<?php } ?>
 				</td>
 			</tr>
 		</table>
+		<br>
 	</div>
 </div>

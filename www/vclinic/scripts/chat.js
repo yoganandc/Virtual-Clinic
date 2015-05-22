@@ -296,6 +296,7 @@ function setupMessages(jsonData) {
 function setupWebRTC() {
 	if(runWebRTC) {
 		document.getElementById("localvideo-container").style.display = "block";
+		setCookie(COOKIE_NAME, CHAT_OPEN);
 
 		webrtc = new SimpleWebRTC({
 		    localVideoEl: 'localvideo',
@@ -329,6 +330,7 @@ function setupWebRTC() {
 function destroyWebRTC() {
 	if(runWebRTC) {
 		document.getElementById("localvideo-container").style.display = "none";
+		setCookie(COOKIE_NAME, CHAT_CLOSE);
 		webrtc.stopLocalVideo();
 		webrtc.leaveRoom();
 		webrtc.connection.disconnect();

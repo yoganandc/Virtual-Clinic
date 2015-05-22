@@ -36,15 +36,30 @@
 	border-bottom: 1px solid gray;
 }
 #case-content th#width-1 {
-	width: 25%;
+	width: 23%;
 }
 #case-content th#width-2 {
-	width: 60%;
+	width: 55%;
 }
 #case-content th#width-3 {
-	width: 15%;
+	width: 22%;
 }
-#heading {
+#case-content th#width-4 {
+	width: 40%;
+}
+#case-content th#width-5 {
+	width: 20%;
+}
+#case-content th#width-6 {
+	width: 20%;
+}
+#case-content th#width-7 {
+	width: 20%;
+}
+#heading-results {
+	background-color: #40A2D0;
+}
+#heading-treatments {
 	background-color: #40A2D0;
 }
 .color-row {

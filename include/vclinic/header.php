@@ -20,4 +20,5 @@
 		</div>
 		<h1>Virtual Clinic</h1>
 	</div>
-	<div id="main">
+	<div id="vc-wrapper">
+		<div id="main">

@@ -67,6 +67,7 @@
 				$test['file_error'] = $_FILES['file-'.$i]['error'];
 				array_push($tests, $test);
 				$count++;
+				unset($test['altname']);
 			}
 			$i++;
 		}
@@ -185,7 +186,7 @@
 					exit();
 				}
 			}
-			header('Location: '.VC_LOCATION.'/technician/closewindow.php');
+			header('Location: '.VC_LOCATION.'closewindow.php');
 			exit();
 		}
 

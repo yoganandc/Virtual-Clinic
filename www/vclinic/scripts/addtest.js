@@ -151,7 +151,7 @@ function selectHandler(evtSrc) {
 				break;
 		}
 		if(j == tableRows.length-1) {
-			for(j=1; j<tableRows.length-1; j++) {
+			for(j=0; j<tableRows.length-1; j++) {
 				tableRows[j].cells[1].style.display = "none";
 			}
 			hidden = true;

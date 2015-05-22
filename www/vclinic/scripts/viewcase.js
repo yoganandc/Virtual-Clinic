@@ -1,9 +1,12 @@
 var testWindow =null;
+var treatmentWindow = null;
 var case_id = null;
 
 window.addEventListener("load", function() {
 	case_id = parseInt(document.getElementById("case").getAttribute("data-case_id"));
-	document.getElementById("add-test").addEventListener("click", function(evt) { testHandler(); evt.preventDefault(); });
+	if(document.getElementById("add-test"))
+		document.getElementById("add-test").addEventListener("click", function(evt) { testHandler(); evt.preventDefault(); });
+	document.getElementById("add-treatment").addEventListener("click", function(evt) { treatmentHandler(); evt.preventDefault(); });
 });
 
 function testHandler() {
@@ -11,4 +14,11 @@ function testHandler() {
 		testWindow = window.open("technician/addtest.php?case_id="+case_id, "test-window", "left=50, top=50, width=790, height=262");
 	else
 		testWindow.focus();
+}
+
+function treatmentHandler() {
+	if(treatmentWindow == null || treatmentWindow.closed)
+		treatmentWindow = window.open("addprescription.php?case_id="+case_id, "treatment-window", "left=50, top=50, width=833, height=262");
+	else
+		treatmentWindow.focus();
 }
