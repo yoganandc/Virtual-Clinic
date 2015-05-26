@@ -2,7 +2,7 @@
 	-webkit-box-sizing: border-box;
  	-moz-box-sizing: border-box;
     box-sizing: border-box;
-	width: 900px;
+	width: 1296px;
 	margin: 0 auto;
 }
 #header-right {
@@ -24,27 +24,42 @@
 	font-size: 300%;
 	float: left;
 }
+#vc-wrapper {
+	-webkit-box-sizing: border-box;
+ 	-moz-box-sizing: border-box;
+    box-sizing: border-box;
+	clear: both;
+	width: 1296px;
+	margin: 0 auto;
+	border: 1px solid;
+}
 #main {
   	-webkit-box-sizing: border-box;
  	-moz-box-sizing: border-box;
     box-sizing: border-box;
-	clear: both;
-	width: 902px;
-	margin: 0 auto;
+    width: 842px;
+    margin-top: 10px;
+	margin-left: 442px;
+	margin-right: 10px;
+	padding: 10px;
 	border: 1px solid;
-	padding: 10px 40px 40px 40px;
+    min-height: 647px;
+    margin-bottom: 10px;
 }
 #banner h2 {
-	float: left;
+
 }
 #banner p {
 	float: right;
-	margin-bottom: 0px;
-	margin-top: 24px;
+    margin-top: 8px;
 }
 #main-content {
-	clear: both;
+    clear: right;
 	border: 1px solid;
+}
+#vc-iframe {
+    border: none;
+    width: 820px;
 }
 .username {
 	font-style: italic;

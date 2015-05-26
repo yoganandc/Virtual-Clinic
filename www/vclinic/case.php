@@ -38,34 +38,30 @@
 
 	$row = mysqli_fetch_array($data);
 	$name = $row['fname'].' '.$row['lname'].' - View Case';
-	$pagetitle = 'View Case';
 ?>
 
 <?php require_once(VC_INCLUDE.'startdocument.php'); ?>
 
-<link rel="stylesheet" href="stylesheets/user.css">
-<link rel="stylesheet" href="stylesheets/patient-sidebar.css">
-<link rel="stylesheet" href="stylesheets/viewcase.css">
-<link rel="stylesheet" href="stylesheets/case.css">
-<script src="scripts/viewcase.js"></script>
-<link href="stylesheets/lightbox.css" rel="stylesheet">
-<script src="scripts/jquery-1.11.0.min.js"></script>
-<script src="scripts/lightbox.min.js"></script>
-
-<?php require_once(VC_INCLUDE.'header.php'); ?>
-
-<?php require_once(VC_INCLUDE.'chat.php'); ?>
-
-<div id="banner">
-	<h2><?php echo $name; ?></h2>
-	<p><a title="Back to patient overview" href="patient.php?patient_id=<?php echo $patient_id; ?>">Back</a></p>
-</div>
-
-<div id="main-content">
-	<?php require_once(VC_INCLUDE.'patient-sidebar.php'); ?>
-	<div id="content">
-		<?php require_once(VC_INCLUDE.'viewcase.php'); ?>
+	<link rel="stylesheet" href="stylesheets/user.css">
+	<link rel="stylesheet" href="stylesheets/patient-sidebar.css">
+	<link rel="stylesheet" href="stylesheets/viewcase.css">
+	<link rel="stylesheet" href="stylesheets/case.css">
+	<script src="scripts/viewcase.js"></script>
+	<link href="stylesheets/lightbox.css" rel="stylesheet">
+	<script src="scripts/jquery-1.11.0.min.js"></script>
+	<script src="scripts/lightbox.min.js"></script>
+</head>
+<body>
+	<div id="banner">
+		<p><a title="Back to patient overview" href="patient.php?patient_id=<?php echo $patient_id; ?>">Back</a></p>
+		<h2><?php echo $name; ?></h2>
 	</div>
-</div>
+
+	<div id="main-content">
+		<?php require_once(VC_INCLUDE.'patient-sidebar.php'); ?>
+		<div id="content">
+			<?php require_once(VC_INCLUDE.'viewcase.php'); ?>
+		</div>
+	</div>
 
 <?php require_once(VC_INCLUDE.'footer.php'); ?>

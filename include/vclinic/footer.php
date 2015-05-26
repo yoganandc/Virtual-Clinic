@@ -1,5 +1,3 @@
-		<?php if(isset($dbc)) mysqli_close($dbc); ?>
-		</div>
-	</div>
+	<?php if(isset($dbc)) mysqli_close($dbc); ?>
 </body>
 </html>

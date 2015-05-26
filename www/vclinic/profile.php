@@ -36,62 +36,57 @@
 			$docname = $result['fname'].' '.$result['lname'];
 		}
 	}
-
-	$pagetitle = "Profile";
 ?>
 
 <?php require_once(VC_INCLUDE.'startdocument.php'); ?>
 
-<link rel="stylesheet" href="stylesheets/user.css">
-<link rel="stylesheet" href="stylesheets/profile.css">
-
-<?php require_once(VC_INCLUDE.'header.php'); ?>
-
-<?php if($_SESSION['type'] !=VC_ADMINISTRATOR) require_once(VC_INCLUDE.'chat.php'); ?>
-
-<div id="banner">
-	<h2><?php echo $name; ?></h2>
-	<?php if($user_id == $_SESSION['user_id']) echo '<p><a title="Edit Profile" href="editprofile.php">Edit Profile</a></p>'; ?>
-</div>
-
-<div id="main-content">
-	<div id="sidebar">
-		<?php echo '<img src="'.VC_UPLOADPATH.$row['picture'].'" alt="Profile Picture">'."\n"; ?>
+	<link rel="stylesheet" href="stylesheets/user.css">
+	<link rel="stylesheet" href="stylesheets/profile.css">
+</head>
+<body>
+	<div id="banner">
+		<?php if($user_id == $_SESSION['user_id']) echo '<p><a title="Edit Profile" href="editprofile.php">Edit Profile</a></p>'; ?>
+		<h2><?php echo $name; ?></h2>
 	</div>
-	<div id="content">
-		<table>
-			<?php if($user_id == $_SESSION['user_id']) { ?>
-			<tr>
-				<th>Username: </th>
-				<td><?php echo $row['username']; ?></td>
-			</tr>
-			<?php } ?>
-			<tr>
-				<th>Account Type: </th>
-				<td><?php if($row['type'] == VC_TECHNICIAN) echo 'Technician'; else echo 'Doctor'; ?></td>
-			</tr>
-			<tr>
-				<th><?php  if($row['type'] == VC_TECHNICIAN) echo 'Assigned Doctor: '; else echo 'Assigned Technician: '; ?></th>
-				<td><?php if($docname == '') echo '<span class="nulldata">No doctor assigned yet.</span>'; else echo '<a title="'.$docname.'" href="profile.php?user_id='.$row['assigneduser_id'].'">'.$docname.'</a>'; ?></td>
-			</tr>
-			<tr>
-				<th>Gender: </th>
-				<td><?php if(empty($row['gender'])) echo '<span class="nulldata">Not set.</span>'; else if($row['gender'] == 'm') echo 'Male'; else echo 'Female'; ?></td>
-			</tr>
-			<tr>
-				<th>Birth Date: </th>
-				<td><?php if(empty($row['birthdate'])) echo '<span class="nulldata">Not Set.</span>'; else echo $row['birthdate']; ?></td>
-			</tr>
-			<tr>
-				<th>Email: </th>
-				<td><?php if(empty($row['email'])) echo '<span class="nulldata">Not Set.</span>'; else echo $row['email']; ?></td>
-			</tr>
-			<tr>
-				<th>Phone No.: </th>
-				<td><?php if(empty($row['phone'])) echo '<span class="nulldata">Not Set.</span>'; else echo $row['phone']; ?></td>
-			</tr>
-		</table>
+
+	<div id="main-content">
+		<div id="sidebar">
+			<?php echo '<img src="'.VC_UPLOADPATH.$row['picture'].'" alt="Profile Picture">'."\n"; ?>
+		</div>
+		<div id="content">
+			<table>
+				<?php if($user_id == $_SESSION['user_id']) { ?>
+				<tr>
+					<th>Username: </th>
+					<td><?php echo $row['username']; ?></td>
+				</tr>
+				<?php } ?>
+				<tr>
+					<th>Account Type: </th>
+					<td><?php if($row['type'] == VC_TECHNICIAN) echo 'Technician'; else echo 'Doctor'; ?></td>
+				</tr>
+				<tr>
+					<th><?php  if($row['type'] == VC_TECHNICIAN) echo 'Assigned Doctor: '; else echo 'Assigned Technician: '; ?></th>
+					<td><?php if($docname == '') echo '<span class="nulldata">No doctor assigned yet.</span>'; else echo '<a title="'.$docname.'" href="profile.php?user_id='.$row['assigneduser_id'].'">'.$docname.'</a>'; ?></td>
+				</tr>
+				<tr>
+					<th>Gender: </th>
+					<td><?php if(empty($row['gender'])) echo '<span class="nulldata">Not set.</span>'; else if($row['gender'] == 'm') echo 'Male'; else echo 'Female'; ?></td>
+				</tr>
+				<tr>
+					<th>Birth Date: </th>
+					<td><?php if(empty($row['birthdate'])) echo '<span class="nulldata">Not Set.</span>'; else echo $row['birthdate']; ?></td>
+				</tr>
+				<tr>
+					<th>Email: </th>
+					<td><?php if(empty($row['email'])) echo '<span class="nulldata">Not Set.</span>'; else echo $row['email']; ?></td>
+				</tr>
+				<tr>
+					<th>Phone No.: </th>
+					<td><?php if(empty($row['phone'])) echo '<span class="nulldata">Not Set.</span>'; else echo $row['phone']; ?></td>
+				</tr>
+			</table>
+		</div>
 	</div>
-</div>
 
 <?php require_once(VC_INCLUDE.'footer.php'); ?>

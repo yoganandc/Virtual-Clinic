@@ -162,73 +162,68 @@
 		$email = $row['email'];
 		$phone = $row['phone'];
 	}
-
-	$pagetitle = "Edit Profile";
 ?>
 
 <?php require_once(VC_INCLUDE.'startdocument.php'); ?>
 
-<link rel="stylesheet" href="stylesheets/user.css">
-<link rel="stylesheet" href="stylesheets/profile.css">
-
-<?php require_once(VC_INCLUDE.'header.php'); ?>
-
-<?php require_once(VC_INCLUDE.'chat.php'); ?>
-
-<div id="banner">
-	<h2><?php echo $display_fname.' '.$display_lname; ?></h2>
-	<p><a title="Change Password" href="#">Change Password</a></p>
-</div>
-
-<div id="main-content">
-	<div id="sidebar">
-		<?php echo '<img src="'.VC_UPLOADPATH.$display_picture.'" alt="Profile Picture">'."\n"; ?>
+	<link rel="stylesheet" href="stylesheets/user.css">
+	<link rel="stylesheet" href="stylesheets/profile.css">
+</head>
+<body>
+	<div id="banner">
+		<p><a title="Change Password" href="#">Change Password</a></p>
+		<h2><?php echo $display_fname.' '.$display_lname; ?></h2>
 	</div>
-	<div id="content">
-		<?php if($showerror) echo '<p class="error">'.$error.'</p>'."\n"; ?>
-		<form enctype="multipart/form-data" method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-			<table>
-				<tr>
-					<th><label for="fname">First Name: </label></th>
-					<td><input type="text" id="fname" name="fname" value="<?php if(!empty($fname)) echo $fname; ?>"></td>
-				</tr>
-				<tr>
-					<th><label for="lname">Last Name: </label></th>
-					<td><input type="text" id="lname" name="lname" value="<?php if(!empty($lname)) echo $lname; ?>"></td>
-				</tr>
-				<tr>
-					<th><label for="gender">Gender: </label></th>
-					<td>
-						<select id="gender" name="gender">
-							<option value="m" <?php if(!empty($gender) && $gender == 'm') echo 'selected="selected"'; ?>>Male</option>
-							<option value="f" <?php if(!empty($gender) && $gender == 'f') echo 'selected="selected"'; ?>>Female</option>
-							<option value="n" <?php if(empty($gender)) echo 'selected="selected"'; ?>>Prefer not to say</option>
-						</select>
-					</td>
-				</tr>
-				<tr>
-					<th><label for="birthdate">Birthdate: </label></th>
-					<td><input type="text" id="birthdate" name="birthdate" value="<?php if(!empty($birthdate)) echo $birthdate; else echo 'YYYY-MM-DD'; ?>"></td>
-				</tr>
-				<tr>
-					<th><label for="email">Email: </label></th>
-					<td><input type="text" id="email" name="email" value="<?php if(!empty($email)) echo $email; ?>"></td>
-				</tr>
-				<tr>
-					<th><label for="phone">Phone: </label></th>
-					<td><input type="text" id="phone" name="phone" value="<?php if(!empty($phone)) echo $phone; ?>"></td>
-				</tr>
-				<tr>
-					<th><label for="picture">Picture: </label></th>
-					<td><input type="file" id="picture" name="picture"></td>
-				</tr>
-				<tr>
-					<th></th>
-					<td><input type="submit" id="submit" name="submit"><a href="profile.php" class="back-link" title="Cancel">Cancel</a></td>
-				</tr>
-			</table>
-		</form>
+
+	<div id="main-content">
+		<div id="sidebar">
+			<?php echo '<img src="'.VC_UPLOADPATH.$display_picture.'" alt="Profile Picture">'."\n"; ?>
+		</div>
+		<div id="content">
+			<?php if($showerror) echo '<p class="error">'.$error.'</p>'."\n"; ?>
+			<form enctype="multipart/form-data" method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+				<table>
+					<tr>
+						<th><label for="fname">First Name: </label></th>
+						<td><input type="text" id="fname" name="fname" value="<?php if(!empty($fname)) echo $fname; ?>"></td>
+					</tr>
+					<tr>
+						<th><label for="lname">Last Name: </label></th>
+						<td><input type="text" id="lname" name="lname" value="<?php if(!empty($lname)) echo $lname; ?>"></td>
+					</tr>
+					<tr>
+						<th><label for="gender">Gender: </label></th>
+						<td>
+							<select id="gender" name="gender">
+								<option value="m" <?php if(!empty($gender) && $gender == 'm') echo 'selected="selected"'; ?>>Male</option>
+								<option value="f" <?php if(!empty($gender) && $gender == 'f') echo 'selected="selected"'; ?>>Female</option>
+								<option value="n" <?php if(empty($gender)) echo 'selected="selected"'; ?>>Prefer not to say</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<th><label for="birthdate">Birthdate: </label></th>
+						<td><input type="text" id="birthdate" name="birthdate" value="<?php if(!empty($birthdate)) echo $birthdate; else echo 'YYYY-MM-DD'; ?>"></td>
+					</tr>
+					<tr>
+						<th><label for="email">Email: </label></th>
+						<td><input type="text" id="email" name="email" value="<?php if(!empty($email)) echo $email; ?>"></td>
+					</tr>
+					<tr>
+						<th><label for="phone">Phone: </label></th>
+						<td><input type="text" id="phone" name="phone" value="<?php if(!empty($phone)) echo $phone; ?>"></td>
+					</tr>
+					<tr>
+						<th><label for="picture">Picture: </label></th>
+						<td><input type="file" id="picture" name="picture"></td>
+					</tr>
+					<tr>
+						<th></th>
+						<td><input type="submit" id="submit" name="submit"><a href="profile.php" class="back-link" title="Cancel">Cancel</a></td>
+					</tr>
+				</table>
+			</form>
+		</div>
 	</div>
-</div>
 
 <?php require_once(VC_INCLUDE.'footer.php'); ?>

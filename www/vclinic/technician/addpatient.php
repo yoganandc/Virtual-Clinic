@@ -251,114 +251,109 @@
 			$error = "First name and last name fields cannot be blank.";
 		}
 	}
-
-	$pagetitle = "Add New Patient";
 ?>
 
 <?php require_once('../'.VC_INCLUDE.'startdocument.php'); ?>
 
-<link rel="stylesheet" href="<?php echo VC_LOCATION.'stylesheets/user.css'; ?>">
-<link rel="stylesheet" href="<?php echo VC_LOCATION.'stylesheets/adduser.css'; ?>">
-<link rel="stylesheet" href="<?php echo VC_LOCATION.'stylesheets/addpatient.css'; ?>">
-
-<?php require_once('../'.VC_INCLUDE.'header.php'); ?>
-
-<?php require_once('../'.VC_INCLUDE.'chat.php'); ?>
-
-<div id="banner">
-	<h2><?php echo $pagetitle; ?></h2>
-</div>
-
-<div id="main-content">
-	<?php if($showerror) echo '<p class="error">'.$error.'</p>'."\n"; ?>
-	<div id="content">
-		<form enctype="multipart/form-data" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
-			<table>
-				<tr>
-					<th><label for="fname">First Name: </label></th>
-					<td><input type="text" id="fname" name="fname" value="<?php if(!empty($fname)) echo $fname; ?>"></td>
-				</tr>
-				<tr>
-					<th><label for="lname">Last Name: </label></th>
-					<td><input type="text" id="lname" name="lname" value="<?php if(!empty($lname)) echo $lname; ?>"></td>
-				</tr>
-				<tr>
-					<th>Gender: </th>
-					<td>
-						<input type="radio" id="gender_m" name="gender" value="m" <?php if(!empty($gender) && $gender == 'm') echo 'checked="checked"'; ?>><label for="gender_m">Male </label>
-						<input type="radio" id="gender_f" name="gender" value="f" <?php if(!empty($gender) && $gender == 'f') echo 'checked="checked"'; ?>><label for="gender_f">Female </label>
-					</td>
-				</tr>
-				<tr>
-					<th><label for="birthdate">Birth Date: </label></th>
-					<td><input type="text" id="birthdate" name="birthdate" value="<?php if(!empty($birthdate)) echo $birthdate; ?>"></td>
-				</tr>
-				<tr>
-					<th><label for="occupation">Occupation: </label></th>
-					<td><input type="text" id="occupation" name="occupation" value="<?php if(!empty($occupation)) echo $occupation; ?>"></td>
-				</tr>
-				<tr>
-					<th>Address: </th>
-					<td>
-						<table>
-							<tr>
-								<th><label for="line1">Line 1: </label></th>
-								<td><input type="text" id="line1" name="line1" value="<?php if(!empty($line1)) echo $line1; ?>"></td>
-							</tr>
-							<tr>
-								<th><label for="line2">Line 2: </label></th>
-								<td><input type="text" id="line2" name="line2" value="<?php if(!empty($line2)) echo $line2; ?>"></td>
-							</tr>
-							<tr>
-								<th><label for="city">City: </label></th>
-								<td><input type="text" id="city" name="city" value="<?php if(!empty($city)) echo $city; ?>"></td>
-							</tr>
-							<tr>
-								<th><label for="district">District: </label></th>
-								<td><input type="text" id="district" name="district" value="<?php if(!empty($district)) echo $district; ?>"></td>
-							</tr>
-							<tr>
-								<th><label for="state">State: </label></th>
-								<td>
-									<select id="state" name="state">
-										<?php
-											echo '<option value="0">Do not set.</option>'."\n";
-											foreach($states as $currentstate) {
-												if(!empty($state) && $state == $currentstate['state_id'])
-													echo '<option value="'.$currentstate['state_id'].'" selected="selected">'.$currentstate['name'].'</option>'."\n";
-												else
-													echo '<option value="'.$currentstate['state_id'].'">'.$currentstate['name'].'</option>'."\n";
-											}
-										?>
-									</select>
-								</td>
-							</tr>
-							<tr>
-								<th><label for="pincode">Pincode: </label></th>
-								<td><input type="text" id="pincode" name="pincode" value="<?php if(!empty($pincode)) echo $pincode; ?>"></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<th><label for="email">Email: </label></th>
-					<td><input type="text" id="email" name="email" value="<?php if(!empty($email)) echo $email; ?>"></td>
-				</tr>
-				<tr>
-					<th><label for="phone">Phone: </label></th>
-					<td><input type="text" id="phone" name="phone" value="<?php if(!empty($phone)) echo $phone; ?>"></td>
-				</tr>
-				<tr>
-					<th><label for="picture">Picture: </label></th>
-					<td><input type="file" id="picture" name="picture"></td>
-				</tr>
-				<tr>
-					<th></th>
-					<td><input type="submit" id="submit" name="submit"><a href="<?php echo VC_LOCATION; ?>" class="back-link" title="Cancel">Cancel</a></td>
-				</tr>
-			</table>
-		</form>
+	<link rel="stylesheet" href="<?php echo VC_LOCATION.'stylesheets/user.css'; ?>">
+	<link rel="stylesheet" href="<?php echo VC_LOCATION.'stylesheets/adduser.css'; ?>">
+	<link rel="stylesheet" href="<?php echo VC_LOCATION.'stylesheets/addpatient.css'; ?>">
+</head>
+<body>
+	<div id="banner">
+		<h2><?php echo "Add Patient"; ?></h2>
 	</div>
-</div>
+
+	<div id="main-content">
+		<?php if($showerror) echo '<p class="error">'.$error.'</p>'."\n"; ?>
+		<div id="content">
+			<form enctype="multipart/form-data" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
+				<table>
+					<tr>
+						<th><label for="fname">First Name: </label></th>
+						<td><input type="text" id="fname" name="fname" value="<?php if(!empty($fname)) echo $fname; ?>"></td>
+					</tr>
+					<tr>
+						<th><label for="lname">Last Name: </label></th>
+						<td><input type="text" id="lname" name="lname" value="<?php if(!empty($lname)) echo $lname; ?>"></td>
+					</tr>
+					<tr>
+						<th>Gender: </th>
+						<td>
+							<input type="radio" id="gender_m" name="gender" value="m" <?php if(!empty($gender) && $gender == 'm') echo 'checked="checked"'; ?>><label for="gender_m">Male </label>
+							<input type="radio" id="gender_f" name="gender" value="f" <?php if(!empty($gender) && $gender == 'f') echo 'checked="checked"'; ?>><label for="gender_f">Female </label>
+						</td>
+					</tr>
+					<tr>
+						<th><label for="birthdate">Birth Date: </label></th>
+						<td><input type="text" id="birthdate" name="birthdate" value="<?php if(!empty($birthdate)) echo $birthdate; ?>"></td>
+					</tr>
+					<tr>
+						<th><label for="occupation">Occupation: </label></th>
+						<td><input type="text" id="occupation" name="occupation" value="<?php if(!empty($occupation)) echo $occupation; ?>"></td>
+					</tr>
+					<tr>
+						<th>Address: </th>
+						<td>
+							<table>
+								<tr>
+									<th><label for="line1">Line 1: </label></th>
+									<td><input type="text" id="line1" name="line1" value="<?php if(!empty($line1)) echo $line1; ?>"></td>
+								</tr>
+								<tr>
+									<th><label for="line2">Line 2: </label></th>
+									<td><input type="text" id="line2" name="line2" value="<?php if(!empty($line2)) echo $line2; ?>"></td>
+								</tr>
+								<tr>
+									<th><label for="city">City: </label></th>
+									<td><input type="text" id="city" name="city" value="<?php if(!empty($city)) echo $city; ?>"></td>
+								</tr>
+								<tr>
+									<th><label for="district">District: </label></th>
+									<td><input type="text" id="district" name="district" value="<?php if(!empty($district)) echo $district; ?>"></td>
+								</tr>
+								<tr>
+									<th><label for="state">State: </label></th>
+									<td>
+										<select id="state" name="state">
+											<?php
+												echo '<option value="0">Do not set.</option>'."\n";
+												foreach($states as $currentstate) {
+													if(!empty($state) && $state == $currentstate['state_id'])
+														echo '<option value="'.$currentstate['state_id'].'" selected="selected">'.$currentstate['name'].'</option>'."\n";
+													else
+														echo '<option value="'.$currentstate['state_id'].'">'.$currentstate['name'].'</option>'."\n";
+												}
+											?>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th><label for="pincode">Pincode: </label></th>
+									<td><input type="text" id="pincode" name="pincode" value="<?php if(!empty($pincode)) echo $pincode; ?>"></td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<th><label for="email">Email: </label></th>
+						<td><input type="text" id="email" name="email" value="<?php if(!empty($email)) echo $email; ?>"></td>
+					</tr>
+					<tr>
+						<th><label for="phone">Phone: </label></th>
+						<td><input type="text" id="phone" name="phone" value="<?php if(!empty($phone)) echo $phone; ?>"></td>
+					</tr>
+					<tr>
+						<th><label for="picture">Picture: </label></th>
+						<td><input type="file" id="picture" name="picture"></td>
+					</tr>
+					<tr>
+						<th></th>
+						<td><input type="submit" id="submit" name="submit"><a href="<?php echo VC_LOCATION.'technician/'; ?>" class="back-link" title="Cancel">Cancel</a></td>
+					</tr>
+				</table>
+			</form>
+		</div>
+	</div>
 
 <?php require_once('../'.VC_INCLUDE.'footer.php');

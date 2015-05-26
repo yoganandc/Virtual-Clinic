@@ -2,25 +2,20 @@
 	require_once('../../../include/vclinic/techniciansession.php');
 
 	$dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME) or die('Error connecting to database.');
-
-	$pagetitle = 'Home';
 ?>
 
-<?php require_once('../'.VC_INCLUDE.'startdocument.php'); ?>
+<?php require_once('../'.VC_INCLUDE.'startdocument.php');?>
 
-<link rel="stylesheet" href="<?php echo VC_LOCATION.'stylesheets/user.css'; ?>">
+	<link rel="stylesheet" href="<?php echo VC_LOCATION.'stylesheets/user.css'; ?>">
+</head>
+<body>
+	<div id="banner">
+		<p><a title="Add New Patient" href="addpatient.php">Add New Patient</a></p>
+		<h2><?php echo "Home"; ?></h2>
+	</div>
 
-<?php require_once('../'.VC_INCLUDE.'header.php'); ?>
+	<div id="main-content">
 
-<?php require_once('../'.VC_INCLUDE.'chat.php'); ?>
-
-<div id="banner">
-	<h2><?php echo $pagetitle; ?></h2>
-	<p><a title="Add New Patient" href="addpatient.php">Add New Patient</a></p>
-</div>
-
-<div id="main-content">
-	
-</div>
-
+	</div>
+		
 <?php require_once('../'.VC_INCLUDE.'footer.php'); ?>
