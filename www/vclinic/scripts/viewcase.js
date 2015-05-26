@@ -7,6 +7,14 @@ window.addEventListener("load", function() {
 	if(document.getElementById("add-test"))
 		document.getElementById("add-test").addEventListener("click", function(evt) { testHandler(); evt.preventDefault(); });
 	document.getElementById("add-treatment").addEventListener("click", function(evt) { treatmentHandler(); evt.preventDefault(); });
+	var testResultPictures = document.getElementsByClassName("fancybox");
+	for(var i = 0; i < testResultPictures.length; i++) {
+		testResultPictures[i].addEventListener("click", function(evt) {
+			evt.preventDefault();
+			var targetImage = evt.target.getAttribute("href");
+			parent.$.fancybox([{href: targetImage, title: ""}]);
+		});
+	}
 });
 
 function testHandler() {

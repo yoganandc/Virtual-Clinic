@@ -209,7 +209,7 @@
 										finfo_close($finfo);
 										$href = VC_LOCATION.'cases/case-'.$case_id.'/'.$data_case_test['filename'];
 										if(is_filetype_image($filetype)) {
-											echo '<a href="'.$href.'" data-lightbox="case-'.$case_id.'">View</a>';
+											echo '<a class="fancybox" href="'.$href.'">View</a>';
 										}
 										else if(is_filetype_pdf($filetype)) {
 											echo '<a href="'.$href.'" target="_blank">Open</a>';

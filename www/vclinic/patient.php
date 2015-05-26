@@ -46,9 +46,9 @@
 	<?php if(!$nocase) { ?>
 	<link rel="stylesheet" href="stylesheets/viewcase.css">
 	<script src="scripts/viewcase.js"></script>
-	<link href="stylesheets/lightbox.css" rel="stylesheet">
+	<link href="fancybox/jquery.fancybox.css" rel="stylesheet">
 	<script src="scripts/jquery-1.11.0.min.js"></script>
-	<script src="scripts/lightbox.min.js"></script>
+	<script src="fancybox/jquery.fancybox.js"></script>
 	<?php } ?>
 </head>
 <body>

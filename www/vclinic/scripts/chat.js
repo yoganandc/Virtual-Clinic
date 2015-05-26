@@ -6,7 +6,6 @@ var ASSIGNED_STATUS_NULL = 0;
 var HOST = window.location.protocol+"//"+window.location.hostname
 var SERVER_LOCATION = HOST+"/vclinic/ajax/";
 var SIGNAL_SERVER_LOCATION = HOST+":8888/";
-var COOKIE_NAME = "chatopen";
 var COOKIE_PAGEOPEN = "pageopen";
 var CHAT_OPEN = "OPEN";
 var CHAT_CLOSE = "CLOSED";
@@ -20,7 +19,6 @@ var room = null;
 var webrtc =null;
 var runWebRTC = null;
 
-var isChatOpen = false;
 var assignedStatus = ASSIGNED_STATUS_NULL;
 
 window.addEventListener("load", readyChat);
@@ -44,13 +42,15 @@ function readyChat() {
 		setCookie(COOKIE_PAGEOPEN, CHAT_CLOSE);
 	});
 
+	//document.getElementById("toggle-chat").addEventListener("click", toggleHandler);
 	assignedStatus = document.getElementById("chat-container").getAttribute("data-status");
-	document.getElementById("toggle-chat").addEventListener("click", toggleHandler);
-	document.getElementById("send").addEventListener("click", sendHandler);
-	document.getElementById("send-text").addEventListener("keyup", function(evt) { sendTextHandler(evt); });
-
 	if(assignedStatus == ASSIGNED_STATUS_NULL)
 		return;
+
+	//ADD CODE TO HANDLE NO ASSIGNED USER
+
+	document.getElementById("send").addEventListener("click", sendHandler);
+	document.getElementById("send-text").addEventListener("keyup", function(evt) { sendTextHandler(evt); });
 
 	panel = document.getElementById("text-chat-panel");
 	room = document.getElementById("chat-container").getAttribute("data-room");
@@ -75,26 +75,8 @@ function readyChat() {
 
 	if(assignedStatus == ASSIGNED_STATUS_ONLINE) {
 		pollInterval = POLL_INTERVAL_CHAT;
-		setupWebRTC();
 	}
-
-	var cookie_chatopen = getCookie(COOKIE_NAME);
-	if(cookie_chatopen) {
-		if(cookie_chatopen == CHAT_OPEN) {
-			document.getElementById("chat-body").style.display = "block";
-			document.getElementById("toggle-chat").value = "Close Chat";
-			isChatOpen = true;
-		}
-		else {
-			document.getElementById("toggle-chat").value = "Open Chat";
-		}
-	}
-	else {
-		if(assignedStatus == ASSIGNED_STATUS_ONLINE) {
-			document.getElementById("chat-body").style.display = "block";
-			isChatOpen = true;
-		}
-	}
+	setupWebRTC();
 
 	sendUpdate();
 	updateTimerID = setTimeout(function() { keepUpdating(); }, pollInterval);
@@ -106,21 +88,6 @@ function createXMLHttpRequest() {
 	}
 	catch(e) {
 		return null;
-	}
-}
-
-var toggleHandler = function() {
-	if(!isChatOpen) {
-		document.getElementById("chat-body").style.display = "block";
-		document.getElementById("toggle-chat").value = "Close Chat";
-		isChatOpen= true;
-		setCookie(COOKIE_NAME, CHAT_OPEN);
-	}
-	else {
-		document.getElementById("chat-body").style.display = "none";
-		document.getElementById("toggle-chat").value = "Open Chat";	
-		isChatOpen = false;
-		setCookie(COOKIE_NAME, CHAT_CLOSE);
 	}
 }
 
@@ -158,15 +125,7 @@ function updateChat(status, messages) {
 			pollInterval = POLL_INTERVAL_CHAT;
 			updateTimerID = setTimeout(function() { keepUpdating(); }, pollInterval);
 
-			document.getElementById("status").className = "online";
-			replaceText("status", "ONLINE");
 			requestMessenger = createXMLHttpRequest();
-			setupWebRTC();
-			if(!isChatOpen) {
-				document.getElementById("chat-body").style.display = "block";
-				document.getElementById("toggle-chat").value = "Close Chat";
-				isChatOpen= true;
-			}
 		}
 		else {
 			clearTimeout(updateTimerID);
@@ -177,11 +136,6 @@ function updateChat(status, messages) {
 			replaceText("status", "OFFLINE");
 			requestMessenger = null;
 			destroyWebRTC();
-			if(isChatOpen) {
-				document.getElementById("chat-body").style.display = "none";
-				document.getElementById("toggle-chat").value = "Open Chat";	
-				isChatOpen = false;
-			}
 		}
 	}
 	if(assignedStatus == ASSIGNED_STATUS_ONLINE) {
@@ -295,9 +249,6 @@ function setupMessages(jsonData) {
 
 function setupWebRTC() {
 	if(runWebRTC) {
-		document.getElementById("localvideo-container").style.display = "block";
-		setCookie(COOKIE_NAME, CHAT_OPEN);
-
 		webrtc = new SimpleWebRTC({
 		    localVideoEl: 'localvideo',
 		    remoteVideosEl: '',
@@ -306,6 +257,10 @@ function setupWebRTC() {
 		});
 
 		webrtc.on('videoAdded', function (video, peer) {
+			document.getElementById("localvideo-container").style.display = "block";
+			document.getElementById("status").className = "online";
+			replaceText("status", "ONLINE");
+			
 			var videosDiv = document.getElementById("remotevideo");
 			var videoDiv = document.createElement("div");
 			videoDiv.id = "container_" + webrtc.getDomId(peer);
@@ -330,10 +285,5 @@ function setupWebRTC() {
 function destroyWebRTC() {
 	if(runWebRTC) {
 		document.getElementById("localvideo-container").style.display = "none";
-		setCookie(COOKIE_NAME, CHAT_CLOSE);
-		webrtc.stopLocalVideo();
-		webrtc.leaveRoom();
-		webrtc.connection.disconnect();
-		webrtc = null;
 	}
 }

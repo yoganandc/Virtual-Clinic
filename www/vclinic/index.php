@@ -22,6 +22,9 @@
     <script src="<?php echo VC_LOCATION.'scripts/simplewebrtc.bundle.js'; ?>"></script>
     <script src="<?php echo VC_LOCATION.'scripts/chat.js'; ?>"></script> 
     <script src="<?php echo VC_LOCATION.'scripts/index.js'; ?>"></script> 
+    <script src="<?php echo VC_LOCATION.'scripts/jquery-1.11.0.min.js'; ?>"></script>
+    <script src="<?php echo VC_LOCATION.'fancybox/jquery.fancybox.js'; ?>"></script>
+    <link rel="stylesheet" href="<?php echo VC_LOCATION.'fancybox/jquery.fancybox.css'; ?>">
     <link rel="stylesheet" href="<?php echo VC_LOCATION.'stylesheets/chat.css'; ?>">
     <link rel="stylesheet" href="<?php echo VC_LOCATION.'stylesheets/user.css'; ?>">
 </head>
@@ -29,6 +32,8 @@
     <div id="header">
         <div id="header-right">
             <ul id="nav">
+                <li><a title="Home" href="<?php echo VC_LOCATION.$url; ?>" target="vc-iframe">Home</a></li>
+                <li>|</li>
                 <?php if($_SESSION['type'] != VC_ADMINISTRATOR) { ?>
                 <li><a title="My Account" href="<?php echo VC_LOCATION.'profile.php'; ?>" target="vc-iframe">My Account</a><?php echo '<span class="username"> ('.$_SESSION['username'].')</span>'; ?></li>
                 <li>|</li>
@@ -68,7 +73,6 @@
         <div id="chat-container" data-status="<?php if($docname == "") echo '0'; else if($online) echo '2'; else echo '1'; ?>" data-room="<?php if(!empty($_SESSION['room'])) echo $_SESSION['room']; ?>">
             <div id="chat-details">
                 <div id="details-right">
-                    <input type="button" id="toggle-chat" value="<?php if($online) echo 'Close chat'; else echo 'Open chat'; ?>">
                 </div>
                 <p id="details-left">
                     <?php if($docname == "") echo 'No doctor assigned yet.'."\n"; else { if($_SESSION['type'] == VC_TECHNICIAN) echo 'Dr. '; echo $docname.' is '; if($online) echo '<span id="status" class="online">ONLINE</span>.'; else echo '<span id="status" class="offline">OFFLINE</span>.'; echo "\n"; }  ?>

@@ -17,7 +17,6 @@
     float: right;
 }
 #chat-body {
-    display: none;
     clear: both;
     text-align: center;
 }
@@ -45,7 +44,7 @@
     bottom: 0px;
     right: 0px;
     z-index: 99;
-    display: hidden;
+    display: none;
 }
 #localvideo {
     height: 100px;
