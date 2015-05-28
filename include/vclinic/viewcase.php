@@ -135,7 +135,7 @@
 	}
 ?>
 <div id="case" data-case_id="<?php echo $case_id; ?>">
-	<a id="case-edit" title="Edit Case" href="#">Edit Case</a>
+	<a id="case-edit" title="Edit Case" href="editcase.php?case_id=<?php echo $case_id; ?>&amp;patient_id=<?php echo $patient_id; ?>">Edit Case</a>
 	<h3 id="case-heading"><?php if(isset($case_no)) echo '#'.$case_no.' '; echo $title; ?></h3>
 	<div id="case-content">
 		<table>
@@ -218,6 +218,8 @@
 											echo '<a href="'.$href.'" target="_blank">Download</a>';
 										}
 									}
+									else 
+										echo '<span>-</span>';
 								?>
 							</td>
 						</tr>

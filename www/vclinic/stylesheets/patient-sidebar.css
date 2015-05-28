@@ -9,6 +9,7 @@
 }
 #content {
 	margin-left: 235px;
+	min-height: 517px;
 }
 #sidebar {
 	width: 225px;

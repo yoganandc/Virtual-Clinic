@@ -45,7 +45,6 @@
 	<link rel="stylesheet" href="stylesheets/user.css">
 	<link rel="stylesheet" href="stylesheets/patient-sidebar.css">
 	<link rel="stylesheet" href="stylesheets/viewcase.css">
-	<link rel="stylesheet" href="stylesheets/case.css">
 	<script src="scripts/viewcase.js"></script>
 	<link href="fancybox/jquery.fancybox.css" rel="stylesheet">
 	<script src="scripts/jquery-1.11.0.min.js"></script>

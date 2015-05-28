@@ -4,8 +4,10 @@ var previousComplaint = null;
 window.addEventListener("load", readyForm);
 
 function readyForm() {
-	if(document.getElementById("complaint").value == COMPLAINT_UNLISTED)
+	if(document.getElementById("complaint").value == COMPLAINT_UNLISTED) {
 		addAlternateRow();
+		document.getElementById("alternate").value = document.getElementById("altname").value;
+	}
 	if(document.getElementById("chronic").checked)
 		radioHandler(1);
 

@@ -60,6 +60,7 @@
 #vc-iframe {
     border: none;
     width: 820px;
+    overflow: hidden;
 }
 .username {
 	font-style: italic;

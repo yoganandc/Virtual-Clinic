@@ -4,3 +4,48 @@
 	border: 1px solid;
 	min-height: 600px;
 }
+#othercases {
+	border: 1px solid;
+	margin-top: 10px;
+}
+#othercases-top {
+	border-bottom: 1px solid;
+}
+#othercases-heading {
+	padding-left: 20px;
+}
+#othercases table {
+	table-layout: fixed;
+	width: 567px;
+}
+#othercases table td[rowspan] {
+	vertical-align: top;
+}
+#othercases-heading-row {
+	background-color: #40A2D0;
+	border-bottom: 1px solid gray;
+}
+#oc-width-6 {
+	width: 5%;
+}
+#oc-width-1 {
+	width: 26%;
+}
+#oc-width-2 {
+	width: 27%;
+}
+#oc-width-3 {
+	width: 14%;
+}
+#oc-width-4 {
+	width: 14%;
+}
+#oc-width-5 {
+	width: 14%;
+}
+.treatment-center {
+	text-align: center;
+}
+.othercases-color {
+	background-color: #DDDDDD;
+}

@@ -1,53 +1,64 @@
 <?php 
-	require_once('../../../include/vclinic/techniciansession.php');
+	require_once('../../include/vclinic/usersession.php');
 
 	$showerror = false;
 	$error = "";
+	$dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME) or die('Error connecting to database.');
 
-	if(isset($_GET['patient_id'])) {
-		$dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME) or die('Error connecting to database.');
+	if(isset($_GET['case_id']) && isset($_GET['patient_id'])) {
+		$case_id = mysqli_real_escape_string($dbc, trim($_GET['case_id']));
 		$patient_id = mysqli_real_escape_string($dbc, trim($_GET['patient_id']));
-		$query = "SELECT vp.fname, vp.lname FROM vc_patient AS vp WHERE vp.patient_id=".$patient_id;
-		$data = mysqli_query($dbc, $query);
-
-		if(mysqli_num_rows($data) != 1) {
-			echo '<p class="error">Some error occured.</p>';
-			exit();
-		}
-
-		$row = mysqli_fetch_array($data);
-		$name = $row['fname'].' '.$row['lname'];
-
-		$query = "SELECT * FROM vc_complaint";
-		$data_complaints = mysqli_query($dbc, $query);
-
-		if(mysqli_num_rows($data_complaints) < 1) {
-			echo '<p class="error">Some error occured.</p>';
-			exit();
-		}
 	}
 	else if(isset($_POST['submit'])) {
-		$patient_id = $_POST['patient_id'];
+		$case_id = mysqli_real_escape_string($dbc, trim($_POST['case_id']));
+		$patient_id = mysqli_real_escape_string($dbc, trim($_POST['patient_id']));
+	}
+	else {
+		header('Location: '.VC_LOCATION);
+		exit();
+	}
 
-		$dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME) or die('Error connecting to database.');
-		$query = "SELECT vp.fname, vp.lname FROM vc_patient AS vp LEFT JOIN vc_address AS va USING (address_id) LEFT JOIN vc_address_state AS vas USING (state_id) WHERE vp.patient_id=".$patient_id;
+	$query = "SELECT case_id FROM vc_case WHERE patient_id=".$patient_id." ORDER BY case_id DESC LIMIT 1";
+	$data = mysqli_query($dbc, $query);
+	$row = mysqli_fetch_array($data);
+	if($case_id == $row['case_id']) 
+		$back_url = "patient.php?patient_id=".$patient_id;
+	else 
+		$back_url = "case.php?case_id=".$case_id."&amp;patient_id=".$patient_id;
+
+	if(isset($_GET['case_id']) && isset($_GET['patient_id'])) {
+		$case_id = mysqli_real_escape_string($dbc, trim($_GET['case_id']));
+		$patient_id = mysqli_real_escape_string($dbc, trim($_GET['patient_id']));
+
+		$query = "SELECT patient_id FROM vc_case WHERE case_id=".$case_id;
 		$data = mysqli_query($dbc, $query);
-
 		if(mysqli_num_rows($data) != 1) {
-			echo '<p class="error">Some error occured.</p>';
+			echo '<p>Some error occured.</p>';
 			exit();
 		}
-
 		$row = mysqli_fetch_array($data);
-		$name = $row['fname'].' '.$row['lname'];
 
-		$query = "SELECT * FROM vc_complaint";
-		$data_complaints = mysqli_query($dbc, $query);
-
-		if(mysqli_num_rows($data_complaints) < 1) {
-			echo '<p class="error">Some error occured.</p>';
+		if($patient_id != $row['patient_id']) {
+			header('Location: '.VC_LOCATION);
 			exit();
 		}
+
+		$query = "SELECT complaint_id, altname, chronic, patient_history, personal_history, past_history, family_history, examination FROM vc_case WHERE case_id=".$case_id;
+		$data = mysqli_query($dbc, $query);
+		$row = mysqli_fetch_array($data);
+
+		$complaint = $row['complaint_id'];
+		$alternate = $row['altname'];
+		$complaint_type = $row['chronic'];
+		$patient_history = $row['patient_history'];
+		$personal_history = $row['personal_history'];
+		$past_history = $row['past_history'];
+		$family_history = $row['family_history'];
+		$examination = $row['examination'];
+	}
+	else if(isset($_POST['submit'])) {
+		$case_id = mysqli_real_escape_string($dbc, trim($_POST['case_id']));
+		$patient_id = mysqli_real_escape_string($dbc, trim($_POST['patient_id']));
 
 		if(isset($_POST['complaint_type']))
 			$complaint_type = mysqli_real_escape_string($dbc, trim($_POST['complaint_type']));
@@ -76,16 +87,16 @@
 
 				if(!(($complaint_type == VC_ACUTE) && ($row['chronic_only'] == 1))) {
 					if(!(($complaint == VC_COMPLAINT_UNLISTED) && (($alternate == "") || (strlen($alternate) > 40)))) {
-						$query = "INSERT INTO vc_case (patient_id, complaint_id, altname, chronic, patient_history, past_history, personal_history, family_history, examination) VALUES (".$patient_id.", ".$complaint.", ";
+						$query = "UPDATE vc_case SET complaint_id=".$complaint.", chronic=".$complaint_type.", patient_history='$patient_history', personal_history='$personal_history', past_history='$past_history', family_history='$family_history', ";
 						if($complaint == VC_COMPLAINT_UNLISTED)
-							$query .= "'".$alternate."', ";
+							$query .= "altname='$alternate'";
 						else
-							$query .= "NULL, ";
-						$query .= $complaint_type.", '$patient_history', '$past_history', '$personal_history', '$family_history', '$examination')";
+							$query .= "altname=NULL";
+						$query .= " WHERE case_id=".$case_id;
+
 						if(mysqli_query($dbc, $query)) {
 							mysqli_close($dbc);
-							$url = VC_LOCATION.'patient.php?patient_id='.$patient_id;
-							header("Location: ".$url);
+							header("Location: ".$back_url);
 							exit();
 						}
 						else {
@@ -113,30 +124,40 @@
 			$error = "Complaint type must be set to either acute or chronic.";
 		}
 	}
-	else {
-		header('Location: '.VC_LOCATION);
+
+	$query = "SELECT vp.fname, vp.lname FROM vc_patient AS vp WHERE vp.patient_id=".$patient_id;
+	$data = mysqli_query($dbc, $query);
+	if(mysqli_num_rows($data) != 1) {
+		echo '<p class="error">Some error occured.</p>';
 		exit();
 	}
+	$row = mysqli_fetch_array($data);
+	
+	$title = $row['fname'].' '.$row['lname'].' - Edit Case';
+
+	$query = "SELECT * FROM vc_complaint";
+	$data_complaints = mysqli_query($dbc, $query);
 ?>
 
-<?php require_once('../'.VC_INCLUDE.'startdocument.php'); ?>
+<?php require_once(VC_INCLUDE.'startdocument.php'); ?>
 
-	<link rel="stylesheet" href="<?php echo VC_LOCATION.'stylesheets/user.css'; ?>">
-	<link rel="stylesheet" href="<?php echo VC_LOCATION.'stylesheets/patient-sidebar.css'; ?>">
-	<link rel="stylesheet" href="<?php echo VC_LOCATION.'stylesheets/addcase.css'; ?>">
-	<script src="<?php echo VC_LOCATION.'scripts/addcase.js'; ?>"></script>
+	<link rel="stylesheet" href="stylesheets/user.css">
+	<link rel="stylesheet" href="stylesheets/patient-sidebar.css">
+	<link rel="stylesheet" href="stylesheets/editcase.css">
+	<script src="scripts/addcase.js"></script>
 </head>
 <body>
 	<div id="banner">
-		<h2><?php echo $name.' - Add Case'; ?></h2>
+		<h2><?php echo $title; ?></h2>
 	</div>
 
 	<div id="main-content">
-		<?php require_once('../'.VC_INCLUDE.'patient-sidebar.php'); ?>
+		<?php require_once(VC_INCLUDE.'patient-sidebar.php'); ?>
 		<div id="content">
 			<?php if($showerror) echo '<p class="error">'.$error.'</p>'."\n"; ?>
 			<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
 				<input type="hidden" id="patient_id" name="patient_id" value="<?php if(isset($_GET['patient_id'])) echo $_GET['patient_id']; else echo $_POST['patient_id']; ?>">
+				<input type="hidden" id="case_id" name="case_id" value="<?php if(isset($_GET['case_id'])) echo $_GET['case_id']; else echo $_POST['case_id']; ?>">
 				<input type="hidden" id="altname" name="altname" value="<?php if(isset($alternate)) echo $alternate; ?>">
 				<table id="case">
 					<tr>
@@ -188,11 +209,11 @@
 					</tr>
 					<tr>
 						<th></th>
-						<td><input type="submit" id="submit" name="submit"><a href="<?php echo VC_LOCATION.'patient.php?patient_id='.$patient_id; ?>" class="back-link" title="Cancel">Cancel</a></td>
+						<td><input type="submit" id="submit" name="submit"><a href="<?php echo $back_url; ?>" class="back-link" title="Cancel">Cancel</a></td>
 					</tr>
 				</table>
 			</form>
 		</div>
 	</div>
 
-<?php require_once('../'.VC_INCLUDE.'footer.php'); ?>
+<?php require_once(VC_INCLUDE.'footer.php'); ?>
