@@ -132,7 +132,6 @@ function removeHandler(evtSrc) {
 		var firstRemoveLink = document.getElementsByTagName("table")[0].rows[1].cells[4].firstChild;
 		firstRemoveLink.removeEventListener("click", removeHandler);
 	}
-
 }
 
 function selectHandler(evtSrc) {

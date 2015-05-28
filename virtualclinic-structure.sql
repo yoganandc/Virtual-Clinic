@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 06, 2015 at 08:45 AM
+-- Generation Time: May 28, 2015 at 02:19 PM
 -- Server version: 5.6.22-log
 -- PHP Version: 5.6.7
 
@@ -75,6 +75,19 @@ CREATE TABLE IF NOT EXISTS `vc_case` (
   `personal_history` varchar(400) DEFAULT NULL,
   `family_history` varchar(400) DEFAULT NULL,
   `examination` varchar(400) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `vc_case_file`
+--
+
+CREATE TABLE IF NOT EXISTS `vc_case_file` (
+  `case_file_id` int(11) NOT NULL,
+  `case_id` int(11) NOT NULL,
+  `title` varchar(40) NOT NULL,
+  `filename` varchar(40) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -159,7 +172,7 @@ CREATE TABLE IF NOT EXISTS `vc_treatment` (
   `treatment_name_id` int(11) NOT NULL,
   `case_id` int(11) NOT NULL,
   `altname` varchar(40) DEFAULT NULL,
-  `dosage` bit(3) NOT NULL,
+  `dosage` char(3) NOT NULL,
   `before_food` bit(1) NOT NULL,
   `duration` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -185,7 +198,9 @@ CREATE TABLE IF NOT EXISTS `vc_treatment_name` (
 
 CREATE TABLE IF NOT EXISTS `vc_treatment_type` (
   `treatment_type_id` int(11) NOT NULL,
-  `name` varchar(40) DEFAULT NULL
+  `initial` char(1) DEFAULT NULL,
+  `name` varchar(40) DEFAULT NULL,
+  `unit` varchar(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -246,6 +261,13 @@ ALTER TABLE `vc_case`
   ADD PRIMARY KEY (`case_id`),
   ADD KEY `complaint_id` (`complaint_id`),
   ADD KEY `patient_id` (`patient_id`);
+
+--
+-- Indexes for table `vc_case_file`
+--
+ALTER TABLE `vc_case_file`
+  ADD PRIMARY KEY (`case_file_id`),
+  ADD KEY `case_id` (`case_id`);
 
 --
 -- Indexes for table `vc_complaint`
@@ -335,6 +357,11 @@ ALTER TABLE `vc_address_state`
 ALTER TABLE `vc_case`
   MODIFY `case_id` int(11) NOT NULL AUTO_INCREMENT;
 --
+-- AUTO_INCREMENT for table `vc_case_file`
+--
+ALTER TABLE `vc_case_file`
+  MODIFY `case_file_id` int(11) NOT NULL AUTO_INCREMENT;
+--
 -- AUTO_INCREMENT for table `vc_complaint`
 --
 ALTER TABLE `vc_complaint`
@@ -400,6 +427,12 @@ ALTER TABLE `vc_address`
 ALTER TABLE `vc_case`
   ADD CONSTRAINT `vc_case_ibfk_1` FOREIGN KEY (`complaint_id`) REFERENCES `vc_complaint` (`complaint_id`),
   ADD CONSTRAINT `vc_case_ibfk_2` FOREIGN KEY (`patient_id`) REFERENCES `vc_patient` (`patient_id`);
+
+--
+-- Constraints for table `vc_case_file`
+--
+ALTER TABLE `vc_case_file`
+  ADD CONSTRAINT `vc_case_file_ibfk_1` FOREIGN KEY (`case_id`) REFERENCES `vc_case` (`case_id`);
 
 --
 -- Constraints for table `vc_messages`

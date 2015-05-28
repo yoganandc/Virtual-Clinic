@@ -56,10 +56,19 @@
 #case-content th#width-7 {
 	width: 20%;
 }
+#case-content th#width-8 {
+	width: 70%;
+}
+#case-content th#width-9 {
+	width: 30%;
+}
 #heading-results {
 	background-color: #40A2D0;
 }
 #heading-treatments {
+	background-color: #40A2D0;
+}
+#heading-files {
 	background-color: #40A2D0;
 }
 .color-row {

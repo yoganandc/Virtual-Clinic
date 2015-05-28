@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 06, 2015 at 08:46 AM
+-- Generation Time: May 28, 2015 at 02:20 PM
 -- Server version: 5.6.22-log
 -- PHP Version: 5.6.7
 
@@ -145,11 +145,11 @@ INSERT INTO `vc_treatment_name` (`treatment_name_id`, `treatment_type_id`, `name
 -- Dumping data for table `vc_treatment_type`
 --
 
-INSERT INTO `vc_treatment_type` (`treatment_type_id`, `name`) VALUES
-(1, 'Tablet'),
-(2, 'Suspension'),
-(3, 'Injection'),
-(4, 'Not Listed');
+INSERT INTO `vc_treatment_type` (`treatment_type_id`, `initial`, `name`, `unit`) VALUES
+(1, 'T', 'Tablet', 'mg'),
+(2, 'S', 'Suspension', 'mg/5ml'),
+(3, 'I', 'Injection', 'mg'),
+(4, NULL, 'Not Listed', NULL);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

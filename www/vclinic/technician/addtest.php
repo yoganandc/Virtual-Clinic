@@ -96,7 +96,6 @@
 					}
 				}
 				else {
-					echo $test['file_type'];
 					unlink_all_files($tests);
 					$showerror = true;
 					$error = "You can only upload files of the following types: .odt, .ods, .doc/.docx, .xls/.xlsx, .pdf, .jpg, .png, .bmp, & .gif";
@@ -164,7 +163,6 @@
 								}
 							}
 							else {
-								echo $test['file_src_location'];
 								unlink_all_files($tests);
 								echo '<p class="error">Some error occured.</p>';
 								exit();

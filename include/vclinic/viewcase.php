@@ -95,6 +95,28 @@
 		}
 	}
 
+	$query_case = "SELECT COUNT(*) AS count_files FROM vc_case_file WHERE case_id=".$case_id;
+	$data_case = mysqli_query($dbc, $query_case);
+	if(mysqli_num_rows($data_case) != 1) {
+		echo '<p class="error">Some error occured.</p>';
+		exit();
+	}
+	$row_temp = mysqli_fetch_array($data_case);
+	$row_case['count_files'] = $row_temp['count_files'];
+
+	if($row_case['count_files'] > 0) {
+		$query_case = "SELECT title, filename FROM vc_case_file WHERE case_id=".$case_id;
+		$data_case = mysqli_query($dbc, $query_case);
+		if(mysqli_num_rows($data_case) < 1) {
+			echo '<p class="error">Some error occured.</p>';
+			exit();
+		}
+		$data_case_files = array();
+		while($row_temp = mysqli_fetch_array($data_case)) {
+			array_push($data_case_files, $row_temp);
+		}
+	}
+
 	$query_case = "SELECT * FROM vc_test_name";
 	$data_case = mysqli_query($dbc, $query_case);
 	if(mysqli_num_rows($data_case) < 1) {
@@ -170,6 +192,56 @@
 			<tr>
 				<th>Examination: </th>
 				<td><?php if(empty($row_case['examination'])) echo '<span class="nulldata">Not entered.</span>'; else echo $row_case['examination']; ?></td>
+			</tr>
+		</table>
+		<br>
+		<hr>
+		<br>
+		<table>
+			<tr>
+				<th>Attached Files: </th>
+				<td>
+					<?php
+						if($_SESSION['type'] == VC_TECHNICIAN) echo '<a class="add" id="add-file" title="Add File" href="#">Add File</a><br>';
+						if(($row_case['count_files'] == "0")) {
+							if(($_SESSION['type'] == VC_DOCTOR))
+								echo '<span class="add nulldata">No files attached.</span><br>';
+						}
+						else { 
+					?>
+					<br>
+					<table id="files">
+						<tr id="heading-files">
+							<th id="width-8">Name</th>
+							<th id="width-9">File</th>
+						</tr>
+						<?php $color = false; ?>
+						<?php foreach($data_case_files as $data_case_file) { ?>
+						<tr<?php if($color) echo ' class="color-row"'; ?>>
+							<?php $color = !$color; ?>
+							<td><?php echo $data_case_file['title']; ?></td>
+							<td>
+								<?php
+									$filename = $_SERVER['DOCUMENT_ROOT'].'/vclinic/cases/case-'.$case_id.'/'.$data_case_file['filename'];
+									$finfo = finfo_open(FILEINFO_MIME_TYPE);
+									$filetype = finfo_file($finfo, $filename);
+									finfo_close($finfo);
+									$href = VC_LOCATION.'cases/case-'.$case_id.'/'.$data_case_file['filename'];
+									if(is_filetype_image($filetype)) {
+										echo '<a class="fancybox" href="'.$href.'">View</a>';
+									}
+									else if(is_filetype_pdf($filetype)) {
+										echo '<a href="'.$href.'" target="_blank">Open</a>';
+									}
+									else {
+										echo '<a href="'.$href.'" target="_blank">Download</a>';
+									}
+								?>
+							</td>
+						<?php } ?>
+					</table>
+					<?php } ?>
+				</td>
 			</tr>
 		</table>
 		<br>
