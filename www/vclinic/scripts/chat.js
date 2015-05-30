@@ -1,3 +1,17 @@
+var identity;
+var i = 0;
+var j = 0;
+
+var localVideo;
+var remoteVideo;
+var peerConnection;
+var peerConnectionConfig = {'iceServers': [{'url': 'stun:stun.services.mozilla.com'}, {'url': 'stun:stun.l.google.com:19302'}]};
+
+navigator.getUserMedia = navigator.getUserMedia || navigator.mozGetUserMedia || navigator.webkitGetUserMedia;
+window.RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
+window.RTCIceCandidate = window.RTCIceCandidate || window.mozRTCIceCandidate || window.webkitRTCIceCandidate;
+window.RTCSessionDescription = window.RTCSessionDescription || window.mozRTCSessionDescription || window.webkitRTCSessionDescription;
+
 var POLL_INTERVAL_UPDATE = 10000;
 var POLL_INTERVAL_CHAT = 2000;
 var ASSIGNED_STATUS_OFFLINE = 1;
@@ -16,7 +30,6 @@ var updateTimerID = null;
 var pollInterval = null;
 var panel = null;
 var room = null;
-var webrtc =null;
 var runWebRTC = null;
 
 var assignedStatus = ASSIGNED_STATUS_NULL;
@@ -76,7 +89,9 @@ function readyChat() {
 	if(assignedStatus == ASSIGNED_STATUS_ONLINE) {
 		pollInterval = POLL_INTERVAL_CHAT;
 	}
-	setupWebRTC();
+	if(runWebRTC) {
+		pageReady();
+	}
 
 	sendUpdate();
 	updateTimerID = setTimeout(function() { keepUpdating(); }, pollInterval);
@@ -135,7 +150,6 @@ function updateChat(status, messages) {
 			document.getElementById("status").className = "offline";
 			replaceText("status", "OFFLINE");
 			requestMessenger = null;
-			destroyWebRTC();
 		}
 	}
 	if(assignedStatus == ASSIGNED_STATUS_ONLINE) {
@@ -247,43 +261,103 @@ function setupMessages(jsonData) {
 	}
 }
 
-function setupWebRTC() {
-	if(runWebRTC) {
-		webrtc = new SimpleWebRTC({
-		    localVideoEl: 'localvideo',
-		    remoteVideosEl: '',
-		    autoRequestMedia: true,
-		    url: SIGNAL_SERVER_LOCATION
-		});
+function pageReady() {
+    localVideo = document.getElementById('localVideo');
+    remoteVideo = document.getElementById('remoteVideo');
 
-		webrtc.on('videoAdded', function (video, peer) {
-			document.getElementById("localvideo-container").style.display = "block";
-			document.getElementById("status").className = "online";
-			replaceText("status", "ONLINE");
-			
-			var videosDiv = document.getElementById("remotevideo");
-			var videoDiv = document.createElement("div");
-			videoDiv.id = "container_" + webrtc.getDomId(peer);
-			videoDiv.appendChild(video);
-			video.oncontextmenu = function() { return false; };
-			videosDiv.appendChild(videoDiv);
-		});
+    serverConnection = new WebSocket('ws://127.0.0.1:3434');
 
-		webrtc.on('videoRemoved', function (video, peer) {
-			var videosDiv = document.getElementById("remotevideo");
-			var videoDiv = document.getElementById(peer ? 'container_' + webrtc.getDomId(peer) : 'localScreenContainer');
-			if(videosDiv && videoDiv)
-				videosDiv.removeChild(videoDiv);
-		});
+    function sendRoomInfo() {
+        console.log('sendRoomInfo');
+        if(serverConnection.readyState == 1) {
+            serverConnection.send(JSON.stringify({'room': room}));
+        }
+        else {
+            setTimeout(sendRoomInfo, 5);
+        }
+    }
+    sendRoomInfo();
 
-		webrtc.on('readyToCall', function () {
-		    webrtc.joinRoom(room);
-		});
-	}
+    serverConnection.onmessage = function(message) {
+        if(!peerConnection) start(false);
+
+        var signal = JSON.parse(message.data);
+        if(signal.sdp) {
+            console.log('received sdp info: '+signal.identity);
+            peerConnection.setRemoteDescription(new RTCSessionDescription(signal.sdp), function() {
+                peerConnection.createAnswer(function(description) {
+                    peerConnection.setLocalDescription(description, function () {
+                        console.log('sending sdp answer');
+                        var tmp3 = identity + "-" + (j++);
+                        serverConnection.send(JSON.stringify({'sdp': description, 'identity': tmp3}));
+                    }, errorHandler);
+                }, errorHandler);
+            }, errorHandler);
+        } else if(signal.ice) {
+            console.log('received ice candidate: '+signal.identity);
+            peerConnection.addIceCandidate(new RTCIceCandidate(signal.ice));
+        } else if(signal.hangup) {
+            console.log('call ended');
+            peerConnection.close();
+            peerConnection = null;
+            document.getElementById("localvideo-container").style.display = "none";
+        }
+    };
+
+     window.addEventListener("beforeunload", function() {
+        serverConnection.send(JSON.stringify({'hangup': true}));
+    });
+
+    if(navigator.getUserMedia) {
+        navigator.getUserMedia({ video: true, audio: true }, function(stream) {
+            localStream = stream;
+            localVideo.src = window.URL.createObjectURL(stream);
+            if(assignedStatus == ASSIGNED_STATUS_ONLINE) {
+				start(true);
+			}
+        }, errorHandler);
+    } else {
+        alert('Your browser does not support getUserMedia API');
+    }
 }
 
-function destroyWebRTC() {
-	if(runWebRTC) {
-		document.getElementById("localvideo-container").style.display = "none";
-	}
+function start(isCaller) {
+    if(isCaller)
+        identity = "Caller";
+    else
+        identity = "Answerer";
+
+    peerConnection = new RTCPeerConnection(peerConnectionConfig);
+
+    peerConnection.onicecandidate = function(event) {
+        if(event.candidate != null) {
+            console.log('sending ice candidate');
+            var tmp1  = identity + "-" + (i++);
+            serverConnection.send(JSON.stringify({'ice': event.candidate, 'identity': tmp1}));
+        }
+    };
+
+    peerConnection.onaddstream = function(event) {
+        console.log("got remote stream");
+        remoteVideo.src = window.URL.createObjectURL(event.stream);
+        document.getElementById("localvideo-container").style.display = "block";
+		document.getElementById("status").className = "online";
+		replaceText("status", "ONLINE");
+    };
+
+    peerConnection.addStream(localStream);
+
+    if(isCaller) {
+        peerConnection.createOffer(function(localDescription) {
+            peerConnection.setLocalDescription(localDescription, function () {
+                console.log('sending sdp info');
+                var tmp2 = identity + "-" + (j++);
+                serverConnection.send(JSON.stringify({'sdp': localDescription, 'identity': tmp2}));
+            }, errorHandler);
+        }, errorHandler);
+    }
+}
+
+function errorHandler(error) {
+    console.log(error);
 }

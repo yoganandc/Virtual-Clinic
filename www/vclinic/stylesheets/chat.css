@@ -32,7 +32,7 @@
     border-right: 1px solid;
     display: inline-block;
 }
-#remotevideo video {
+#remotevideo-container video {
     height: 299px;
     position: absolute;
     top: 0px;
@@ -46,7 +46,7 @@
     z-index: 99;
     display: none;
 }
-#localvideo {
+#localVideo {
     height: 100px;
 }
 #text-chat {

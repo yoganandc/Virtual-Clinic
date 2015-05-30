@@ -96,7 +96,11 @@
 
 						if(mysqli_query($dbc, $query)) {
 							mysqli_close($dbc);
-							header("Location: ".$back_url);
+							if($back_url[0] == "p")
+								$url = $back_url;
+							else
+								$url = "case.php?case_id=".$case_id."&patient_id=".$patient_id;
+							header("Location: ".$url);
 							exit();
 						}
 						else {

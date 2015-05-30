@@ -19,7 +19,6 @@
 
 <?php require_once(VC_INCLUDE.'startdocument.php'); ?>
 
-    <script src="<?php echo VC_LOCATION.'scripts/simplewebrtc.bundle.js'; ?>"></script>
     <script src="<?php echo VC_LOCATION.'scripts/chat.js'; ?>"></script> 
     <script src="<?php echo VC_LOCATION.'scripts/index.js'; ?>"></script> 
     <script src="<?php echo VC_LOCATION.'scripts/jquery-1.11.0.min.js'; ?>"></script>
@@ -80,10 +79,11 @@
             </div>
             <div id="chat-body">
                 <div id="video-chat">
-                    <div id="remotevideo">
+                    <div id="remotevideo-container">
+                        <video id="remoteVideo" autoplay></video>
                     </div>
                     <div id="localvideo-container">
-                        <video id="localvideo"></video>
+                        <video id="localVideo" autoplay muted></video>
                     </div>
                 </div>
                 <div id="text-chat">
