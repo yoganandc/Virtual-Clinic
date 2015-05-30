@@ -11,7 +11,3 @@ This application aims to provide two main functions:
 4. */include/vclinic/cron.php* must be scheduled to run every 20 seconds.
 5. install and start *signalmaster* by running `npm install` and then `node server.js`.
 6. direct your browser to the server location and log in as *admin* (password is the same).
-
-###Other information:
-* The video chat functionality in this application is implemented using [SimpleWebRTC](https://github.com/henrikjoreteg/SimpleWebRTC).
-* WebRTC applications require a signaling server. This is implemented using [signalmaster](https://github.com/andyet/signalmaster).
