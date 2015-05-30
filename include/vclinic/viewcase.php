@@ -15,7 +15,7 @@
 		return false;
 	}
 
-	$query_case = "SELECT complaint_id, altname, chronic, patient_history, past_history, personal_history, family_history, examination FROM vc_case WHERE case_id=".$case_id;
+	$query_case = "SELECT complaint_id, altname, chronic, patient_history, past_history, personal_history, family_history, examination, DATE(date_created) AS date_created FROM vc_case WHERE case_id=".$case_id;
 	$data_case = mysqli_query($dbc, $query_case);
 	if(mysqli_num_rows($data_case) != 1) {
 		echo '<p class="error">Some error occured.</p>';
@@ -48,6 +48,10 @@
 	$row_case['personal_history'] = preg_replace("/\r\n/", "<br>", $row_case['personal_history']);
 	$row_case['family_history'] = preg_replace("/\r\n/", "<br>", $row_case['family_history']);
 	$row_case['examination'] = preg_replace("/\r\n/", "<br>", $row_case['examination']);
+
+	$date_arr = explode('-', $row_case['date_created']);
+	$date_arr = array_reverse($date_arr);
+	$row_case['date_created'] = implode('-', $date_arr);
 
 	$query_case = "SELECT COUNT(*) AS count_test FROM vc_test WHERE case_id=".$case_id;
 	$data_case = mysqli_query($dbc, $query_case);
@@ -161,6 +165,10 @@
 	<h3 id="case-heading"><?php if(isset($case_no)) echo '#'.$case_no.' '; echo $title; ?></h3>
 	<div id="case-content">
 		<table>
+			<tr>
+				<th>Date Created: </th>
+				<td><?php echo $row_case['date_created']; ?></td>
+			</tr>
 			<tr>
 				<th>Type: </th>
 				<td><?php echo $type; ?></td>

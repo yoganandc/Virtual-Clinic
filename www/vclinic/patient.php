@@ -38,7 +38,7 @@
 	}
 
 	if(!$nocase) {
-		$query = "SELECT vc.case_id, vc.complaint_id, vc.altname, vs.complaint FROM vc_case AS vc INNER JOIN vc_complaint AS vs USING (complaint_id) WHERE patient_id=".$patient_id." ORDER BY vc.case_id DESC";
+		$query = "SELECT vc.case_id, vc.complaint_id, vc.altname, vs.complaint, DATE(vc.date_created) AS date_created FROM vc_case AS vc INNER JOIN vc_complaint AS vs USING (complaint_id) WHERE patient_id=".$patient_id." ORDER BY vc.case_id DESC";
 		$data = mysqli_query($dbc, $query);
 		$othercases = array();
 		$othertreatment = array();
@@ -52,6 +52,9 @@
 				if($othercases[$i]['complaint_id'] == VC_COMPLAINT_UNLISTED)
 					$othercases[$i]['altname'] = $row['altname'];
 				$othercases[$i]['complaint'] = $row['complaint'];
+				$date_arr = explode('-', $row['date_created']);
+				$date_arr = array_reverse($date_arr);
+				$othercases[$i]['date_created'] = implode('-', $date_arr);
 				$query = "SELECT treatment_name_id, altname, dosage, before_food, duration FROM vc_treatment WHERE case_id=".$othercases[$i]['case_id'];
 				$data_other_treatment = mysqli_query($dbc, $query);
 				if(mysqli_num_rows($data_other_treatment) < 1)
@@ -116,7 +119,7 @@
 					</div>
 					<table>
 						<tr id="othercases-heading-row">
-							<th id="oc-width-6"></th>
+							<th id="oc-width-6">Date</th>
 							<th id="oc-width-1">Complaint</th>
 							<th id="oc-width-2">Medicine</th>
 							<th id="oc-width-3" class="treatment-center">Dosage</th>
@@ -127,7 +130,7 @@
 						<?php for($i = 0; $i < count($othercases); $i++) { ?>
 						<tr <?php if($othercases_color) echo 'class="othercases-color"'; ?>>
 							<?php if($othertreatment[$i] == null) { $notreatment = true; $rowspan = 1; } else { $notreatment = false; $rowspan = count($othertreatment[$i]); } ?>
-							<td rowspan="<?php echo $rowspan; ?>"><?php echo '#'.$othercases[$i]['case_id']; ?></td>
+							<td rowspan="<?php echo $rowspan; ?>"><?php echo $othercases[$i]['date_created']; ?></td>
 							<td rowspan="<?php echo $rowspan; ?>"><a href="case.php?case_id=<?php echo $othercases[$i]['case_id']; ?>&amp;patient_id=<?php echo $patient_id; ?>"><?php if($othercases[$i]['complaint_id'] == VC_COMPLAINT_UNLISTED) echo $othercases[$i]['altname']; else echo $othercases[$i]['complaint']; ?></a></td>
 							<?php if($notreatment) { ?>
 							<td colspan="4"><span class="nulldata">None prescribed.</span></td>

@@ -55,7 +55,6 @@ function readyChat() {
 		setCookie(COOKIE_PAGEOPEN, CHAT_CLOSE);
 	});
 
-	//document.getElementById("toggle-chat").addEventListener("click", toggleHandler);
 	assignedStatus = document.getElementById("chat-container").getAttribute("data-status");
 	if(assignedStatus == ASSIGNED_STATUS_NULL)
 		return;
@@ -139,17 +138,11 @@ function updateChat(status, messages) {
 			clearTimeout(updateTimerID);
 			pollInterval = POLL_INTERVAL_CHAT;
 			updateTimerID = setTimeout(function() { keepUpdating(); }, pollInterval);
-
-			requestMessenger = createXMLHttpRequest();
 		}
 		else {
 			clearTimeout(updateTimerID);
 			pollInterval = POLL_INTERVAL_UPDATE;
 			updateTimerID = setTimeout(function() { keepUpdating(); }, pollInterval);
-
-			document.getElementById("status").className = "offline";
-			replaceText("status", "OFFLINE");
-			requestMessenger = null;
 		}
 	}
 	if(assignedStatus == ASSIGNED_STATUS_ONLINE) {
@@ -285,11 +278,11 @@ function pageReady() {
         if(signal.sdp) {
             console.log('received sdp info: '+signal.identity);
             peerConnection.setRemoteDescription(new RTCSessionDescription(signal.sdp), function() {
-                peerConnection.createAnswer(function(description) {
-                    peerConnection.setLocalDescription(description, function () {
+                peerConnection.createAnswer(function(localDescription) {
+                    peerConnection.setLocalDescription(localDescription, function () {
                         console.log('sending sdp answer');
                         var tmp3 = identity + "-" + (j++);
-                        serverConnection.send(JSON.stringify({'sdp': description, 'identity': tmp3}));
+                        serverConnection.send(JSON.stringify({'sdp': localDescription, 'identity': tmp3}));
                     }, errorHandler);
                 }, errorHandler);
             }, errorHandler);
@@ -301,6 +294,8 @@ function pageReady() {
             peerConnection.close();
             peerConnection = null;
             document.getElementById("localvideo-container").style.display = "none";
+            document.getElementById("status").className = "offline";
+			replaceText("status", "OFFLINE");
         }
     };
 
