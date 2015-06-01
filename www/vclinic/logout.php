@@ -2,17 +2,8 @@
     session_start();
 
     require_once('../../include/vclinic/appvars.php');
-    require_once(VC_INCLUDE.'dbvars.php');
-    require_once(VC_INCLUDE.'library.php');
 
     if (isset($_SESSION['user_id'])) {
-
-        if($_SESSION['type'] != VC_ADMINISTRATOR) {
-            $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME) or die('Error connecting to database.');
-            set_status_offline($dbc, $_SESSION['user_id']);
-            mysqli_close($dbc);
-            unset($dbc);
-        }
         
         $_SESSION = array();
 

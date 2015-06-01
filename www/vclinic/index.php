@@ -69,7 +69,7 @@
                 }
             }
         ?>
-        <div id="chat-container" data-status="<?php if($docname == "") echo '0'; else if($online) echo '2'; else echo '1'; ?>" data-room="<?php if(!empty($_SESSION['room'])) echo $_SESSION['room']; ?>">
+        <div id="chat-container" data-status="<?php if($docname == "") echo '0'; else echo '1'; ?>" data-user="<?php echo $_SESSION['user_id']; ?>" data-assigned="<?php echo $_SESSION['assigneduser_id']; ?>" data-room="<?php if(!empty($_SESSION['room'])) echo $_SESSION['room']; ?>">
             <div id="chat-details">
                 <div id="details-right">
                 </div>
