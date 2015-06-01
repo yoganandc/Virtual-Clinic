@@ -2,6 +2,11 @@
 	require_once('../../include/vclinic/usersession.php');
 	require_once(VC_INCLUDE.'library.php');
 
+	function remove_file($file_location) {
+		if($upload_type == VC_UPLOAD_FILE)
+			unlink($picture_src_location);
+	}
+
 	$showerror = false;
 	$error = "";
 
@@ -28,74 +33,99 @@
 		$birthdate = mysqli_real_escape_string($dbc, trim($_POST['birthdate']));
 		$email = mysqli_real_escape_string($dbc, trim($_POST['email']));
 		$phone = mysqli_real_escape_string($dbc, trim($_POST['phone']));
-		$picture_name = mysqli_real_escape_string($dbc, trim($_FILES['picture']['name']));
-		$picture_type = mysqli_real_escape_string($dbc, trim($_FILES['picture']['type']));
-		$picture_size = mysqli_real_escape_string($dbc, trim($_FILES['picture']['size']));
-		$picture_src_location = mysqli_real_escape_string($dbc, trim($_FILES['picture']['tmp_name']));
+		$upload_type = mysqli_real_escape_string($dbc, trim($_POST['upload_type']));
+		if($upload_type == VC_UPLOAD_FILE) {
+			$picture_name = mysqli_real_escape_string($dbc, trim($_FILES['picture']['name']));
+			$picture_type = mysqli_real_escape_string($dbc, trim($_FILES['picture']['type']));
+			$picture_size = mysqli_real_escape_string($dbc, trim($_FILES['picture']['size']));
+			$picture_src_location = mysqli_real_escape_string($dbc, trim($_FILES['picture']['tmp_name']));
+		}
+		else if($upload_type == VC_UPLOAD_PHOTO) {
+			$photo = mysqli_real_escape_string($dbc, trim($_POST['encoded_picture']));
+		}
 
 		if(!empty($fname) && !empty($lname)) {
 			if(!preg_match(VC_PATTERN_NAME, $fname)) {
 				$showerror = true;
 				$error = "First name must be between 2 and 40 lowercase or uppercase letters.";
+				remove_file();
 			}
 			if(!preg_match(VC_PATTERN_NAME, $lname)) {
 				$showerror = true;
 				$error = "Last name must be between 2 and 40 lowercase or uppercase letters.";
+				remove_file();
 			}
 			if(!check_email($email)) {
 				$showerror = true;
 				$error = "You have not entered a valid email address.";
+				remove_file();
 			}
 			if(!preg_match(VC_PATTERN_PHONE, $phone)) {
 				$showerror = true;
 				$error = "You have not entered a valid phone number.";
+				remove_file();
 			}
 
 			if(!$showerror) {
-				if(!empty($picture_name)) {
-					if(($picture_type == 'image/png') || ($picture_type == 'image/pjpeg') || ($picture_type == 'image/jpeg')) {
-						if(($picture_size > 0) && ($picture_size <= VC_MAXFILESIZE)) {
-							if($_FILES['picture']['error'] == 0) {
-								list($width, $height) = getimagesize($picture_src_location);
+				if($upload_type == VC_UPLOAD_FILE) {
+					if(!empty($picture_name)) {
+						if(($picture_type == 'image/png') || ($picture_type == 'image/pjpeg') || ($picture_type == 'image/jpeg')) {
+							if(($picture_size > 0) && ($picture_size <= VC_MAXFILESIZE)) {
+								if($_FILES['picture']['error'] == 0) {
+									list($width, $height) = getimagesize($picture_src_location);
 
-								if ($width < $height) 
-									$side = $width;
-								else
-									$side = $height;
-								$image_resampled = imagecreatetruecolor(VC_DPWIDTH, VC_DPHEIGHT);
-								if(($picture_type == 'image/jpeg') || ($picture_type == 'image/pjpeg')) 
-									$image_original = imagecreatefromjpeg($picture_src_location);
-								else
-									$image_original = imagecreatefrompng($picture_src_location);
+									if ($width < $height) 
+										$side = $width;
+									else
+										$side = $height;
+									$image_resampled = imagecreatetruecolor(VC_DPWIDTH, VC_DPHEIGHT);
+									if(($picture_type == 'image/jpeg') || ($picture_type == 'image/pjpeg')) 
+										$image_original = imagecreatefromjpeg($picture_src_location);
+									else
+										$image_original = imagecreatefrompng($picture_src_location);
 
-								imagecopyresampled($image_resampled, $image_original, 0, 0, 0, 0, VC_DPWIDTH, VC_DPHEIGHT, $side, $side);
+									imagecopyresampled($image_resampled, $image_original, 0, 0, 0, 0, VC_DPWIDTH, VC_DPHEIGHT, $side, $side);
 
-								$picture = $_SESSION['user_id'].'-'.time().'-u'.'.png';
-								$picture_dest_location = VC_UPLOADPATH.$picture;
+									$picture = $_SESSION['user_id'].'-'.time().'-u'.'.png';
+									$picture_dest_location = VC_UPLOADPATH.$picture;
 
-								imagepng($image_resampled, $picture_dest_location, 0);
+									imagepng($image_resampled, $picture_dest_location, 0);
 
-								unlink($picture_src_location);
-								if($display_picture != "default.png")
-									unlink(VC_UPLOADPATH.$display_picture);
+									unlink($picture_src_location);
+									if($display_picture != "default.png")
+										unlink(VC_UPLOADPATH.$display_picture);
+								}
+								else {
+									unlink($picture_src_location);
+									$showerror = true;
+									$error = "An error related to the uploaded picture occured.";
+								}
 							}
 							else {
 								unlink($picture_src_location);
 								$showerror = true;
-								$error = "An error related to the uploaded picture occured.";
+								$error = "Picture size cannot exceed ".(VC_MAXFILESIZE/(1024*1024))."MB.";
 							}
 						}
 						else {
 							unlink($picture_src_location);
 							$showerror = true;
-							$error = "Picture size cannot exceed ".(VC_MAXFILESIZE/(1024*1024))."MB.";
-						}
+							$error = "Picture format can only be JPG or PNG.";
+						} 
 					}
 					else {
 						unlink($picture_src_location);
 						$showerror = true;
-						$error = "Picture format can only be JPG or PNG.";
-					} 
+						$error = "You have not specified a file for your display picture.";
+					}
+				}
+				else if($upload_type == VC_UPLOAD_PHOTO) {
+					$decoded_photo = base64_decode($photo);
+					$picture = $_SESSION['user_id'].'-'.time().'-u'.'.png';
+					$picture_dest_location = VC_UPLOADPATH.$picture;
+					$fp = fopen($picture_dest_location, 'w');
+					fwrite($fp, $decoded_photo);
+					fclose($fp);
 				}
 				else {
 					$picture = $display_picture;
@@ -136,12 +166,14 @@
 				else {
 					$showerror = true;
 					$error = "Birth date must be formatted as YYYY-MM-DD. Set it to blank if you do not want to enter a birth date.";
+					remove_file();
 				}
 			}
 		}
 		else {
 			$showerror = true;
 			$error = "First name and last name fields cannot be blank.";
+			remove_file();
 		}
 	}
 	else {
@@ -168,6 +200,8 @@
 
 	<link rel="stylesheet" href="stylesheets/user.css">
 	<link rel="stylesheet" href="stylesheets/profile.css">
+	<link rel="stylesheet" href="stylesheets/takepic.css">
+	<script src="scripts/takepic.js"></script>
 </head>
 <body>
 	<div id="banner">
@@ -182,6 +216,7 @@
 		<div id="content">
 			<?php if($showerror) echo '<p class="error">'.$error.'</p>'."\n"; ?>
 			<form enctype="multipart/form-data" method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+				<input type="hidden" id="encoded_picture" name="encoded_picture" value="">
 				<table>
 					<tr>
 						<th><label for="fname">First Name: </label></th>
@@ -215,6 +250,19 @@
 					</tr>
 					<tr>
 						<th><label for="picture">Picture: </label></th>
+						<td>
+							<input type="radio" id="upload_none" name="upload_type" value="0"><label for="upload_none">Do not update</label>
+							<input type="radio" id="upload_file" name="upload_type" value="1"><label for="upload_file">Upload File</label>
+							<input type="radio" id="upload_pic" name="upload_type" value="2"><label for="upload_pic">Take picture</label>
+						</td>
+					</tr>
+					<tr id="camera-row">
+						<td colspan="2">
+							<?php require_once(VC_INCLUDE.'takepic.php'); ?>
+						</td>
+					</tr>
+					<tr id="file-row">
+						<th></th>
 						<td><input type="file" id="picture" name="picture"></td>
 					</tr>
 					<tr>

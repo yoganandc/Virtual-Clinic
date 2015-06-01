@@ -9,3 +9,9 @@
 	padding-left: 40px;
 	border-left: 1px solid;
 }
+#camera-row {
+	display: none;
+}
+#file-row {
+	display: none;
+}

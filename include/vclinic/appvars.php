@@ -23,4 +23,8 @@
 	define('VC_TREATMENT_UNLISTED', '38');
 	define('VC_CHRONIC', '1');
 	define('VC_ACUTE', '0');
+
+	define('VC_UPLOAD_NONE', '0');
+	define('VC_UPLOAD_FILE', '1');
+	define('VC_UPLOAD_PHOTO', '2');
 ?>
