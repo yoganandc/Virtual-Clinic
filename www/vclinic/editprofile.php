@@ -2,9 +2,9 @@
 	require_once('../../include/vclinic/usersession.php');
 	require_once(VC_INCLUDE.'library.php');
 
-	function remove_file($file_location) {
-		if($upload_type == VC_UPLOAD_FILE)
-			unlink($picture_src_location);
+	function remove_file($upload_type, $file_location) {
+		if($upload_type == VC_UPLOAD_FILE && !empty($file_location))
+			unlink($file_location);
 	}
 
 	$showerror = false;
@@ -33,7 +33,14 @@
 		$birthdate = mysqli_real_escape_string($dbc, trim($_POST['birthdate']));
 		$email = mysqli_real_escape_string($dbc, trim($_POST['email']));
 		$phone = mysqli_real_escape_string($dbc, trim($_POST['phone']));
-		$upload_type = mysqli_real_escape_string($dbc, trim($_POST['upload_type']));
+
+		if(isset($_POST['upload_type']))
+			$upload_type = mysqli_real_escape_string($dbc, trim($_POST['upload_type']));
+		else
+			$upload_type = VC_UPLOAD_NONE;
+
+		$picture_src_location = "";
+
 		if($upload_type == VC_UPLOAD_FILE) {
 			$picture_name = mysqli_real_escape_string($dbc, trim($_FILES['picture']['name']));
 			$picture_type = mysqli_real_escape_string($dbc, trim($_FILES['picture']['type']));
@@ -48,22 +55,22 @@
 			if(!preg_match(VC_PATTERN_NAME, $fname)) {
 				$showerror = true;
 				$error = "First name must be between 2 and 40 lowercase or uppercase letters.";
-				remove_file();
+				remove_file($upload_type, $picture_src_location);
 			}
 			if(!preg_match(VC_PATTERN_NAME, $lname)) {
 				$showerror = true;
 				$error = "Last name must be between 2 and 40 lowercase or uppercase letters.";
-				remove_file();
+				remove_file($upload_type, $picture_src_location);
 			}
 			if(!check_email($email)) {
 				$showerror = true;
 				$error = "You have not entered a valid email address.";
-				remove_file();
+				remove_file($upload_type, $picture_src_location);
 			}
 			if(!preg_match(VC_PATTERN_PHONE, $phone)) {
 				$showerror = true;
 				$error = "You have not entered a valid phone number.";
-				remove_file();
+				remove_file($upload_type, $picture_src_location);
 			}
 
 			if(!$showerror) {
@@ -166,14 +173,14 @@
 				else {
 					$showerror = true;
 					$error = "Birth date must be formatted as YYYY-MM-DD. Set it to blank if you do not want to enter a birth date.";
-					remove_file();
+					remove_file($upload_type, $picture_src_location);
 				}
 			}
 		}
 		else {
 			$showerror = true;
 			$error = "First name and last name fields cannot be blank.";
-			remove_file();
+			remove_file($upload_type, $picture_src_location);
 		}
 	}
 	else {

@@ -126,7 +126,7 @@ function pageReady() {
     localVideo = document.getElementById('localVideo');
     remoteVideo = document.getElementById('remoteVideo');
 
-    serverConnection = new WebSocket('ws://127.0.0.1:3434');
+    serverConnection = new WebSocket(SIGNAL_SERVER_LOCATION);
 
     function sendRoomInfo() {
         console.log('sendRoomInfo');

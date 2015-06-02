@@ -33,8 +33,8 @@ wss.on('connection', function(ws) {
             var dbc = mysql.createConnection({host: DB_HOST, user: DB_USER, password: DB_PASSWORD, database: DB_NAME});
             var escapedChat = dbc.escape(parsedInfo.chat);
             var query = "INSERT INTO vc_messages (assigneduser_id, user_id, message) VALUES ("+this.assigned+", "+this.user+", "+escapedChat+")";
-            dbc.query(query, function(error, results, fields) { });
-            dbc.end();
+            dbc.query(query, function(error, results, fields) { if(error) console.log('query chat: '+error); });
+            dbc.end(function(err) { console.log('chat: '+err); });
             if(this.partner)
                 this.partner.send(message);
         }
@@ -59,8 +59,8 @@ wss.on('connection', function(ws) {
     ws.on('close', function() {
         var query = "UPDATE vc_user_status SET status=0, room=NULL WHERE status_id="+this.user;
         var dbc = mysql.createConnection({host: DB_HOST, user: DB_USER, password: DB_PASSWORD, database: DB_NAME});
-        dbc.query(query, function(error, results, fields) { });
-        dbc.end();
+        dbc.query(query, function(error, results, fields) { if(error) console.log('query close: '+error); });
+        dbc.end(function(err) { console.log('close: '+err); });
         clients.splice(clients.indexOf(this), 1);
         if(this.partner) {
             this.partner.send(JSON.stringify({'hangup': true}));

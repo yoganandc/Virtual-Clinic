@@ -1,3 +1,9 @@
+#camera-row {
+	display: none;
+}
+#file-row {
+	display: none;
+}
 #camera {
 	float: left;
 	width: 225px;
