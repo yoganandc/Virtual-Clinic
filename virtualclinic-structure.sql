@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 28, 2015 at 02:19 PM
+-- Generation Time: Jun 02, 2015 at 06:17 AM
 -- Server version: 5.6.22-log
 -- PHP Version: 5.6.7
 
@@ -19,6 +19,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `virtualclinic`
 --
+CREATE DATABASE IF NOT EXISTS `virtualclinic` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `virtualclinic`;
 
 -- --------------------------------------------------------
 
@@ -74,7 +76,8 @@ CREATE TABLE IF NOT EXISTS `vc_case` (
   `past_history` varchar(400) DEFAULT NULL,
   `personal_history` varchar(400) DEFAULT NULL,
   `family_history` varchar(400) DEFAULT NULL,
-  `examination` varchar(400) DEFAULT NULL
+  `examination` varchar(400) DEFAULT NULL,
+  `date_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -112,8 +115,7 @@ CREATE TABLE IF NOT EXISTS `vc_messages` (
   `message_id` int(11) NOT NULL,
   `assigneduser_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `message` varchar(400) DEFAULT NULL,
-  `received` bit(1) NOT NULL DEFAULT b'0'
+  `message` varchar(400) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -233,8 +235,7 @@ CREATE TABLE IF NOT EXISTS `vc_user` (
 CREATE TABLE IF NOT EXISTS `vc_user_status` (
   `status_id` int(11) NOT NULL,
   `status` bit(1) NOT NULL DEFAULT b'0',
-  `room` char(40) DEFAULT NULL,
-  `lastseen` char(10) DEFAULT NULL
+  `room` char(40) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
