@@ -117,6 +117,7 @@
 			}
 		}
 		if(!$showerror) {
+			mysqli_close($dbc);
 			header('Location: '.VC_LOCATION.'closewindow.php');
 			exit();
 		}

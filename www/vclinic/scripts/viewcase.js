@@ -49,7 +49,7 @@ function fileHandler() {
 
 function photoHandler() {
 	if(photoWindow == null || photoWindow.closed)
-		photoWindow = window.open("technician/addphoto.php?case_id="+case_id, "photo-window", "left=5, top=5, width=1339, height=619");
+		photoWindow = window.open("technician/addphoto.php?case_id="+case_id, "photo-window", "left=5, top=5, width=1339, height=650");
 	else
 		photoWindow.focus();
 }
