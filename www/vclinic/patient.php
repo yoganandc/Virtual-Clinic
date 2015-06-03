@@ -37,6 +37,8 @@
 		$nocase = true;
 	}
 
+	$nothercases = true;
+
 	if(!$nocase) {
 		$query = "SELECT vc.case_id, vc.complaint_id, vc.altname, vs.complaint, DATE(vc.date_created) AS date_created FROM vc_case AS vc INNER JOIN vc_complaint AS vs USING (complaint_id) WHERE patient_id=".$patient_id." ORDER BY vc.case_id DESC";
 		$data = mysqli_query($dbc, $query);
@@ -82,9 +84,6 @@
 				$mednames[$k] = $row2;
 				$k++;
 			}
-		}
-		else {
-			$nothercases = true;
 		}
 	}
 ?>

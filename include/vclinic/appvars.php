@@ -12,6 +12,7 @@
 	define('VC_DPHEIGHT', '225');
 
 	define('VC_PATTERN_NAME', '/^[a-zA-Z]{2,40}$/');
+	define('VC_PATTERN_BDAY', '/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/');
 	define('VC_PATTERN_PHONE', '/^[0-9]{0,15}$/');
 	define('VC_PATTERN_OCCUPATION', '/^.{0,40}$/');
 	define('VC_PATTERN_CITY', '/^[a-zA-Z ]{0,40}$/');

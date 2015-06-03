@@ -17,6 +17,7 @@
     	}
     	return false;
     }
+
     function check_email($email) {
     	if(empty($email))
     		return true;
@@ -28,5 +29,10 @@
     	if(!(strlen($email) <= VC_EMAIL_LENGTH))
     		return false;
     	return true;
+    }
+
+    function remove_file($upload_type, $file_location) {
+        if($upload_type == VC_UPLOAD_FILE && !empty($file_location))
+            unlink($file_location);
     }
 ?>

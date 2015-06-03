@@ -210,7 +210,10 @@
 				<th>Attached Files: </th>
 				<td>
 					<?php
-						if($_SESSION['type'] == VC_TECHNICIAN) echo '<a class="add" id="add-file" title="Add File" href="#">Add File</a><br>';
+						if($_SESSION['type'] == VC_TECHNICIAN) { 
+							echo '<a class="add" id="add-file" title="Add File" href="#">Add File</a>';
+							echo '<span> /</span><a class="add" id="add-photo" title="Take Photo" href="#">Take Photo</a><br>';
+						}
 						if(($row_case['count_files'] == "0")) {
 							if(($_SESSION['type'] == VC_DOCTOR))
 								echo '<span class="add nulldata">No files attached.</span><br>';

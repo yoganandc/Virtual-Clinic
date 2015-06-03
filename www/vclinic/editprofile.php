@@ -2,11 +2,6 @@
 	require_once('../../include/vclinic/usersession.php');
 	require_once(VC_INCLUDE.'library.php');
 
-	function remove_file($upload_type, $file_location) {
-		if($upload_type == VC_UPLOAD_FILE && !empty($file_location))
-			unlink($file_location);
-	}
-
 	$showerror = false;
 	$error = "";
 
