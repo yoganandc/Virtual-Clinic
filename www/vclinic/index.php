@@ -31,7 +31,7 @@
     <link rel="stylesheet" href="<?php echo VC_LOCATION.'stylesheets/user1.css'; ?>">
     <?php } ?>
 </head>
-<body>
+<body> 
     <div id="header">
         <div id="header-right">
             <ul id="nav">
@@ -74,7 +74,7 @@
                 }
             }
         ?>
-        <div id="chat-container" data-status="<?php if($docname == "") echo '0'; else echo '1'; ?>" data-user="<?php echo $_SESSION['user_id']; ?>" data-assigned="<?php echo $_SESSION['assigneduser_id']; ?>" data-room="<?php if(!empty($_SESSION['room'])) echo $_SESSION['room']; ?>">
+        <div id="chat-container" data-status="<?php if($docname == "") echo '0'; else echo '1'; ?>" data-user="<?php echo $_SESSION['user_id']; ?>" data-assigned="<?php echo $_SESSION['assigneduser_id']; ?>">
             <div id="chat-details">
                 <div id="details-right">
                 </div>

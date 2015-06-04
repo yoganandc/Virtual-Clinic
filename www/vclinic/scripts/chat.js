@@ -26,6 +26,7 @@ var assigned = null;
 var runWebRTC = null;
 
 window.addEventListener("load", readyChat);
+window.addEventListener("beforeunload", function() { serverConnection.close(); })
 
 function readyChat() {
 	var pageopen = getCookie(COOKIE_PAGEOPEN);
@@ -131,7 +132,7 @@ function pageReady() {
     function sendRoomInfo() {
         console.log('sendRoomInfo');
         if(serverConnection.readyState == 1) {
-            serverConnection.send(JSON.stringify({'user': user, 'assigned': assigned, 'room': room}));
+            serverConnection.send(JSON.stringify({'user': user, 'assigned': assigned}));
         }
         else {
             setTimeout(sendRoomInfo, 5);
@@ -177,6 +178,7 @@ function pageReady() {
 	            peerConnection.close();
 	            peerConnection = null;
 	            localStream.stop();
+                localStream = null;
 	        }
             document.getElementById("localvideo-container").style.display = "none";
             document.getElementById("status").className = "offline";
@@ -187,7 +189,7 @@ function pageReady() {
 
 function getMedia() {
 	if(navigator.getUserMedia) {
-        navigator.getUserMedia({ video: true, audio: true }, function(stream) {
+        navigator.getUserMedia({ video: true, audio: false }, function(stream) {
             localStream = stream;
             localVideo.src = window.URL.createObjectURL(stream);
             serverConnection.send(JSON.stringify({'ready': true}));
