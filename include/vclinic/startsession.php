@@ -80,6 +80,7 @@
     }
     if(isset($_SESSION['user_id'])) {
         if($_SESSION['type'] != VC_ADMINISTRATOR) {
+            $already_online = true;
             $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME) or die('Error connecting to database');
             $query = "SELECT status FROM vc_user_status WHERE status_id=".$_SESSION['user_id'];
             $data = mysqli_query($dbc, $query);
@@ -91,6 +92,7 @@
             if(!(intval($row['status']))) {
                 $room = update_status($dbc);
                 $_SESSION['room'] = $room;
+                $already_online = false;
             }
             mysqli_close($dbc);
             unset($dbc);

@@ -19,13 +19,17 @@
 
 <?php require_once(VC_INCLUDE.'startdocument.php'); ?>
 
-    <script src="<?php echo VC_LOCATION.'scripts/chat.js'; ?>"></script> 
     <script src="<?php echo VC_LOCATION.'scripts/index.js'; ?>"></script> 
     <script src="<?php echo VC_LOCATION.'scripts/jquery-1.11.0.min.js'; ?>"></script>
     <script src="<?php echo VC_LOCATION.'fancybox/jquery.fancybox.js'; ?>"></script>
     <link rel="stylesheet" href="<?php echo VC_LOCATION.'fancybox/jquery.fancybox.css'; ?>">
+    <?php if(!$already_online) { ?>
+    <script src="<?php echo VC_LOCATION.'scripts/chat.js'; ?>"></script>
     <link rel="stylesheet" href="<?php echo VC_LOCATION.'stylesheets/chat.css'; ?>">
     <link rel="stylesheet" href="<?php echo VC_LOCATION.'stylesheets/user.css'; ?>">
+    <?php } else { ?>
+    <link rel="stylesheet" href="<?php echo VC_LOCATION.'stylesheets/user1.css'; ?>">
+    <?php } ?>
 </head>
 <body>
     <div id="header">
@@ -49,6 +53,7 @@
         <h1>Virtual Clinic</h1>
     </div>
     <div id="vc-wrapper">
+        <?php if(!$already_online) { ?>
         <?php
             $docname = "";
             if(!empty($_SESSION['assigneduser_id'])) {
@@ -96,6 +101,7 @@
                 </div>
             </div>
         </div>
+        <?php } ?>
         <div id="main">
             <iframe name="vc-iframe" id="vc-iframe" src="<?php echo VC_LOCATION.$url; ?>">
                 <p>Your browser does not support iframes.</p>

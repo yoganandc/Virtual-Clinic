@@ -77,49 +77,65 @@
     }
 
     $pagetitle = "Add New User";
+    $url = 'administrator/';
 ?>
 
 <?php require_once('../'.VC_INCLUDE.'startdocument.php'); ?>
 
-<link rel="stylesheet" href="<?php echo VC_LOCATION.'stylesheets/user.css'; ?>">
+<link rel="stylesheet" href="<?php echo VC_LOCATION.'stylesheets/user1.css'; ?>">
 <link rel="stylesheet" href="<?php echo VC_LOCATION.'stylesheets/adduser.css'; ?>">
 
-<?php require_once('../'.VC_INCLUDE.'header.php'); ?>
-
-<div id="banner">
-	<h2><?php echo $pagetitle; ?></h2>
-</div>
-<div id="main-content">
-    <?php if($showerror) echo '<p class="error">'.$error.'</p>'."\n"; ?>
-	<div id="content">
-		<form action="#" method="POST">
-			<table>
-				<tr>
-					<th><label for="username">Username: </label></th>
-					<td><input type="text" id="username" name="username" value="<?php if(!empty($username)) echo $username; ?>"></td>
-				</tr>
-				<tr>
-					<th><label for="password">Password: </label></th>
-					<td><input type="password" id="password" name="password" value="<?php if(!empty($password)) echo $password; ?>"></td>
-				</tr>
-				<tr>
-					<th><label for="retype_password">Retype Password: </label></th>
-					<td><input type="password" id="retype_password" name="retype_password" value="<?php if(!empty($retype_password)) echo $retype_password; ?>"></td>
-				</tr>
-				<tr>
-					<th>Type: </th>
-					<td>
-						<input type="radio" id="type_t" name="type" value="t" <?php if(!empty($type) && $type == 't') echo 'checked="checked"'; ?>><label for="type_t">Technician</label>
-						<input type="radio" id="type_d" name="type" value="d" <?php if(!empty($type) && $type == 'd') echo 'checked="checked"'; ?>><label for="type_d">Doctor</label>
-					</td>
-				</tr>
-				<tr>
-					<th></th>
-					<td><input type="submit" id="submit" name="submit"><a href="index.php" class="back-link" title="Cancel">Cancel</a></td>
-				</tr>
-			</table>
-		</form>
-	</div>
-</div>
-
-<?php require_once('../'.VC_INCLUDE.'footer.php'); ?>
+</head>
+<body>
+    <div id="header">
+        <div id="header-right">
+            <ul id="nav">
+                <li><a title="Home" href="<?php echo VC_LOCATION.$url; ?>">Home</a></li>
+                <li>|</li>
+                <li><a title="Log out" href="<?php echo VC_LOCATION.'logout.php'; ?>">Log Out</a></li>
+            </ul>
+            </div>
+        <h1>Virtual Clinic</h1>
+    </div>
+    <div id="vc-wrapper">
+        <div id="main">
+            <div id="banner">
+            	<h2><?php echo $pagetitle; ?></h2>
+            </div>
+            <div id="main-content">
+                <?php if($showerror) echo '<p class="error">'.$error.'</p>'."\n"; ?>
+            	<div id="content">
+            		<form action="#" method="POST">
+            			<table>
+            				<tr>
+            					<th><label for="username">Username: </label></th>
+            					<td><input type="text" id="username" name="username" value="<?php if(!empty($username)) echo $username; ?>"></td>
+            				</tr>
+            				<tr>
+            					<th><label for="password">Password: </label></th>
+            					<td><input type="password" id="password" name="password" value="<?php if(!empty($password)) echo $password; ?>"></td>
+            				</tr>
+            				<tr>
+            					<th><label for="retype_password">Retype Password: </label></th>
+            					<td><input type="password" id="retype_password" name="retype_password" value="<?php if(!empty($retype_password)) echo $retype_password; ?>"></td>
+            				</tr>
+            				<tr>
+            					<th>Type: </th>
+            					<td>
+            						<input type="radio" id="type_t" name="type" value="t" <?php if(!empty($type) && $type == 't') echo 'checked="checked"'; ?>><label for="type_t">Technician</label>
+            						<input type="radio" id="type_d" name="type" value="d" <?php if(!empty($type) && $type == 'd') echo 'checked="checked"'; ?>><label for="type_d">Doctor</label>
+            					</td>
+            				</tr>
+            				<tr>
+            					<th></th>
+            					<td><input type="submit" id="submit" name="submit"><a href="index.php" class="back-link" title="Cancel">Cancel</a></td>
+            				</tr>
+            			</table>
+            		</form>
+            	</div>
+            </div>
+            <?php if(isset($dbc)) mysqli_close($dbc); ?>
+        </div>
+    </div>
+</body>
+</html>
