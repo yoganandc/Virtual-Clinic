@@ -161,7 +161,18 @@
 	}
 ?>
 <div id="case" data-case-id="<?php echo $case_id; ?>">
-	<a id="case-forward" title="Forward to doctor" href="#">Forward to doctor</a>
+	<?php if($row_case['forward'] == "0") { ?>
+	<?php if($_SESSION['type'] == VC_TECHNICIAN) { ?>
+	<a class="case-forward" title="Forward to doctor" href="#">Forward to doctor</a>
+	<?php } } else if($row_case['forward'] == "1") { ?>
+	<?php if($_SESSION['type'] == VC_TECHNICIAN) { ?>
+	<span class="case-under-review">Under Review</span>
+	<?php } else { ?>
+	<a class="case-forward" title="Mark as complete" href="#">Mark as reviewed</a>
+	<?php } } else { ?>
+	<?php if($_SESSION['type'] == VC_TECHNICIAN) { ?>
+	<div class="case-forward"><span class="case-reviewed">Reviewed</span> (<a title="Dismiss" href="#">x</a>)</div>
+	<?php } } ?>
 	<h3 id="case-heading"><?php if(isset($case_no)) echo '#'.$case_no.' '; echo $title; ?></h3>
 	(<a id="case-edit" title="Edit Case" href="editcase.php?case_id=<?php echo $case_id; ?>&amp;patient_id=<?php echo $patient_id; ?>">Edit</a>)
 	<div id="case-content">
@@ -221,7 +232,7 @@
 						}
 						else { 
 					?>
-					<br>
+					<?php if($_SESSION['type'] == VC_TECHNICIAN) echo '<br>'; ?>
 					<table id="files">
 						<tr id="heading-files">
 							<th id="width-8">Name</th>
@@ -271,7 +282,7 @@
 						}
 						else { 	
 					?>
-					<br>
+					<?php if($_SESSION['type'] == VC_TECHNICIAN) echo '<br>'; ?>
 					<table id="results">
 						<tr id="heading-results">
 							<th id="width-1">Name</th>

@@ -5,10 +5,19 @@
 	padding-left: 20px;
 	display: inline-block;
 }
-#case-forward {
+.case-forward {
 	float: right;
 	padding-right: 20px;
 	margin-top: 18px;
+}
+.case-under-review {
+	float: right;
+	padding-right: 20px;
+	margin-top: 18px;
+	color: red;
+}
+.case-reviewed {
+	color: green;
 }
 #case-content {
 	border-top: 1px solid;
