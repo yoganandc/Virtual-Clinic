@@ -5,7 +5,7 @@ var photoWindow = null;
 var case_id = null;
 
 window.addEventListener("load", function() {
-	case_id = parseInt(document.getElementById("case").getAttribute("data-case_id"));
+	case_id = parseInt(document.getElementById("case").getAttribute("data-case-id"));
 
 	if(document.getElementById("add-test"))
 		document.getElementById("add-test").addEventListener("click", function(evt) { testHandler(); evt.preventDefault(); });

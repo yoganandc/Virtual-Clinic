@@ -160,7 +160,7 @@
 		$i++;
 	}
 ?>
-<div id="case" data-case_id="<?php echo $case_id; ?>">
+<div id="case" data-case-id="<?php echo $case_id; ?>">
 	<a id="case-forward" title="Forward to doctor" href="#">Forward to doctor</a>
 	<h3 id="case-heading"><?php if(isset($case_no)) echo '#'.$case_no.' '; echo $title; ?></h3>
 	(<a id="case-edit" title="Edit Case" href="editcase.php?case_id=<?php echo $case_id; ?>&amp;patient_id=<?php echo $patient_id; ?>">Edit</a>)

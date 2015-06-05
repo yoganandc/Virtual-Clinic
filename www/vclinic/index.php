@@ -15,6 +15,12 @@
 
         $pagetitle = 'Home';
     }
+
+    $iframe_url = "";
+
+    if(isset($_POST['url'])) {
+        $iframe_url = mysqli_real_escape_string($dbc, trim($_POST['url']));
+    }
 ?>
 
 <?php require_once(VC_INCLUDE.'startdocument.php'); ?>
@@ -103,7 +109,7 @@
         </div>
         <?php } ?>
         <div id="main">
-            <iframe name="vc-iframe" id="vc-iframe" src="<?php echo VC_LOCATION.$url; ?>">
+            <iframe name="vc-iframe" id="vc-iframe" src="<?php if(!empty($iframe_url)) echo $iframe_url; else echo VC_LOCATION.$url; ?>">
                 <p>Your browser does not support iframes.</p>
             </iframe>
             <?php if(isset($dbc)) mysqli_close($dbc); ?>

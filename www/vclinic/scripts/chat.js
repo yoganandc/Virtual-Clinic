@@ -154,6 +154,9 @@ function pageReady() {
         else if(signal.initiate) {
         	start(true);
         }
+        else if(signal.reload) {
+            document.getElementById("vc-iframe").contentWindow.location.reload();
+        }
         else if(signal.sdp) {
             console.log('received sdp info: '+signal.identity);
             if(!peerConnection) start(false);

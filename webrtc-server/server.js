@@ -17,7 +17,7 @@ wss.on('connection', function(ws) {
         if(typeof parsedInfo.forceReload !== 'undefined') {
             console.log(message);
             for(var i in clients) {
-                if(clients[i].caseId !== 'undefined') {
+                if(typeof clients[i].caseId !== 'undefined') {
                     if(clients[i].caseId == parsedInfo.forceReload)
                         clients[i].send(JSON.stringify({"reload": true}));
                 }
@@ -56,12 +56,12 @@ wss.on('connection', function(ws) {
             if(this.partner)
                 this.partner.send(message);
         }
-        //Client sends EDITCASEID message
-        else if(typeof parsedInfo.editCaseId !== 'undefined') {
+        //Client sends LOCKCASEID message
+        else if(typeof parsedInfo.lockCaseId !== 'undefined') {
             console.log(message);
-            this.editCaseId = parsedInfo.editCaseId;
+            this.lockCaseId = parsedInfo.lockCaseId;
             var dbc = mysql.createConnection({host: DB_HOST, user: DB_USER, password: DB_PASSWORD, database: DB_NAME});
-            var query = "UPDATE vc_case SET edit_lock=1 WHERE case_id="+this.editCaseId;
+            var query = "UPDATE vc_case SET edit_lock=1 WHERE case_id="+this.lockCaseId;
             dbc.query(query, function(error, results, fields) { if(error) console.log('editcase query error: '+error); });
             dbc.end(function(err) { console.log('editcase: '+err); });
         }
@@ -69,15 +69,22 @@ wss.on('connection', function(ws) {
         else if(typeof parsedInfo.unlockCaseId !== 'undefined') {
             console.log(message);
             var dbc = mysql.createConnection({host: DB_HOST, user: DB_USER, password: DB_PASSWORD, database: DB_NAME});
-            var query = "UPDATE vc_case SET edit_lock=0 WHERE case_id="+this.editCaseId;
+            var query = "UPDATE vc_case SET edit_lock=0 WHERE case_id="+this.lockCaseId;
             dbc.query(query, function(error, results, fields) { if(error) console.log('editcase query error: '+error); });
             dbc.end(function(err) { console.log('editcase: '+err); });
-            delete this.editCaseId;
+            delete this.lockCaseId;
         }
-        //Client sends CASEID message
-        else if(typeof parsedInfo.caseId !== 'undefined') {
+        //Client sends REGISTERCASEID message
+        else if(typeof parsedInfo.registerCaseId !== 'undefined') {
             console.log(message);
-            this.caseId = parsedInfo.caseId;
+            console.log('registered user'+this.user);
+            this.caseId = parsedInfo.registerCaseId;
+        }
+        //Client sends UNGREGISTERCASEID message
+        else if(typeof parsedInfo.unregisterCaseId !== 'undefined') {
+            console.log(message);
+            console.log('unregistered user'+this.user);
+            delete this.caseId;
         }
         //Client sends SDP/ICE message
     	else {
@@ -99,9 +106,9 @@ wss.on('connection', function(ws) {
             this.partner.send(JSON.stringify({'hangup': true}));
             this.partner.partner = null;
         }
-        if((typeof this.editCaseId !== 'undefined')) {
+        if((typeof this.lockCaseId !== 'undefined')) {
             var dbc = mysql.createConnection({host: DB_HOST, user: DB_USER, password: DB_PASSWORD, database: DB_NAME});
-            var query = "UPDATE vc_case SET edit_lock=0 WHERE case_id="+this.editCaseId;
+            var query = "UPDATE vc_case SET edit_lock=0 WHERE case_id="+this.lockCaseId;
             dbc.query(query, function(error, results, fields) { if(error) console.log('editcase query error: '+error); });
             dbc.end(function(err) { console.log('editcase: '+err); });
             clients.splice(clients.indexOf(this), 1);
