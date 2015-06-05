@@ -13,7 +13,18 @@ wss.on('connection', function(ws) {
     ws.on('message', function(message) {
     	var parsedInfo = JSON.parse(message);
 
-    	if(typeof parsedInfo.user !== 'undefined') {
+    	//Message FORCERELOAD is received
+        if(typeof parsedInfo.forceReload !== 'undefined') {
+            console.log(message);
+            for(var i in clients) {
+                if(clients[i].caseId !== 'undefined') {
+                    if(clients[i].caseId == parsedInfo.forceReload)
+                        clients[i].send(JSON.stringify({"reload": true}));
+                }
+            }
+        }
+        //Client sends USER message
+        else if(typeof parsedInfo.user !== 'undefined') {
     		console.log(message);
             this.user = parsedInfo.user;
             this.assigned = parsedInfo.assigned;
@@ -27,6 +38,7 @@ wss.on('connection', function(ws) {
                 }
             }
     	}
+        //Client sends READY message
         else if(typeof parsedInfo.ready !== 'undefined') {
             this.ready = parsedInfo.ready;
             if((typeof this.partner.ready !== 'undefined') && (this.partner.ready == true)) {
@@ -34,6 +46,7 @@ wss.on('connection', function(ws) {
                 this.partner.send(JSON.stringify({'initiate': true}));
             }    
         }
+        //Client sends CHAT message
         else if(typeof parsedInfo.chat !== 'undefined') {
             var dbc = mysql.createConnection({host: DB_HOST, user: DB_USER, password: DB_PASSWORD, database: DB_NAME});
             var escapedChat = dbc.escape(parsedInfo.chat);
@@ -43,8 +56,32 @@ wss.on('connection', function(ws) {
             if(this.partner)
                 this.partner.send(message);
         }
+        //Client sends EDITCASEID message
+        else if(typeof parsedInfo.editCaseId !== 'undefined') {
+            console.log(message);
+            this.editCaseId = parsedInfo.editCaseId;
+            var dbc = mysql.createConnection({host: DB_HOST, user: DB_USER, password: DB_PASSWORD, database: DB_NAME});
+            var query = "UPDATE vc_case SET edit_lock=1 WHERE case_id="+this.editCaseId;
+            dbc.query(query, function(error, results, fields) { if(error) console.log('editcase query error: '+error); });
+            dbc.end(function(err) { console.log('editcase: '+err); });
+        }
+        //Client sends UNLOCKCASEID message
+        else if(typeof parsedInfo.unlockCaseId !== 'undefined') {
+            console.log(message);
+            var dbc = mysql.createConnection({host: DB_HOST, user: DB_USER, password: DB_PASSWORD, database: DB_NAME});
+            var query = "UPDATE vc_case SET edit_lock=0 WHERE case_id="+this.editCaseId;
+            dbc.query(query, function(error, results, fields) { if(error) console.log('editcase query error: '+error); });
+            dbc.end(function(err) { console.log('editcase: '+err); });
+            delete this.editCaseId;
+        }
+        //Client sends CASEID message
+        else if(typeof parsedInfo.caseId !== 'undefined') {
+            console.log(message);
+            this.caseId = parsedInfo.caseId;
+        }
+        //Client sends SDP/ICE message
     	else {
-	        console.log('received sdp/ice message: '+message);
+	        console.log('received sdp/ice message from user '+this.user);
             this.send(message);
     	    if(this.partner) {
                 this.partner.send(message);
@@ -61,6 +98,13 @@ wss.on('connection', function(ws) {
             this.partner.ready = false;
             this.partner.send(JSON.stringify({'hangup': true}));
             this.partner.partner = null;
+        }
+        if((typeof this.editCaseId !== 'undefined')) {
+            var dbc = mysql.createConnection({host: DB_HOST, user: DB_USER, password: DB_PASSWORD, database: DB_NAME});
+            var query = "UPDATE vc_case SET edit_lock=0 WHERE case_id="+this.editCaseId;
+            dbc.query(query, function(error, results, fields) { if(error) console.log('editcase query error: '+error); });
+            dbc.end(function(err) { console.log('editcase: '+err); });
+            clients.splice(clients.indexOf(this), 1);
         }
     });
 });

@@ -18,6 +18,7 @@
 		exit();
 	}
 
+	$edit_success = false;
 	$query = "SELECT case_id FROM vc_case WHERE patient_id=".$patient_id." ORDER BY case_id DESC LIMIT 1";
 	$data = mysqli_query($dbc, $query);
 	$row = mysqli_fetch_array($data);
@@ -27,9 +28,6 @@
 		$back_url = "case.php?case_id=".$case_id."&amp;patient_id=".$patient_id;
 
 	if(isset($_GET['case_id']) && isset($_GET['patient_id'])) {
-		$case_id = mysqli_real_escape_string($dbc, trim($_GET['case_id']));
-		$patient_id = mysqli_real_escape_string($dbc, trim($_GET['patient_id']));
-
 		$query = "SELECT patient_id FROM vc_case WHERE case_id=".$case_id;
 		$data = mysqli_query($dbc, $query);
 		if(mysqli_num_rows($data) != 1) {
@@ -43,22 +41,37 @@
 			exit();
 		}
 
-		$query = "SELECT complaint_id, altname, chronic, patient_history, personal_history, past_history, family_history, examination FROM vc_case WHERE case_id=".$case_id;
+		$query = "SELECT edit_lock FROM vc_case WHERE case_id=".$case_id;
 		$data = mysqli_query($dbc, $query);
 		$row = mysqli_fetch_array($data);
+		$edit_lock = intval($row['edit_lock']);
 
-		$complaint = $row['complaint_id'];
-		$alternate = $row['altname'];
-		$complaint_type = $row['chronic'];
-		$patient_history = $row['patient_history'];
-		$personal_history = $row['personal_history'];
-		$past_history = $row['past_history'];
-		$family_history = $row['family_history'];
-		$examination = $row['examination'];
+		if(!$edit_lock) {
+			$query = "SELECT complaint_id, altname, chronic, patient_history, personal_history, past_history, family_history, examination FROM vc_case WHERE case_id=".$case_id;
+			$data = mysqli_query($dbc, $query);
+			$row = mysqli_fetch_array($data);
+
+			$complaint = $row['complaint_id'];
+			$alternate = $row['altname'];
+			$complaint_type = $row['chronic'];
+			$patient_history = $row['patient_history'];
+			$personal_history = $row['personal_history'];
+			$past_history = $row['past_history'];
+			$family_history = $row['family_history'];
+			$examination = $row['examination'];
+		}
+		else {
+			$showerror = true;
+			$error = "Someone else is editing this case right now. This is most probably your assigned ";
+			if($_SESSION['type'] == VC_DOCTOR)
+				$error .= "technician. ";
+			else
+				$error .= "doctor. ";
+			$error .= "Please check. If not, please try editing this case at a later time.";
+		}
 	}
 	else if(isset($_POST['submit'])) {
-		$case_id = mysqli_real_escape_string($dbc, trim($_POST['case_id']));
-		$patient_id = mysqli_real_escape_string($dbc, trim($_POST['patient_id']));
+		$edit_lock = 0;
 
 		if(isset($_POST['complaint_type']))
 			$complaint_type = mysqli_real_escape_string($dbc, trim($_POST['complaint_type']));
@@ -95,13 +108,14 @@
 						$query .= " WHERE case_id=".$case_id;
 
 						if(mysqli_query($dbc, $query)) {
-							mysqli_close($dbc);
+							$edit_success = true;
+							/* mysqli_close($dbc);
 							if($back_url[0] == "p")
 								$url = $back_url;
 							else
 								$url = "case.php?case_id=".$case_id."&patient_id=".$patient_id;
 							header("Location: ".$url);
-							exit();
+							exit(); */
 						}
 						else {
 							$showerror = true;
@@ -136,11 +150,15 @@
 		exit();
 	}
 	$row = mysqli_fetch_array($data);
-	
-	$title = $row['fname'].' '.$row['lname'].' - Edit Case';
 
-	$query = "SELECT * FROM vc_complaint";
-	$data_complaints = mysqli_query($dbc, $query);
+	if(!$edit_success) {
+		$title = $row['fname'].' '.$row['lname'].' - Edit Case';
+		$query = "SELECT * FROM vc_complaint";
+		$data_complaints = mysqli_query($dbc, $query);
+	}
+	else {
+		$title = $row['fname'].' '.$row['lname'].' - Updating Case...';
+	}
 ?>
 
 <?php require_once(VC_INCLUDE.'startdocument.php'); ?>
@@ -148,17 +166,20 @@
 	<link rel="stylesheet" href="stylesheets/user.css">
 	<link rel="stylesheet" href="stylesheets/patient-sidebar.css">
 	<link rel="stylesheet" href="stylesheets/editcase.css">
-	<script src="scripts/addcase.js"></script>
+	<?php if(!$edit_success) { ?>
+	<script src="scripts/editcase.js"></script>
 </head>
 <body>
 	<div id="banner">
+		<?php if($edit_lock) { ?><p><a title="Back" href="<?php echo $back_url; ?>">Back</a></p><?php } ?>
 		<h2><?php echo $title; ?></h2>
 	</div>
 
-	<div id="main-content">
+	<div id="main-content" data-case-id="<?php echo $case_id; ?>" data-edit-lock="<?php if($edit_lock) echo '1'; else echo '0'; ?>">
 		<?php require_once(VC_INCLUDE.'patient-sidebar.php'); ?>
 		<div id="content">
 			<?php if($showerror) echo '<p class="error">'.$error.'</p>'."\n"; ?>
+			<?php if(!$edit_lock) { ?>
 			<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
 				<input type="hidden" id="patient_id" name="patient_id" value="<?php if(isset($_GET['patient_id'])) echo $_GET['patient_id']; else echo $_POST['patient_id']; ?>">
 				<input type="hidden" id="case_id" name="case_id" value="<?php if(isset($_GET['case_id'])) echo $_GET['case_id']; else echo $_POST['case_id']; ?>">
@@ -217,7 +238,24 @@
 					</tr>
 				</table>
 			</form>
+			<?php } ?>
 		</div>
 	</div>
+	<?php } else { ?>
+	<script src="scripts/sendreload.js"></script>
+</head>
+<body>
+	<div id="banner">
+		<h2><?php echo $title; ?></h2>
+	</div>
+	<div id="main-content" data-case-id="<?php echo $case_id; ?>" data-redirect="<?php echo $back_url; ?>">
+		<?php require_once(VC_INCLUDE.'patient-sidebar.php'); ?>
+		<div id="content">
+			<p style="text-align: center">
+				Please wait while the case is being updated
+			</p>
+		</div>
+	</div>
+	<?php } ?>
 
 <?php require_once(VC_INCLUDE.'footer.php'); ?>

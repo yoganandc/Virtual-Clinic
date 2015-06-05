@@ -3,8 +3,9 @@
 }
 #case-heading {
 	padding-left: 20px;
+	display: inline-block;
 }
-#case-edit {
+#case-forward {
 	float: right;
 	padding-right: 20px;
 	margin-top: 18px;

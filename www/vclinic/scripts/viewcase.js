@@ -12,7 +12,7 @@ window.addEventListener("load", function() {
 	if(document.getElementById("add-file"))
 		document.getElementById("add-file").addEventListener("click", function(evt) { fileHandler(); evt.preventDefault(); });
 	if(document.getElementById("add-photo"))
-		document.getElementById("add-photo").addEventListener("click", function(evt) { photoHandler(); evt.preventDefault(); })
+		document.getElementById("add-photo").addEventListener("click", function(evt) { photoHandler(); evt.preventDefault(); });
 
 	document.getElementById("add-treatment").addEventListener("click", function(evt) { treatmentHandler(); evt.preventDefault(); });
 

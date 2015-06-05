@@ -15,7 +15,7 @@
 		return false;
 	}
 
-	$query_case = "SELECT complaint_id, altname, chronic, patient_history, past_history, personal_history, family_history, examination, DATE(date_created) AS date_created FROM vc_case WHERE case_id=".$case_id;
+	$query_case = "SELECT complaint_id, altname, chronic, patient_history, past_history, personal_history, family_history, examination, DATE(date_created) AS date_created, forward FROM vc_case WHERE case_id=".$case_id;
 	$data_case = mysqli_query($dbc, $query_case);
 	if(mysqli_num_rows($data_case) != 1) {
 		echo '<p class="error">Some error occured.</p>';
@@ -161,8 +161,9 @@
 	}
 ?>
 <div id="case" data-case_id="<?php echo $case_id; ?>">
-	<a id="case-edit" title="Edit Case" href="editcase.php?case_id=<?php echo $case_id; ?>&amp;patient_id=<?php echo $patient_id; ?>">Edit Case</a>
+	<a id="case-forward" title="Forward to doctor" href="#">Forward to doctor</a>
 	<h3 id="case-heading"><?php if(isset($case_no)) echo '#'.$case_no.' '; echo $title; ?></h3>
+	(<a id="case-edit" title="Edit Case" href="editcase.php?case_id=<?php echo $case_id; ?>&amp;patient_id=<?php echo $patient_id; ?>">Edit</a>)
 	<div id="case-content">
 		<table>
 			<tr>
