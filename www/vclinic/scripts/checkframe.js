@@ -1,6 +1,5 @@
 (function() {
 	if((window == window.top) && (location.pathname != '/vclinic/') && (location.pathname != '/vclinic/index.php') && (location.pathname != '/vclinic/technician/addfile.php') && (location.pathname != '/vclinic/technician/addphoto.php') && (location.pathname != '/vclinic/technician/addtest.php') && (location.pathname != '/vclinic/addprescription.php')) {
-		alert('inside redirect: '+location.pathname);
 		var form = document.createElement("form");
 		form.setAttribute("method", "POST");
 		form.setAttribute("action", "http://"+location.hostname+"/vclinic/index.php");

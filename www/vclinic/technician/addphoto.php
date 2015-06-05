@@ -5,6 +5,7 @@
 
 	$showerror = false;
 	$error = "";
+	$photo_success = false;
 
 	if(isset($_GET['case_id'])) {
 		$dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME) or die('Error connecting to database.');
@@ -56,10 +57,8 @@
 
 			$query = "UPDATE vc_case_file SET filename='$filename' WHERE case_file_id=".$row['case_file_id'];
 			mysqli_query($dbc, $query);
-			mysqli_close($dbc);
 
-			header('Location: '.VC_LOCATION.'closewindow.php');
-			exit();
+			$photo_success = true;
 		}
 	}
 	else {
@@ -70,6 +69,7 @@
 
 <?php require_once('../'.VC_INCLUDE.'startdocument.php'); ?>
 
+	<?php if(!$photo_success) { ?>
 	<link rel="stylesheet" href="<?php echo VC_LOCATION.'stylesheets/addtest.css'; ?>">
 	<link rel="stylesheet" href="<?php echo VC_LOCATION.'stylesheets/addphoto.css'; ?>">
 	<script src="<?php echo VC_LOCATION.'scripts/addphoto.js'; ?>"></script>
@@ -111,5 +111,17 @@
 				</table>
 			</form>
 		</div>
+	</div>
+	<?php } else { ?>
+	<link rel="stylesheet" href="<?php echo VC_LOCATION.'stylesheets/closewindow.css'; ?>">
+	<script src="<?php echo VC_LOCATION.'scripts/sendreload.js'; ?>"></script>
+</head>
+<body>
+	<div id="wrapper" data-case-id="<?php echo $case_id; ?>">
+		<div id="wrapper-form">
+			<p id="success-message">Uploading...</p>
+		</div>
+	</div>
+	<?php } ?>
 
 <?php require_once('../'.VC_INCLUDE.'footer.php'); ?>

@@ -1,3 +1,4 @@
+var chatIncluded = true;
 var identity;
 var i = 0;
 var j = 0;

@@ -77,13 +77,15 @@ wss.on('connection', function(ws) {
         //Client sends REGISTERCASEID message
         else if(typeof parsedInfo.registerCaseId !== 'undefined') {
             console.log(message);
-            console.log('registered user'+this.user);
+            if(typeof this.user === 'undefined')
+                clients.push(this);
             this.caseId = parsedInfo.registerCaseId;
         }
         //Client sends UNGREGISTERCASEID message
         else if(typeof parsedInfo.unregisterCaseId !== 'undefined') {
             console.log(message);
-            console.log('unregistered user'+this.user);
+            if(typeof this.user === 'undefined')
+                clients.splice(clients.indexOf(this), 1);
             delete this.caseId;
         }
         //Client sends SDP/ICE message
@@ -96,22 +98,27 @@ wss.on('connection', function(ws) {
 	    }
     });
     ws.on('close', function() {
-        var query = "UPDATE vc_user_status SET status=0 WHERE status_id="+this.user;
-        var dbc = mysql.createConnection({host: DB_HOST, user: DB_USER, password: DB_PASSWORD, database: DB_NAME});
-        dbc.query(query, function(error, results, fields) { if(error) console.log('query close: '+error); });
-        dbc.end(function(err) { console.log('close: '+err); });
-        clients.splice(clients.indexOf(this), 1);
-        if(this.partner) {
-            this.partner.ready = false;
-            this.partner.send(JSON.stringify({'hangup': true}));
-            this.partner.partner = null;
-        }
         if((typeof this.lockCaseId !== 'undefined')) {
             var dbc = mysql.createConnection({host: DB_HOST, user: DB_USER, password: DB_PASSWORD, database: DB_NAME});
             var query = "UPDATE vc_case SET edit_lock=0 WHERE case_id="+this.lockCaseId;
             dbc.query(query, function(error, results, fields) { if(error) console.log('editcase query error: '+error); });
             dbc.end(function(err) { console.log('editcase: '+err); });
+        }
+        if((typeof this.caseId !== 'undefined')) {
+            if((typeof this.user === 'undefined'))
+                clients.splice(clients.indexOf(this), 1);
+        }
+        if((typeof this.user !== 'undefined')) {
+            var query = "UPDATE vc_user_status SET status=0 WHERE status_id="+this.user;
+            var dbc = mysql.createConnection({host: DB_HOST, user: DB_USER, password: DB_PASSWORD, database: DB_NAME});
+            dbc.query(query, function(error, results, fields) { if(error) console.log('query close: '+error); });
+            dbc.end(function(err) { console.log('close: '+err); });
             clients.splice(clients.indexOf(this), 1);
+            if(this.partner) {
+                this.partner.ready = false;
+                this.partner.send(JSON.stringify({'hangup': true}));
+                this.partner.partner = null;
+            }
         }
     });
 });

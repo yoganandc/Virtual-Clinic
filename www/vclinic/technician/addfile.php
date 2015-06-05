@@ -21,6 +21,7 @@
 	$showerror = false;
 	$error = "";
 	$hidden = "1";
+	$test_success = false;
 
 	if(isset($_GET['case_id'])) {
 		$dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME) or die('Error connecting to database.');
@@ -117,9 +118,7 @@
 			}
 		}
 		if(!$showerror) {
-			mysqli_close($dbc);
-			header('Location: '.VC_LOCATION.'closewindow.php');
-			exit();
+			$test_success = true;
 		}
 	}
 	else {
@@ -130,6 +129,7 @@
 
 <?php require_once('../'.VC_INCLUDE.'startdocument.php'); ?>
 
+	<?php if(!$test_success) { ?>
 	<link rel="stylesheet" href="<?php echo VC_LOCATION.'stylesheets/addtest.css'; ?>">
 	<script src="<?php echo VC_LOCATION.'scripts/addfile.js'; ?>"></script>
 </head>
@@ -165,5 +165,17 @@
 				</table>
 			</form>
 		</div>
+	</div>
+	<?php } else { ?>
+	<link rel="stylesheet" href="<?php echo VC_LOCATION.'stylesheets/closewindow.css'; ?>">
+	<script src="<?php echo VC_LOCATION.'scripts/sendreload.js'; ?>"></script>
+</head>
+<body>
+	<div id="wrapper" data-case-id="<?php echo $case_id; ?>">
+		<div id="wrapper-form">
+			<p id="success-message">Uploading...</p>
+		</div>
+	</div>
+	<?php } ?>
 
 <?php require_once('../'.VC_INCLUDE.'footer.php'); ?>
