@@ -146,7 +146,7 @@
 			}
 
 			if($showerror)
-				remove_files($upload_type, $picture_src_location);
+				remove_file($upload_type, $picture_src_location);
 
 			if(!$showerror) {
 				if($upload_type == VC_UPLOAD_FILE) {
@@ -361,7 +361,7 @@
 			}
 		}
 		else {
-			remove_files($upload_type, $picture_src_location);
+			remove_file($upload_type, $picture_src_location);
 			$showerror = true;
 			$error = "First name and last name fields cannot be blank.";
 		}

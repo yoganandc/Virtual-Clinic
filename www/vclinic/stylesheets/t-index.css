@@ -1,0 +1,18 @@
+#main-content {
+	padding: 20px;
+}
+.section-heading {
+	border-bottom: 1px solid gray;
+	margin-bottom: 0px;
+}
+.section-body {
+	text-align: center;
+}
+.section-body table {
+	display: inline-block;
+	text-align: left;
+	margin-top: 20px;
+}
+.nodata-message {
+	color: red;
+}

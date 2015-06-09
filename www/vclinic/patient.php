@@ -17,6 +17,33 @@
 	$row = mysqli_fetch_array($data);
 	$name = $row['fname'].' '.$row['lname'];
 
+	//add patient id to user's recently viewed list
+	$query = "SELECT COUNT(*) AS count FROM vc_recents WHERE user_id=".$_SESSION['user_id']." AND patient_id=".$patient_id;
+	$data = mysqli_query($dbc, $query);
+	$row = mysqli_fetch_array($data);
+
+	if(intval($row['count']) == 0) {
+		$query = "SELECT vc_recents_pointer FROM vc_user WHERE user_id=".$_SESSION['user_id'];
+		$data = mysqli_query($dbc, $query);
+		$row = mysqli_fetch_array($data);
+		$recents_pointer = $row['vc_recents_pointer'];
+
+		$query = "SELECT recents_id FROM vc_recents WHERE user_id=".$_SESSION['user_id']." LIMIT 1 OFFSET ".$recents_pointer;
+		$data = mysqli_query($dbc, $query);
+		$row = mysqli_fetch_array($data);
+	
+		$query = "UPDATE vc_recents SET patient_id=".$patient_id." WHERE recents_id=".$row['recents_id'];
+		mysqli_query($dbc, $query);
+		
+		$recents_pointer = intval($recents_pointer);
+		$recents_pointer++;
+		if($recents_pointer == 10) 
+			$recents_pointer = 0;
+
+		$query = "UPDATE vc_user SET vc_recents_pointer=".$recents_pointer." WHERE user_id=".$_SESSION['user_id'];
+		mysqli_query($dbc, $query);
+	}
+
 	$query = "SELECT case_id FROM vc_case WHERE patient_id=".$patient_id." ORDER BY case_id DESC LIMIT 1";
 	$data = mysqli_query($dbc, $query);
 	if(mysqli_num_rows($data) == 1) {

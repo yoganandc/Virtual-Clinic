@@ -34,6 +34,7 @@
 }
 #remotevideo-container video {
     height: 299px;
+    width: 399px;
     position: absolute;
     top: 0px;
     left: 0px;
