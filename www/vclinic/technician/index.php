@@ -54,31 +54,31 @@
 			<p class="nodata-message">No patient profiles visited yet.</p>
 			<?php } else { ?>
 			<table>
-				<tr>
-					<th>Name</th>
-					<th>Sex</th>
-					<th>Birth Date</th>
-					<th>Occupation</th>
-					<th>Email</th>
-					<th>Phone</th>
+				<tr id="recents-heading">
+					<th id="width-1">Name</th>
+					<th id="width-2" class="middle-cell section-body">Sex</th>
+					<th id="width-3" class="middle-cell section-body">Birth Date</th>
+					<th id="width-4" class="middle-cell">Occupation</th>
+					<th id="width-5" class="middle-cell">Email</th>
+					<th id="width-6">Phone</th>
 				</tr>
 				<?php for($i = $recents_pointer - 1; $i >= 0; $i--) { $recent = $recents[$i]; if(is_null($recent['patient_id'])) continue; else { ?>
 				<tr>
 					<td><a title="<?php echo $recent['fname'].' '.$recent['lname']; ?>" href="<?php echo VC_LOCATION; ?>patient.php?patient_id=<?php echo $recent['patient_id']; ?>"><?php echo $recent['fname'].' '.$recent['lname']; ?></a></td>
-					<td><?php if(!empty($recent['gender'])) { if($recent['gender'] == 'm') echo 'M'; else echo 'F'; } else echo '<span class="nulldata">Not Set.</span>'; ?></td>
-					<td><?php if(!empty($recent['birthdate'])) echo $recent['birthdate']; else echo '<span class="nulldata">Not Set.</span>'; ?></td>
-					<td><?php if(!empty($recent['occupation'])) echo $recent['occupation']; else echo '<span class="nulldata">Not Set.</span>'; ?></td>
-					<td><?php if(!empty($recent['email'])) echo $recent['email']; else echo '<span class="nulldata">Not Set.</span>'; ?></td>
+					<td class="middle-cell section-body"><?php if(!empty($recent['gender'])) { if($recent['gender'] == 'm') echo 'M'; else echo 'F'; } else echo '<span class="nulldata">-</span>'; ?></td>
+					<td class="middle-cell section-body"><?php if(!empty($recent['birthdate'])) echo $recent['birthdate']; else echo '<span class="nulldata">Not Set.</span>'; ?></td>
+					<td class="middle-cell"><?php if(!empty($recent['occupation'])) echo $recent['occupation']; else echo '<span class="nulldata">Not Set.</span>'; ?></td>
+					<td class="middle-cell"><?php if(!empty($recent['email'])) echo $recent['email']; else echo '<span class="nulldata">Not Set.</span>'; ?></td>
 					<td><?php if(!empty($recent['phone'])) echo $recent['phone']; else echo '<span class="nulldata">Not Set.</span>'; ?></td>
 				</tr>
 				<?php } } ?>
 				<?php for($i = 9; $i >= $recents_pointer; $i--) { $recent = $recents[$i]; if(is_null($recent['patient_id'])) continue; else { ?>
 				<tr>
 					<td><a title="<?php echo $recent['fname'].' '.$recent['lname']; ?>" href="<?php echo VC_LOCATION; ?>patient.php?patient_id=<?php echo $recent['patient_id']; ?>"><?php echo $recent['fname'].' '.$recent['lname']; ?></a></td>
-					<td><?php if(!empty($recent['gender'])) { if($recent['gender'] == 'm') echo 'M'; else echo 'F'; } else echo '<span class="nulldata">Not Set.</span>'; ?></td>
-					<td><?php if(!empty($recent['birthdate'])) echo $recent['birthdate']; else echo '<span class="nulldata">Not Set.</span>'; ?></td>
-					<td><?php if(!empty($recent['occupation'])) echo $recent['occupation']; else echo '<span class="nulldata">Not Set.</span>'; ?></td>
-					<td><?php if(!empty($recent['email'])) echo $recent['email']; else echo '<span class="nulldata">Not Set.</span>'; ?></td>
+					<td class="middle-cell section-body"><?php if(!empty($recent['gender'])) { if($recent['gender'] == 'm') echo 'M'; else echo 'F'; } else echo '<span class="nulldata">Not Set.</span>'; ?></td>
+					<td class="middle-cell section-body"><?php if(!empty($recent['birthdate'])) echo $recent['birthdate']; else echo '<span class="nulldata">Not Set.</span>'; ?></td>
+					<td class="middle-cell"><?php if(!empty($recent['occupation'])) echo $recent['occupation']; else echo '<span class="nulldata">Not Set.</span>'; ?></td>
+					<td class="middle-cell"><?php if(!empty($recent['email'])) echo $recent['email']; else echo '<span class="nulldata">Not Set.</span>'; ?></td>
 					<td><?php if(!empty($recent['phone'])) echo $recent['phone']; else echo '<span class="nulldata">Not Set.</span>'; ?></td>
 				</tr>
 				<?php } } ?>

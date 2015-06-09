@@ -1,6 +1,27 @@
 #main-content {
 	padding: 20px;
 }
+#width-1 {
+	width: 25%;
+}
+#width-2 {
+	width: 7%;
+}
+#width-3 {
+	width: 13%;
+}
+#width-4 {
+	width: 19%;
+}
+#width-5 {
+	width: 23%;
+}
+#width-6 {
+	width: 13%;
+}
+#recents-heading {
+	border-bottom: 2px solid;
+}
 .section-heading {
 	border-bottom: 1px solid gray;
 	margin-bottom: 0px;
@@ -12,6 +33,12 @@
 	display: inline-block;
 	text-align: left;
 	margin-top: 20px;
+	table-layout: fixed;
+	width: 750px;
+}
+.middle-cell {
+	border-left: 1px dashed;
+	border-right: 1px dashed;
 }
 .nodata-message {
 	color: red;
