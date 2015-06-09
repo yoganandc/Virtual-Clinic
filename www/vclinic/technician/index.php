@@ -44,7 +44,7 @@
 	</div>
 
 	<div id="main-content">
-		<h3 class="section-heading">Reviewed Cases</h3>
+		<h3 class="section-heading">Cases Forwarded</h3>
 		<div class="section-body">
 
 		</div>
@@ -75,7 +75,7 @@
 				<?php for($i = 9; $i >= $recents_pointer; $i--) { $recent = $recents[$i]; if(is_null($recent['patient_id'])) continue; else { ?>
 				<tr>
 					<td><a title="<?php echo $recent['fname'].' '.$recent['lname']; ?>" href="<?php echo VC_LOCATION; ?>patient.php?patient_id=<?php echo $recent['patient_id']; ?>"><?php echo $recent['fname'].' '.$recent['lname']; ?></a></td>
-					<td class="middle-cell section-body"><?php if(!empty($recent['gender'])) { if($recent['gender'] == 'm') echo 'M'; else echo 'F'; } else echo '<span class="nulldata">Not Set.</span>'; ?></td>
+					<td class="middle-cell section-body"><?php if(!empty($recent['gender'])) { if($recent['gender'] == 'm') echo 'M'; else echo 'F'; } else echo '<span class="nulldata">-</span>'; ?></td>
 					<td class="middle-cell section-body"><?php if(!empty($recent['birthdate'])) echo $recent['birthdate']; else echo '<span class="nulldata">Not Set.</span>'; ?></td>
 					<td class="middle-cell"><?php if(!empty($recent['occupation'])) echo $recent['occupation']; else echo '<span class="nulldata">Not Set.</span>'; ?></td>
 					<td class="middle-cell"><?php if(!empty($recent['email'])) echo $recent['email']; else echo '<span class="nulldata">Not Set.</span>'; ?></td>

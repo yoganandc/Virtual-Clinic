@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 02, 2015 at 06:17 AM
+-- Generation Time: Jun 09, 2015 at 03:05 PM
 -- Server version: 5.6.22-log
 -- PHP Version: 5.6.7
 
@@ -77,7 +77,8 @@ CREATE TABLE IF NOT EXISTS `vc_case` (
   `personal_history` varchar(400) DEFAULT NULL,
   `family_history` varchar(400) DEFAULT NULL,
   `examination` varchar(400) DEFAULT NULL,
-  `date_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `date_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `edit_lock` bit(1) DEFAULT b'0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -103,6 +104,19 @@ CREATE TABLE IF NOT EXISTS `vc_complaint` (
   `complaint_id` int(11) NOT NULL,
   `complaint` varchar(40) NOT NULL,
   `chronic_only` bit(1) NOT NULL DEFAULT b'0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `vc_forward`
+--
+
+CREATE TABLE IF NOT EXISTS `vc_forward` (
+  `forward_id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `case_id` int(11) DEFAULT NULL,
+  `status` enum('0','1','2') NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -135,6 +149,18 @@ CREATE TABLE IF NOT EXISTS `vc_patient` (
   `email` varchar(40) DEFAULT NULL,
   `phone` varchar(15) DEFAULT NULL,
   `picture` varchar(20) NOT NULL DEFAULT 'default.png'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `vc_recents`
+--
+
+CREATE TABLE IF NOT EXISTS `vc_recents` (
+  `recents_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `patient_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -223,7 +249,8 @@ CREATE TABLE IF NOT EXISTS `vc_user` (
   `birthdate` date DEFAULT NULL,
   `email` varchar(40) DEFAULT NULL,
   `phone` varchar(15) DEFAULT NULL,
-  `picture` varchar(20) NOT NULL DEFAULT 'default.png'
+  `picture` varchar(20) NOT NULL DEFAULT 'default.png',
+  `vc_recents_pointer` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -234,8 +261,7 @@ CREATE TABLE IF NOT EXISTS `vc_user` (
 
 CREATE TABLE IF NOT EXISTS `vc_user_status` (
   `status_id` int(11) NOT NULL,
-  `status` bit(1) NOT NULL DEFAULT b'0',
-  `room` char(40) DEFAULT NULL
+  `status` bit(1) NOT NULL DEFAULT b'0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -277,6 +303,14 @@ ALTER TABLE `vc_complaint`
   ADD PRIMARY KEY (`complaint_id`);
 
 --
+-- Indexes for table `vc_forward`
+--
+ALTER TABLE `vc_forward`
+  ADD PRIMARY KEY (`forward_id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `case_id` (`case_id`);
+
+--
 -- Indexes for table `vc_messages`
 --
 ALTER TABLE `vc_messages`
@@ -289,6 +323,14 @@ ALTER TABLE `vc_messages`
 ALTER TABLE `vc_patient`
   ADD PRIMARY KEY (`patient_id`),
   ADD KEY `address_id` (`address_id`);
+
+--
+-- Indexes for table `vc_recents`
+--
+ALTER TABLE `vc_recents`
+  ADD PRIMARY KEY (`recents_id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `patient_id` (`patient_id`);
 
 --
 -- Indexes for table `vc_test`
@@ -368,6 +410,11 @@ ALTER TABLE `vc_case_file`
 ALTER TABLE `vc_complaint`
   MODIFY `complaint_id` int(11) NOT NULL AUTO_INCREMENT;
 --
+-- AUTO_INCREMENT for table `vc_forward`
+--
+ALTER TABLE `vc_forward`
+  MODIFY `forward_id` int(11) NOT NULL AUTO_INCREMENT;
+--
 -- AUTO_INCREMENT for table `vc_messages`
 --
 ALTER TABLE `vc_messages`
@@ -377,6 +424,11 @@ ALTER TABLE `vc_messages`
 --
 ALTER TABLE `vc_patient`
   MODIFY `patient_id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `vc_recents`
+--
+ALTER TABLE `vc_recents`
+  MODIFY `recents_id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `vc_test`
 --
@@ -436,6 +488,13 @@ ALTER TABLE `vc_case_file`
   ADD CONSTRAINT `vc_case_file_ibfk_1` FOREIGN KEY (`case_id`) REFERENCES `vc_case` (`case_id`);
 
 --
+-- Constraints for table `vc_forward`
+--
+ALTER TABLE `vc_forward`
+  ADD CONSTRAINT `vc_forward_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `vc_user` (`user_id`),
+  ADD CONSTRAINT `vc_forward_ibfk_2` FOREIGN KEY (`case_id`) REFERENCES `vc_case` (`case_id`);
+
+--
 -- Constraints for table `vc_messages`
 --
 ALTER TABLE `vc_messages`
@@ -446,6 +505,13 @@ ALTER TABLE `vc_messages`
 --
 ALTER TABLE `vc_patient`
   ADD CONSTRAINT `vc_patient_ibfk_1` FOREIGN KEY (`address_id`) REFERENCES `vc_address` (`address_id`);
+
+--
+-- Constraints for table `vc_recents`
+--
+ALTER TABLE `vc_recents`
+  ADD CONSTRAINT `vc_recents_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `vc_user` (`user_id`),
+  ADD CONSTRAINT `vc_recents_ibfk_2` FOREIGN KEY (`patient_id`) REFERENCES `vc_patient` (`patient_id`);
 
 --
 -- Constraints for table `vc_test`

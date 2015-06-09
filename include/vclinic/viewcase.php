@@ -15,7 +15,7 @@
 		return false;
 	}
 
-	$query_case = "SELECT complaint_id, altname, chronic, patient_history, past_history, personal_history, family_history, examination, DATE(date_created) AS date_created, forward FROM vc_case WHERE case_id=".$case_id;
+	$query_case = "SELECT complaint_id, altname, chronic, patient_history, past_history, personal_history, family_history, examination, DATE(date_created) AS date_created FROM vc_case WHERE case_id=".$case_id;
 	$data_case = mysqli_query($dbc, $query_case);
 	if(mysqli_num_rows($data_case) != 1) {
 		echo '<p class="error">Some error occured.</p>';
@@ -161,18 +161,6 @@
 	}
 ?>
 <div id="case" data-case-id="<?php echo $case_id; ?>">
-	<?php if($row_case['forward'] == "0") { ?>
-	<?php if($_SESSION['type'] == VC_TECHNICIAN) { ?>
-	<a class="case-forward" title="Forward to doctor" href="#">Forward to doctor</a>
-	<?php } } else if($row_case['forward'] == "1") { ?>
-	<?php if($_SESSION['type'] == VC_TECHNICIAN) { ?>
-	<span class="case-under-review">Under Review</span>
-	<?php } else { ?>
-	<a class="case-forward" title="Mark as complete" href="#">Mark as reviewed</a>
-	<?php } } else { ?>
-	<?php if($_SESSION['type'] == VC_TECHNICIAN) { ?>
-	<div class="case-forward"><span class="case-reviewed">Reviewed</span> (<a title="Dismiss" href="#">x</a>)</div>
-	<?php } } ?>
 	<h3 id="case-heading"><?php if(isset($case_no)) echo '#'.$case_no.' '; echo $title; ?></h3>
 	(<a id="case-edit" title="Edit Case" href="editcase.php?case_id=<?php echo $case_id; ?>&amp;patient_id=<?php echo $patient_id; ?>">Edit</a>)
 	<div id="case-content">

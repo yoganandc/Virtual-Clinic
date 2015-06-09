@@ -5,13 +5,13 @@
 	width: 25%;
 }
 #width-2 {
-	width: 7%;
+	width: 6%;
 }
 #width-3 {
-	width: 13%;
+	width: 15%;
 }
 #width-4 {
-	width: 19%;
+	width: 18%;
 }
 #width-5 {
 	width: 23%;
@@ -35,6 +35,12 @@
 	margin-top: 20px;
 	table-layout: fixed;
 	width: 750px;
+}
+.section-body table th {
+	padding: 5px;
+}
+.section-body table td {
+	padding: 5px;
 }
 .middle-cell {
 	border-left: 1px dashed;
