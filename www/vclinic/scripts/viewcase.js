@@ -13,6 +13,8 @@ window.addEventListener("load", function() {
 		document.getElementById("add-file").addEventListener("click", function(evt) { fileHandler(); evt.preventDefault(); });
 	if(document.getElementById("add-photo"))
 		document.getElementById("add-photo").addEventListener("click", function(evt) { photoHandler(); evt.preventDefault(); });
+	if(document.getElementById("forward-link"))
+		document.getElementById("forward-link").addEventListener("click", forwardHandler);
 
 	document.getElementById("add-treatment").addEventListener("click", function(evt) { treatmentHandler(); evt.preventDefault(); });
 
@@ -52,4 +54,63 @@ function photoHandler() {
 		photoWindow = window.open("technician/addphoto.php?case_id="+case_id, "photo-window", "left=5, top=5, width=1339, height=650");
 	else
 		photoWindow.focus();
+}
+
+function forwardHandler(evt) {
+	evt.preventDefault();
+
+	if(evt.target.getAttribute("data-status") !== null) {
+		if(evt.target.getAttribute("data-status") == "0") {
+			var userId = evt.target.getAttribute("data-user-id");
+			var assignedId = evt.target.getAttribute("data-assigned");
+			var forwardId = evt.target.getAttribute("data-forward-id");
+			evt.target.removeAttribute("href");
+			while(evt.target.firstChild)
+				evt.target.removeChild(evt.target.firstChild);
+			evt.target.appendChild(document.createTextNode("Updating..."));
+			function sendReturnCase() {
+				if(parent.serverConnection.readyState == 1) {
+					parent.serverConnection.send(JSON.stringify({'returnCase': case_id, 'returnCaseId': forwardId, 'returnUser': userId, 'returnAssigned': assignedId}));
+				}
+				else {
+					setTimeout(sendReturnCase, 5);
+				}
+			}
+			sendReturnCase();
+		}
+		else {
+			var userId = evt.target.getAttribute("data-user-id");
+			var forwardId = evt.target.getAttribute("data-forward-id");
+			evt.target.removeAttribute("href");
+			while(evt.target.firstChild)
+				evt.target.removeChild(evt.target.firstChild);
+			evt.target.appendChild(document.createTextNode("..."));
+			function sendDismissCase() {
+				if(parent.serverConnection.readyState == 1) {
+					parent.serverConnection.send(JSON.stringify({'dismissCase': case_id, 'dismissCaseId': forwardId, 'dismissUser': userId}));
+				}
+				else {
+					setTimeout(sendDismissCase, 5);
+				}
+			}
+			sendDismissCase();
+		}
+	}
+	else {
+		var userId = evt.target.getAttribute("data-user-id");
+		var assignedId = evt.target.getAttribute("data-assigned");
+		evt.target.removeAttribute("href");
+		while(evt.target.firstChild)
+			evt.target.removeChild(evt.target.firstChild);
+		evt.target.appendChild(document.createTextNode("Forwarding..."));
+		function sendForwardCase() {
+			if(parent.serverConnection.readyState == 1) {
+				parent.serverConnection.send(JSON.stringify({'forwardCase': case_id, 'forwardUser': userId, 'forwardAssigned': assignedId}));
+			}
+			else {
+				setTimeout(sendForwardCase, 5);
+			}
+		}
+		sendForwardCase();
+	}
 }

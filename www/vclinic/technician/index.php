@@ -43,7 +43,7 @@
 		<h2><?php echo "Home"; ?></h2>
 	</div>
 
-	<div id="main-content">
+	<div id="main-content" data-user="<?php echo $_SESSION['user_id']; ?>">
 		<h3 class="section-heading">Cases Forwarded</h3>
 		<div class="section-body">
 

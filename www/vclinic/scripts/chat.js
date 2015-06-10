@@ -26,6 +26,8 @@ var user = null;
 var assigned = null;
 var runWebRTC = null;
 
+var userSet = false;
+
 window.addEventListener("load", readyChat);
 window.addEventListener("beforeunload", function() { serverConnection.close(); })
 
@@ -134,6 +136,7 @@ function pageReady() {
         console.log('sendRoomInfo');
         if(serverConnection.readyState == 1) {
             serverConnection.send(JSON.stringify({'user': user, 'assigned': assigned}));
+            userSet = true;
         }
         else {
             setTimeout(sendRoomInfo, 5);

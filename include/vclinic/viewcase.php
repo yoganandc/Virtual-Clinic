@@ -159,8 +159,44 @@
 		$data_treatment_names[$i] = $data_treatment_types[$row_temp['treatment_type_id']]['initial'].'. '.$row_temp['name'].' '.substr($row_temp['strength'], 0, 5).$data_treatment_types[$row_temp['treatment_type_id']]['unit'];
 		$i++;
 	}
+
+	$query_case = "SELECT assigneduser_id FROM vc_user WHERE user_id=".$_SESSION['user_id'];
+	$data_case = mysqli_query($dbc, $query_case);
+	$row_temp = mysqli_fetch_array($data_case);
+	if(!empty($row_temp['assigneduser_id'])) {
+		$notassigned = false;
+		$row_case['assigneduser_id'] = $row_temp['assigneduser_id'];
+		if($_SESSION['type'] == VC_TECHNICIAN)
+			$query_case = "SELECT forward_id, status FROM vc_forward WHERE case_id=".$case_id." AND user_id=".$_SESSION['user_id'];
+		else			
+			$query_case = "SELECT forward_id, status FROM vc_forward WHERE case_id=".$case_id." AND user_id=".$row_temp['assigneduser_id'];
+		$data_case = mysqli_query($dbc, $query_case);
+		if(mysqli_num_rows($data_case) == 1) {
+			$row_temp = mysqli_fetch_array($data_case);
+			$row_case['status'] = $row_temp['status'];
+			$row_case['forward_id'] = $row_temp['forward_id'];
+		}
+		else 
+			$row_case['status'] = null;
+	}
+	else
+		$notassigned = true;
 ?>
-<div id="case" data-case-id="<?php echo $case_id; ?>">
+<div id="case" data-case-id="<?php echo $case_id; ?>" data-case-user="<?php echo $_SESSION['user_id']; ?>">
+	<?php if(!$notassigned) { ?>
+	<?php if(is_null($row_case['status'])) { ?>
+	<?php if($_SESSION['type'] == VC_TECHNICIAN) { ?>
+	<a id="forward-link" class="case-forward" title="Forward to doctor" href="#" data-user-id="<?php echo $_SESSION['user_id']; ?>" data-assigned="<?php echo $row_case['assigneduser_id']; ?>">Forward to doctor</a>
+	<?php } } else if($row_case['status'] == 0) { ?>
+	<?php if($_SESSION['type'] == VC_TECHNICIAN) { ?>
+	<span class="case-under-review">Under Review</span>
+	<?php } else { ?>
+	<a id="forward-link" class="case-forward" title="Mark as complete" href="#" data-status="<?php echo $row_case['status']; ?>" data-user-id="<?php echo $_SESSION['user_id']; ?>" data-assigned="<?php echo $row_case['assigneduser_id']; ?>" data-forward-id="<?php echo $row_case['forward_id']; ?>">Mark as reviewed</a>
+	<?php } } else { ?>
+	<?php if($_SESSION['type'] == VC_TECHNICIAN) { ?>
+	<div class="case-forward"><span class="case-reviewed">Reviewed</span> (<a id="forward-link" title="Dismiss" href="#" data-status="<?php echo $row_case['status']; ?>" data-user-id="<?php echo $_SESSION['user_id']; ?>" data-forward-id="<?php echo $row_case['forward_id']; ?>">x</a>)</div>
+	<?php } } ?>
+	<?php } ?> 
 	<h3 id="case-heading"><?php if(isset($case_no)) echo '#'.$case_no.' '; echo $title; ?></h3>
 	(<a id="case-edit" title="Edit Case" href="editcase.php?case_id=<?php echo $case_id; ?>&amp;patient_id=<?php echo $patient_id; ?>">Edit</a>)
 	<div id="case-content">
