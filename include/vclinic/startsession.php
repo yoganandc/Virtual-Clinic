@@ -3,7 +3,13 @@
 
     require_once('appvars.php');
     require_once('dbvars.php');
-    require_once('library.php');            
+    require_once('library.php');  
+
+    if(!isset($_COOKIE['browser_supported'])) {
+        $url = VC_LOCATION.'checkbrowser.php';
+        header('Location: '.$url);
+        exit();
+    }          
 
     if (!isset($_SESSION['user_id'])) {
         if (isset($_COOKIE['user_id']) && isset($_COOKIE['username']) && isset($_COOKIE['type'])) {

@@ -66,6 +66,12 @@
 
 	$error_msg = "";
 
+	if(!isset($_COOKIE['browser_supported'])) {
+        $url = VC_LOCATION.'checkbrowser.php';
+        header('Location: '.$url);
+        exit();
+    }
+
 	if(!isset($_SESSION['user_id'])) {
 		if(isset($_POST['submit'])) {
 			$dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME) or die('Error connecting to database.');
