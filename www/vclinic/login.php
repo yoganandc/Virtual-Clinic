@@ -136,6 +136,7 @@
 <?php require_once(VC_INCLUDE.'startdocument.php'); ?>
 
 	<link rel="stylesheet" href="stylesheets/accountcontrol.css">
+	<script src="scripts/login.js"></script>
 </head>
 <body>
 	<div id="wrapper">
@@ -166,7 +167,8 @@
 			<?php 
 				}
 				else {
-					echo '<p>You are logged in as: '.$_SESSION['username'].'</p>';
+					header('Location: '.VC_LOCATION);
+					exit();
 				}
 			?>
 		</div>

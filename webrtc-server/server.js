@@ -23,6 +23,17 @@ wss.on('connection', function(ws) {
                 }
             }
         }
+        //Message LOGOUT is received
+        if(typeof parsedInfo.logout !== 'undefined') {
+            console.log(message);
+            for(var i in clients) {
+                if(typeof clients[i].user !== 'undefined') {
+                    if((clients[i].user == parsedInfo.logout) || (clients[i].user == parsedInfo.logoutAssigned)) {
+                        clients[i].send(JSON.stringify({'hangup': true}));
+                    }
+                }
+            }
+        }
         //Client sends USER message
         else if(typeof parsedInfo.user !== 'undefined') {
     		console.log(message);

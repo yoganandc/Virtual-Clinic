@@ -52,7 +52,7 @@
 </head>
 <body>
 	<div id="banner">
-		<p><a title="Back to patient overview" href="patient.php?patient_id=<?php echo $patient_id; ?>">Back</a></p>
+		<p><a title="Back to patient overview" href="patient.php?patient_id=<?php echo $patient_id; ?>">Back</a>(to patient overview)</p>
 		<h2><?php echo $name; ?></h2>
 	</div>
 

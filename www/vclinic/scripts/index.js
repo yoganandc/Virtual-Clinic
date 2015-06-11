@@ -1,4 +1,5 @@
 var previousPage;
+var prevCase;
 var edit_lock;
 var elIframe;
 
@@ -15,10 +16,19 @@ if(typeof chatIncluded === 'undefined') {
 	}
 }
 
+function checkSize() {
+	if(elIframe.contentWindow.document.body !== null) {
+		if(elIframe.style.height != (elIframe.contentWindow.document.body.offsetHeight + 30))
+			elIframe.style.height = (elIframe.contentWindow.document.body.offsetHeight + 30) + "px";
+	}
+	setTimeout(checkSize, 200);
+}
+
 window.addEventListener("load", function() {
 	previousPage = null;
 	edit_lock = null;
 	elIframe = document.getElementById("vc-iframe");
+	checkSize();
 	iframeLoad();
 
 	elIframe.addEventListener("load", function() {
@@ -27,8 +37,7 @@ window.addEventListener("load", function() {
 });
 
 function iframeLoad() {
-	elIframe.style.height = (elIframe.contentWindow.document.body.offsetHeight + 30) + "px";
-
+	
 	//send LOCKCASEID
 	if(elIframe.contentWindow.location.pathname == "/vclinic/editcase.php") {
 		if(elIframe.contentWindow.document.getElementById("main-content").getAttribute("data-edit-lock")) {
@@ -81,6 +90,7 @@ function iframeLoad() {
 		if((previousPage != "/vclinic/patient.php") && (previousPage != "/vclinic/case.php")) {
 			var caseId = elIframe.contentWindow.document.getElementById("case").getAttribute("data-case-id");
 			var caseUser = elIframe.contentWindow.document.getElementById("case").getAttribute("data-case-user");
+			prevCase = caseId;
 			function sendCase() {
 				if(serverConnection.readyState == 1) {
 					serverConnection.send(JSON.stringify({'registerCaseId': caseId, 'registerCaseUser': caseUser}));
@@ -93,10 +103,27 @@ function iframeLoad() {
 		}
 	}
 
+	//send UNREGISTER (old) & REGISTER (new)
+	if((elIframe.contentWindow.location.pathname == "/vclinic/patient.php") || (elIframe.contentWindow.location.pathname == "/vclinic/case.php")) {
+		if((previousPage == "/vclinic/patient.php") || (previousPage == "/vclinic/case.php")) {
+			var caseId = elIframe.contentWindow.document.getElementById("case").getAttribute("data-case-id");
+			var caseUser = elIframe.contentWindow.document.getElementById("case").getAttribute("data-case-user");
+			if(caseId != prevCase) {
+				prevCase = caseId;
+				serverConnection.send(JSON.stringify({'unregisterCaseId': true}));
+				function sendRegister() {
+					serverConnection.send(JSON.stringify({'registerCaseId': caseId, 'registerCaseUser': caseUser}));
+				}
+				setTimeout(sendRegister, 100);
+			}
+		}
+	}
+
 	//send UNREGISTERCASEID
 	if((elIframe.contentWindow.location.pathname != "/vclinic/patient.php") && (elIframe.contentWindow.location.pathname != "/vclinic/case.php")) {
-		if((previousPage == "/vclinic/patient.php") || (previousPage == "/vclinic/case.php")) 
+		if((previousPage == "/vclinic/patient.php") || (previousPage == "/vclinic/case.php")) {
 			serverConnection.send(JSON.stringify({'unregisterCaseId': true}));
+		}
 	}
 
 	previousPage = elIframe.contentWindow.location.pathname;

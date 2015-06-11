@@ -1,5 +1,5 @@
 #main-content {
-	padding: 20px;
+	padding: 5px 20px 20px 20px;
 }
 #width-1 {
 	width: 25%;
@@ -19,7 +19,14 @@
 #width-6 {
 	width: 13%;
 }
-#recents-heading {
+#forwards-table {
+	display: inline-block;
+}
+#recents-table {
+	display: table;
+	width: 750px;
+}
+.recents-heading {
 	border-bottom: 2px solid;
 }
 .section-heading {
@@ -30,11 +37,9 @@
 	text-align: center;
 }
 .section-body table {
-	display: inline-block;
 	text-align: left;
 	margin-top: 20px;
 	table-layout: fixed;
-	width: 750px;
 }
 .section-body table th {
 	padding: 5px;

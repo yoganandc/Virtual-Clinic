@@ -30,6 +30,20 @@
 			$no_recents = false;
 		array_push($recents, $row);
 	}
+
+	$query = "SELECT vf.case_id, vf.status, vp.patient_id, vp.fname, vp.lname, vp.gender, vp.birthdate, vc.complaint_id, vco.complaint, vc.altname FROM vc_forward AS vf INNER JOIN vc_case AS vc USING (case_id) INNER JOIN vc_complaint AS vco USING (complaint_id) INNER JOIN vc_patient AS vp USING (patient_id) WHERE vf.user_id=".$_SESSION['user_id'];
+	$data = mysqli_query($dbc, $query);
+	
+	$forwards = array();
+	$no_forwards = true;
+	if(mysqli_num_rows($data) > 0) {
+		$no_forwards = false;
+		while($row = mysqli_fetch_array($data)) {
+			if($row['complaint_id'] == VC_COMPLAINT_UNLISTED)
+				$row['complaint'] = $row['altname'];
+			array_push($forwards, $row);
+		}
+	}
 ?>
 
 <?php require_once('../'.VC_INCLUDE.'startdocument.php');?>
@@ -46,15 +60,37 @@
 	<div id="main-content" data-user="<?php echo $_SESSION['user_id']; ?>">
 		<h3 class="section-heading">Cases Forwarded</h3>
 		<div class="section-body">
-
+			<?php if($no_forwards) { ?>
+			<p class="nodata-message">No cases are under review or complete yet.</p>
+			<?php } else { ?>
+			<table id="forwards-table">
+				<tr class="recents-heading">
+					<th>Chief Complaint</th>
+					<th class="middle-cell">Patient</th>
+					<th class="middle-cell section-body">Sex</th>
+					<th class="middle-cell section-body">Birthdate</th>
+					<th>Status</th>
+				</tr>
+				<?php foreach($forwards as $forward) { ?>
+				<tr>
+					<td><a title="<?php echo $forward['complaint']; ?>" href="<?php echo VC_LOCATION.'case.php?case_id='.$forward['case_id'].'&patient_id='.$forward['patient_id']; ?>"><?php echo $forward['complaint']; ?></a></td>
+					<td class="middle-cell"><?php echo $forward['fname'].' '.$forward['lname']; ?></td>
+					<td class="middle-cell section-body"><?php if(!empty($forward['gender'])) { if($forward['gender'] == 'm') echo 'M'; else echo 'F'; } else echo '-'; ?></td>
+					<td class="middle-cell section-body"><?php if(!empty($forward['birthdate'])) echo $forward['birthdate']; else echo '<span class="nulldata">Not Set.</span>'; ?></td>
+					<td><?php if($forward['status'] == "0") echo '<span class="offline">Under Review</span>'; else echo '<span class="online">Complete</span>'; ?></td>
+				</tr>
+				<?php } ?>
+			</table>
+			<?php } ?>
 		</div>
+		<br>
 		<h3 class="section-heading">Recently Viewed Patient Profiles</h3>
 		<div class="section-body">
 			<?php if($no_recents) { ?>
 			<p class="nodata-message">No patient profiles visited yet.</p>
 			<?php } else { ?>
-			<table>
-				<tr id="recents-heading">
+			<table id="recents-table">
+				<tr class="recents-heading">
 					<th id="width-1">Name</th>
 					<th id="width-2" class="middle-cell section-body">Sex</th>
 					<th id="width-3" class="middle-cell section-body">Birth Date</th>

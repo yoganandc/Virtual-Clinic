@@ -11,6 +11,24 @@
 			header('Location: '.VC_LOCATION);
 			exit();
 		}
+		$query = "SELECT vc_recents_pointer FROM vc_user WHERE user_id=".$_SESSION['user_id'];
+		$data = mysqli_query($dbc, $query);
+		$row = mysqli_fetch_array($data);
+
+		$recents_pointer = $row['vc_recents_pointer'];
+
+		if(is_null($recents_pointer)) {
+			$query = "INSERT INTO vc_recents (user_id) VALUES ";
+			for($i = 0; $i < 9; $i++) {
+				$query .= "(".$_SESSION['user_id']."), ";
+			}
+			$query .= "(".$_SESSION['user_id'].")";
+			mysqli_query($dbc, $query);
+			$query = "UPDATE vc_user SET vc_recents_pointer=0 WHERE user_id=".$_SESSION['user_id'];
+			mysqli_query($dbc, $query);
+			$recents_pointer = "0";
+		}
+
 		$user_id = $_SESSION['user_id'];
 	}
 
