@@ -2,8 +2,10 @@ var previousPage;
 var prevCase;
 var edit_lock;
 var elIframe;
+var createConnection = false;
 
-if(typeof chatIncluded === 'undefined') {
+if((typeof chatIncluded === 'undefined')) {
+	createConnection = true;
 	var userSet = true;
 	var serverConnection = null;
 	var SIGNAL_SERVER_LOCATION = 'ws://'+window.location.hostname+":3434/";
@@ -25,6 +27,18 @@ function checkSize() {
 }
 
 window.addEventListener("load", function() {
+
+	if((!createConnection) && (document.getElementById("chat-container").getAttribute("data-status") == 0)) {
+		userSet = true;
+		serverConnection = new WebSocket(SIGNAL_SERVER_LOCATION);
+
+		serverConnection.onmessage = function(message) {
+			var signal = JSON.parse(message.data);
+			if(signal.reload)
+				elIframe.contentWindow.location.reload();
+		}
+	}
+
 	previousPage = null;
 	edit_lock = null;
 	elIframe = document.getElementById("vc-iframe");

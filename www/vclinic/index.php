@@ -85,7 +85,7 @@
                 <div id="details-right">
                 </div>
                 <p id="details-left">
-                    <?php if($docname == "") echo 'No doctor assigned yet.'."\n"; else { if($_SESSION['type'] == VC_TECHNICIAN) echo 'Dr. '; echo $docname.' is '; if($online) echo '<span id="status" class="online">ONLINE</span>.'; else echo '<span id="status" class="offline">OFFLINE</span>.'; echo "\n"; }  ?>
+                    <?php if($docname == "") echo 'No one is assigned to your account yet.'."\n"; else { if($_SESSION['type'] == VC_TECHNICIAN) echo 'Dr. '; echo $docname.' is '; if($online) echo '<span id="status" class="online">ONLINE</span>.'; else echo '<span id="status" class="offline">OFFLINE</span>.'; echo "\n"; }  ?>
                 </p>
             </div>
             <div id="chat-body">

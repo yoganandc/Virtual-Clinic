@@ -21,20 +21,22 @@
 
     if(($_SERVER['SCRIPT_NAME'] == '/vclinic/index.php') && ($_SESSION['type'] != VC_ADMINISTRATOR)) {
         $already_online = true;
-        $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME) or die('Error connecting to database');
-        $query = "SELECT status FROM vc_user_status WHERE status_id=".$_SESSION['user_id'];
-        $data = mysqli_query($dbc, $query);
-        if(mysqli_num_rows($data) != 1) {
-            echo '<p class="error">Some error occured.</p>';
-            exit();
+        if(!empty($_SESSION['assigneduser_id'])) {
+            $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME) or die('Error connecting to database');
+            $query = "SELECT status FROM vc_user_status WHERE status_id=".$_SESSION['user_id'];
+            $data = mysqli_query($dbc, $query);
+            if(mysqli_num_rows($data) != 1) {
+                echo '<p class="error">Some error occured.</p>';
+                exit();
+            }
+            $row = mysqli_fetch_array($data);
+            if(!(intval($row['status']))) {
+                $query = "UPDATE vc_user_status SET status=1 WHERE status_id=".$_SESSION['user_id'];
+                mysqli_query($dbc, $query);
+                $already_online = false;
+            }
+            mysqli_close($dbc);
+            unset($dbc);
         }
-        $row = mysqli_fetch_array($data);
-        if(!(intval($row['status']))) {
-            $query = "UPDATE vc_user_status SET status=1 WHERE status_id=".$_SESSION['user_id'];
-            mysqli_query($dbc, $query);
-            $already_online = false;
-        }
-        mysqli_close($dbc);
-        unset($dbc);
     }
 ?>
