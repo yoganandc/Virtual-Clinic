@@ -184,6 +184,8 @@ function pageReady() {
             if(peerConnection) {
 	            peerConnection.close();
 	            peerConnection = null;
+            }
+            if((typeof localStream !== 'undefined') && (localStream)) {
 	            localStream.stop();
                 localStream = null;
 	        }
@@ -202,7 +204,7 @@ function getMedia() {
             serverConnection.send(JSON.stringify({'ready': true}));
         }, errorHandler);
     } else {
-        alert('Your browser does not support getUserMedia API');
+        alert('Your browser does not support video-chat.');
     }
 }
 
