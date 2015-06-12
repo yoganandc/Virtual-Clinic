@@ -197,7 +197,7 @@ function pageReady() {
 }
 
 function getMedia() {
-	if(navigator.getUserMedia) {
+	if((navigator.getUserMedia) && (typeof window.RTCPeerConnection !== 'undefined')) {
         navigator.getUserMedia({ video: true, audio: false }, function(stream) {
             localStream = stream;
             localVideo.src = window.URL.createObjectURL(stream);
