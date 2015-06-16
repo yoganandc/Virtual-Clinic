@@ -1,3 +1,10 @@
+<?php
+	require_once('../../include/vclinic/appvars.php');
+	require_once(VC_INCLUDE.'dbvars.php');
+
+	$dbc = @mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME) or die('Error connecting to database.');
+	mysqli_close($dbc);
+?>
 <!doctype html>
 <html>
 <head>
